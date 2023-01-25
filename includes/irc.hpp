@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 15:58:01 by aandric           #+#    #+#             */
-/*   Updated: 2023/01/23 17:29:13 by aandric          ###   ########lyon.fr   */
+/*   Updated: 2023/01/25 15:25:58 by aandric          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,15 @@
 
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <cstring>
 #include <iostream>
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <cerrno>
+#include <unistd.h>
+
+#define BACKLOG 10
 
 //#include "Server.hpp"
 

@@ -6,34 +6,65 @@
 /*   By: aandric <aandric@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 17:01:07 by aandric           #+#    #+#             */
-/*   Updated: 2023/01/23 17:50:38 by aandric          ###   ########lyon.fr   */
+/*   Updated: 2023/01/25 16:16:43 by aandric          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/irc.hpp"
 
 
-int main()
+int main(int ac, char **av)
 {
 	int sock;
-	struct addrinfo hints, *res;
+	struct sockaddr_in my_addr;
 
-	memset(&hints, 0, sizeof hints);
-	memset(&hints, 0, sizeof hints);
-	hints.ai_family = AF_INET;  // use IPv4 or IPv6, whichever
-	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_flags = AI_PASSIVE; // fill in IP for me
+	if (ac < 2)
+		return 0;
+	
+	int port = std::atoi(av[1]);
 
-	std::cout << getaddrinfo(0, "3490", &hints, &res) << std::endl;
-	sock = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+	my_addr.sin_family = AF_INET; // use IPv4 or IPv6, whichever
+	my_addr.sin_port = htons(port);
+	my_addr.sin_addr.s_addr = inet_addr("127.0.0.1"); // or INADDR_ANY >> set random usable IP Address
+	std::memset(my_addr.sin_zero, 0, sizeof( my_addr.sin_zero));
+
+	sock = socket(my_addr.sin_family, SOCK_STREAM, 0);
 	std::cout << sock << std::endl;
 	if (sock == -1)
 	{
-		//std::cerr << "error: socket" << std::endl;
-		std::cout << "Or, in German, " << std::strerror(errno) << std::endl;
+		std::cout << "error: socket: " << std::strerror(errno) << std::endl;
 		return 0;
 	}
-	bind(sock, res->ai_addr, res->ai_addrlen);
+	if (bind(sock, (struct sockaddr *)&my_addr, sizeof(my_addr)) < 0)
+	{
+		std::cout << "error: bind: " << std::strerror(errno) << std::endl;
+		return 0;
+	}
+	if (listen(sock, BACKLOG) < 0)
+	{
+		std::cout << "error: listen: " << std::strerror(errno) << std::endl;
+		return 0;
+	}
+
+	// while (1)
+	// {
+		socklen_t addr_size;
+		struct sockaddr their_addr;
+		addr_size = sizeof(their_addr);
+		int new_socket = accept(sock, (struct sockaddr *)&their_addr, &addr_size);
+		if (new_socket < 0)
+		{
+			std::cout << "error: accept: " << std::strerror(errno) << std::endl;
+			return 0;
+		}
+		char buff[250];
+		while (recv(new_socket, buff, sizeof(buff), 0) > 0)
+		//recv(new_socket, buff, sizeof(buff), 0);
+		{
+			std::cout << buff;
+			memset(buff, 0, 250); 
+		}
+	// }
 	return 0;
 }
 
