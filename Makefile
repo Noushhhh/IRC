@@ -3,13 +3,15 @@ NAME = 			irc_serv
 #PARSING_FILES = 	
 
 SRC_FILES = main.cpp \
+			Server.cpp
 
 SRC = 			${addprefix src/, ${SRC_FILES}} \
 			#	${addprefix parsing/, ${PARSING_FILES}} \
 
 OBJS =			${SRC:.cpp=.o}
 
-#INCLUDES			= 	irc.hpp \
+INCLUDES			= 	#irc.hpp \
+						Server.hpp
 
 CMD = 			c++
 FLAGS = 		-Wall -Werror -Wextra -std=c++98 #-MD

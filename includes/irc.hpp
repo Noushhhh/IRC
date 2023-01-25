@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 15:58:01 by aandric           #+#    #+#             */
-/*   Updated: 2023/01/25 15:25:58 by aandric          ###   ########lyon.fr   */
+/*   Updated: 2023/01/25 18:17:18 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,11 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <cerrno>
+#include <list>
+#include <sstream>
 #include <unistd.h>
+
+#include "Server.hpp"
 
 #define BACKLOG 10
 
