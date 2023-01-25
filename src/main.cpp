@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 17:01:07 by aandric           #+#    #+#             */
-/*   Updated: 2023/01/25 19:00:34 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/01/25 19:02:14 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,3 @@ int main(int ac, char **av)
 	// }
 	return 0;
 }
-
-// listen()  for incoming connections on a specific port—multiplayer network games do this when they tell you to “connect to 192.168.5.10 port 3490”.) 
