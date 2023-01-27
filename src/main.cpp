@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 17:01:07 by aandric           #+#    #+#             */
-/*   Updated: 2023/01/27 16:01:42 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/01/27 16:53:08 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,25 +31,31 @@ int main(int ac, char **av)
 	{
 		std::cerr << e.errorMsg() << '\n';
 	}
-	std::vector<int> sock_vec;
-	// while (1)
-	// {
-		socklen_t addr_size;
-		struct sockaddr their_addr;
+
+	int new_socket;
+	socklen_t addr_size;
+	struct sockaddr their_addr;
+
+	while (1)
+	{
 		addr_size = sizeof(their_addr);
-		int new_socket = accept(Serv.getSock(), (struct sockaddr *)&their_addr, &addr_size);
-		if (new_socket < 0)
+		new_socket = accept(Serv.getSock(), (struct sockaddr *)&their_addr, &addr_size);
+		if (new_socket > 0)
+		{
+			if (!Serv.addUser(new_socket))
+				return 0; // msg User couldnt be add
+		}
+		else if (new_socket < 0)
 		{
 			std::cout << "error: accept: " << std::strerror(errno) << std::endl;
-			return 0;
 		}
-		char buff[250];
-		while (recv(new_socket, buff, sizeof(buff), 0) > 0)
-		//recv(new_socket, buff, sizeof(buff), 0);
-		{
-			std::cout << buff;
-			memset(buff, 0, 250); 
-		}
-	// }
+		// char buff[250];
+		// while (recv(new_socket, buff, sizeof(buff), 0) > 0) // use poll 
+		// //recv(new_socket, buff, sizeof(buff), 0);
+		// {
+		// 	std::cout << buff;
+		// 	memset(buff, 0, 250);
+		// }
+	}
 	return 0;
 }

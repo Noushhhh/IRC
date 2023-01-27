@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 15:58:01 by aandric           #+#    #+#             */
-/*   Updated: 2023/01/27 16:01:49 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/01/27 16:52:04 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 #include <unistd.h>
 
 #include "Server.hpp"
+#include "User.hpp"
+#include "Replies.hpp"
 
 #define BACKLOG 10
 
