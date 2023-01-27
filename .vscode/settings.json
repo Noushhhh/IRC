@@ -39,6 +39,7 @@
 		"initializer_list": "cpp",
 		"ios": "cpp",
 		"iosfwd": "cpp",
+		"iostream": "cpp",
 		"istream": "cpp",
 		"iterator": "cpp",
 		"limits": "cpp",
@@ -48,6 +49,7 @@
 		"mutex": "cpp",
 		"new": "cpp",
 		"optional": "cpp",
+		"ostream": "cpp",
 		"ratio": "cpp",
 		"sstream": "cpp",
 		"stdexcept": "cpp",
@@ -62,5 +64,6 @@
 		"utility": "cpp",
 		"vector": "cpp",
 		"cerrno": "cpp"
+
 	}
 }
