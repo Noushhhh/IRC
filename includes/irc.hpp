@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 15:58:01 by aandric           #+#    #+#             */
-/*   Updated: 2023/01/25 18:17:18 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/01/27 16:01:49 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include <netinet/in.h>
 #include <cerrno>
 #include <list>
+#include <vector>
 #include <sstream>
 #include <unistd.h>
 

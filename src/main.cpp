@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 17:01:07 by aandric           #+#    #+#             */
-/*   Updated: 2023/01/27 13:50:55 by aandric          ###   ########lyon.fr   */
+/*   Updated: 2023/01/27 16:01:42 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int main(int ac, char **av)
 	{
 		std::cerr << e.errorMsg() << '\n';
 	}
+	std::vector<int> sock_vec;
 	// while (1)
 	// {
 		socklen_t addr_size;
