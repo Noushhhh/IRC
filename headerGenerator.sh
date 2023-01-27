@@ -9,4 +9,3 @@ sed -i '' 's/Classname/'$Classname'/g' src/$Classname.cpp
 
 sed -i '' 's/Classname/'$Classname'/g' includes/$Classname.hpp
 sed -i '' 's/CLASSNAME/'$UpperClassname'/g' includes/$Classname.hpp
-

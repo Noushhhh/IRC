@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/01/27 14:08:07 by aandric          ###   ########lyon.fr   */
+/*   Updated: 2023/01/27 16:34:10 by aandric          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,13 @@ void					Server::listenTo(int backlog)
 {
 	if (listen(_sock, backlog) < 0)
 		throw(Server::ServerException(LISTEN));
+}
+
+bool					Server::addUser(int sockfd)
+{
+	// if bad passw
+	User newUser(sockfd);
+	this->_usersList.push_back(newUser);
 }
 
 /**************************************************************/

@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/01/27 14:00:13 by aandric          ###   ########lyon.fr   */
+/*   Updated: 2023/01/27 16:23:53 by aandric          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class Server
 		Server(int port, std::string password);
 		~Server();
 
+// getters
 		int						getSock()		const;
 		int						getPort()		const;
 		std::string				getPassword()	const;
@@ -35,9 +36,14 @@ class Server
 		// std::list< Channel >	&getChanList()	const;
 		// std::list< Command >	&getCmdList()	const;
 
+// setters
 		void					setSock(int type, int protocol);
+
+// functions
 		void					bindSock();
 		void					listenTo(int backlog);
+
+		bool					addUser(int sockfd);
 
 	class ServerException : public std::exception
 	{
@@ -53,7 +59,7 @@ class Server
 		const int			_port;
 		const std::string	_password;
 		struct sockaddr_in	_addr;
-		// std::list< User >	*_usersList; //List d'utilisateurs du serveur
+		std::list< User >	_usersList; //List d'utilisateurs du serveur
 		// std::list< Channel >	*_channelsList; //List d'utilisateurs du serveur
 		// std::list< Comand >	*_comandsList; //List d'utilisateurs du serveur
 
