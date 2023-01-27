@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/01/25 19:00:10 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/01/27 14:08:07 by aandric          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ _password("0000")
 	_addr.sin_port = htons(_port);
 	// _addr.sin_addr.s_addr = inet_addr("127.0.0.1"); // or INADDR_ANY >> set random usable IP Address
 	std::memset(_addr.sin_zero, 0, sizeof( _addr.sin_zero));
-
 	// std::cerr << "Debug message: Server Default Constructor called" << std::endl;
 }
 
@@ -34,20 +33,21 @@ _password(password)
 	_addr.sin_port = htons(_port);
 	// _addr.sin_addr.s_addr = inet_addr("127.0.0.1"); // or INADDR_ANY >> set random usable IP Address
 	std::memset(_addr.sin_zero, 0, sizeof( _addr.sin_zero));
-	
 	// std::cerr << "Debug message: Server Constructor called" << std::endl;
 }
 
-Server::Server(const Server & newServ) :
-_port(9999),
-_password("0000")
+Server::Server(const Server &src) :
+_port(src._port),
+_password(src._password),
+_addr(src._addr)
 {
-	*this = newServ;
+	*this = src;
 }
 
-Server &Server::operator=(const Server & newServ)
+Server &Server::operator=(const Server &src)
 {
-	this->_sock = newServ._sock;
+	this->_sock = src._sock;
+	this->_addr = src._addr;
 	return (*this);
 }
 
@@ -80,19 +80,19 @@ struct sockaddr_in		Server::getAdress()		const	{ return (_addr); 			}
 void					Server::setSock(int type, int protocol)
 {
 	if ((_sock = socket(_addr.sin_family, type, protocol)) < 0)
-		throw (Server::ConnectionException(SOCKET));
+		throw (Server::ServerException(SOCKET));
 }
 
 void					Server::bindSock()
 {
 	if (bind(_sock, (struct sockaddr *)&_addr, sizeof(_addr)) < 0)
-		throw(Server::ConnectionException(BIND));
+		throw(Server::ServerException(BIND));
 }
 
 void					Server::listenTo(int backlog)
 {
 	if (listen(_sock, backlog) < 0)
-		throw(Server::ConnectionException(LISTEN));
+		throw(Server::ServerException(LISTEN));
 }
 
 /**************************************************************/
@@ -101,12 +101,12 @@ void					Server::listenTo(int backlog)
 /*                                                            */
 /**************************************************************/
 
-Server::ConnectionException::ConnectionException(int exType) : exceptionType(exType)
+Server::ServerException::ServerException(int exType) : exceptionType(exType)
 {
 	;
 }
 
-const std::string Server::ConnectionException::errorMsg() const throw()
+const std::string Server::ServerException::errorMsg() const throw()
 {
 	if (exceptionType == SOCKET)
 	{

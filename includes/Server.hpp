@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/01/25 18:57:10 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/01/27 14:00:13 by aandric          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define SERVER_HPP
 
 #define SOCKET 0
+#define PROTOCOL 0
 #define BIND 1
 #define LISTEN 2
 
@@ -38,12 +39,12 @@ class Server
 		void					bindSock();
 		void					listenTo(int backlog);
 
-	class ConnectionException : public std::exception
+	class ServerException : public std::exception
 	{
 		private :
 			int	exceptionType;
 		public	:
-			ConnectionException(int exType);
+			ServerException(int exType);
 			const std::string	errorMsg() const throw();
 	};
 	private	:
@@ -59,7 +60,6 @@ class Server
 		Server();
 		Server(const Server & newServ);
 		Server &operator=(const Server & newServ);
-		
 };
 
 #endif

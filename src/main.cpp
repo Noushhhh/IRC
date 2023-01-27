@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 17:01:07 by aandric           #+#    #+#             */
-/*   Updated: 2023/01/25 19:02:14 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/01/27 13:50:55 by aandric          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ int main(int ac, char **av)
 
 	try
 	{
-		Serv.setSock(SOCK_STREAM, 0);
+		Serv.setSock(SOCK_STREAM, PROTOCOL);
 		Serv.bindSock();
 		Serv.listenTo(BACKLOG);
 	}
-	catch(const Server::ConnectionException e)
+	catch(const Server::ServerException e)
 	{
 		std::cerr << e.errorMsg() << '\n';
 	}
