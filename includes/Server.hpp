@@ -13,15 +13,59 @@
 #ifndef SERVER_HPP
 #define SERVER_HPP
 
+#define SOCKET 0
+#define PROTOCOL 0
+#define BIND 1
+#define LISTEN 2
 
-// class Server
-// {
-// 	public:
-		
-// 	private:
-// 		int 	socktype; // SOCK STREAM SOCK DGRAM
-// 		size_t	addrlen;
-		
-// }
+#include "irc.hpp"
+
+class Server
+{
+	public	:
+
+		Server(int port, std::string password);
+		~Server();
+
+// getters
+		int						getSock()		const;
+		int						getPort()		const;
+		std::string				getPassword()	const;
+		struct sockaddr_in		getAdress()		const;
+		// std::list< User >	&getUserList()	const;
+		// std::list< Channel >	&getChanList()	const;
+		// std::list< Command >	&getCmdList()	const;
+
+// setters
+		void					setSock(int type, int protocol);
+
+// functions
+		void					bindSock();
+		void					listenTo(int backlog);
+
+		bool					addUser(int sockfd);
+
+	class ServerException : public std::exception
+	{
+		private :
+			int	exceptionType;
+		public	:
+			ServerException(int exType);
+			const std::string	errorMsg() const throw();
+	};
+	private	:
+
+		int					_sock;
+		const int			_port;
+		const std::string	_password;
+		struct sockaddr_in	_addr;
+		std::list< User >	_usersList; //List d'utilisateurs du serveur
+		// std::list< Channel >	*_channelsList; //List d'utilisateurs du serveur
+		// std::list< Comand >	*_comandsList; //List d'utilisateurs du serveur
+
+		Server();
+		Server(const Server & newServ);
+		Server &operator=(const Server & newServ);
+};
 
 #endif

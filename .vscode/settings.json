@@ -1,5 +1,7 @@
 {
 	"files.associations": {
+		"iostream": "cpp",
+		"ostream": "cpp",
 		"__bit_reference": "cpp",
 		"__config": "cpp",
 		"__debug": "cpp",
@@ -61,6 +63,7 @@
 		"unordered_map": "cpp",
 		"utility": "cpp",
 		"vector": "cpp",
-		"__cxx_version": "cpp"
+		"cerrno": "cpp"
+
 	}
 }
