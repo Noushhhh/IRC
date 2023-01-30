@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/01/25 16:34:08 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/01/27 17:14:08 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ class Server
 		int						getPort()		const;
 		std::string				getPassword()	const;
 		struct sockaddr_in		getAdress()		const;
-		// std::list< User >	&getUserList()	const;
+		std::list< User >		&getUserList()	const;
 		// std::list< Channel >	&getChanList()	const;
 		// std::list< Command >	&getCmdList()	const;
 
@@ -42,6 +42,7 @@ class Server
 // functions
 		void					bindSock();
 		void					listenTo(int backlog);
+		void					pollDispatch();
 
 		bool					addUser(int sockfd);
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/01/27 16:34:10 by aandric          ###   ########lyon.fr   */
+/*   Updated: 2023/01/30 11:35:41 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,21 @@ void					Server::listenTo(int backlog)
 {
 	if (listen(_sock, backlog) < 0)
 		throw(Server::ServerException(LISTEN));
+}
+
+void					Server::pollDispatch()
+{
+	std::list< User >::iterator 	it = _usersList.begin();
+	int							usrNbr = _usersList.size();
+
+	struct pollfd	pollarray[usrNbr];
+	for (int i = 0; i < usrNbr; i ++)
+	{
+		pollarray[i] = *it.getSockfd();
+		it ++;
+	}
+
+	
 }
 
 bool					Server::addUser(int sockfd)
