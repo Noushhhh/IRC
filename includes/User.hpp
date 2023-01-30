@@ -33,6 +33,8 @@ class User
 		~User();
 		
 		User &operator=(const User &src);
+
+		int		getSockfd() const;
 };
 
 

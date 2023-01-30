@@ -21,7 +21,7 @@ Message::Message()
 
 Message::Message(const Message &src)
 {
-	*this = classInstance;
+	*this = src;
 	// std::cerr << "Debug message: Message Default Copy Constructor called" << std::endl;
 }
 
@@ -30,7 +30,7 @@ Message::~Message()
 	// std::cerr << "Debug message: Message Default Destructor called" << std::endl;
 }
 
-Classename &Message::operator=(const Message &src)
+Message &Message::operator=(const Message &src)
 {
 	
 }

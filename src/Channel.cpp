@@ -21,7 +21,7 @@ Channel::Channel()
 
 Channel::Channel(const Channel &src)
 {
-	*this = classInstance;
+	*this = src;
 	// std::cerr << "Debug message: Channel Default Copy Constructor called" << std::endl;
 }
 
@@ -30,7 +30,7 @@ Channel::~Channel()
 	// std::cerr << "Debug message: Channel Default Destructor called" << std::endl;
 }
 
-Classename &Channel::operator=(const Channel &src)
+Channel &Channel::operator=(const Channel &src)
 {
 	
 }

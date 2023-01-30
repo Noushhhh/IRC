@@ -21,7 +21,7 @@ Classname::Classname()
 
 Classname::Classname(const Classname &src)
 {
-	*this = classInstance;
+	*this = src;
 	// std::cerr << "Debug message: Classname Default Copy Constructor called" << std::endl;
 }
 
@@ -30,7 +30,7 @@ Classname::~Classname()
 	// std::cerr << "Debug message: Classname Default Destructor called" << std::endl;
 }
 
-Classename &Classname::operator=(const Classname &src)
+Classname &Classname::operator=(const Classname &src)
 {
 	
 }
