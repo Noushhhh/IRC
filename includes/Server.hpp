@@ -19,6 +19,7 @@
 #define LISTEN 2
 
 #include "irc.hpp"
+#include "User.hpp"
 
 class Server
 {

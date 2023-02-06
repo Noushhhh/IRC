@@ -18,12 +18,13 @@
 class User
 {
 	private	:
-		const int	_sockfd;
-		const int	_username;
+		int			_sockfd;
+		std::string	_username;
 		std::string _nickname;
 
+
 	// PASS Check if the passwd is ok if not reject user
-	// NICK set nickename for user
+	// NICK set nickname for user
 
 	public	:
 
@@ -31,10 +32,11 @@ class User
 		User(int sockfd);
 		User(const User &src);
 		~User();
-		
+
 		User &operator=(const User &src);
+
+		int	getSockfd() const;
+		
 };
-
-
 
 #endif

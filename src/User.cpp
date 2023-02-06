@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "../includes/irc.hpp"
-#include "../includes/User.hpp"
-
 
 User::User()
 {
@@ -21,6 +19,8 @@ User::User()
 
 User::User(int sockfd) : _sockfd(sockfd)
 {
+	_username = "jambon";
+	_nickname = "jambon";
 	// std::cerr << "Debug message: User Default Constructor called" << std::endl;
 }
 
@@ -37,5 +37,16 @@ User::~User()
 
 User &User::operator=(const User &src)
 {
-	
+	this->_sockfd = src._sockfd;
+	this->_username = src._username;
+	this->_nickname = src._nickname;
+	return (*this);
 }
+
+/**************************************************************/
+/*                                                            */
+/*			               GETTERS                            */
+/*                                                            */
+/**************************************************************/
+
+int	User::getSockfd() const {return (_sockfd);}

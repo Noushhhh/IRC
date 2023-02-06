@@ -79,6 +79,9 @@ struct sockaddr_in		Server::getAdress()		const	{ return (_addr); 			}
 
 void					Server::setSock(int type, int protocol)
 {
+	_addr.sin_family = AF_INET;
+	_addr.sin_addr.s_addr = INADDR_ANY;
+	_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
 	if ((_sock = socket(_addr.sin_family, type, protocol)) < 0)
 		throw (Server::ServerException(SOCKET));
 }
@@ -98,16 +101,31 @@ void					Server::listenTo(int backlog)
 void					Server::pollDispatch()
 {
 	std::list< User >::iterator 	it = _usersList.begin();
-	int							usrNbr = _usersList.size();
+	int								usrNbr = _usersList.size();
+	char buff[250];
 
 	struct pollfd	pollarray[usrNbr];
 	for (int i = 0; i < usrNbr; i ++)
 	{
-		pollarray[i] = *it.getSockfd();
+		pollarray[i].fd = (*it).getSockfd();
 		it ++;
 	}
-
-	
+	poll(pollarray, usrNbr, -1);
+	int i = 0;
+	while (i < usrNbr && pollarray[i].events & POLLIN)
+	{
+		if (recv(pollarray[i].fd, buff, sizeof(buff), 0) > 0)
+		{
+			std::cout << buff;
+			memset(buff, 0, 250);
+		}
+		else
+		{
+			;
+		}
+		//send to all channel users
+		i ++;
+	}
 }
 
 bool					Server::addUser(int sockfd)
@@ -115,6 +133,8 @@ bool					Server::addUser(int sockfd)
 	// if bad passw
 	User newUser(sockfd);
 	this->_usersList.push_back(newUser);
+	//commande NICK et PASS
+	return (true);
 }
 
 /**************************************************************/

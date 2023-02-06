@@ -26,14 +26,13 @@
 #include <sstream>
 #include <unistd.h>
 #include <poll.h>
+#include <cstdlib>
 
 #include "Server.hpp"
 #include "User.hpp"
 #include "Replies.hpp"
 
 #define BACKLOG 10
-
-//#include "Server.hpp"
 
 // crete a server with a socket. Listen entries in particular entry to get new msgs / clients
 // In server >> Chanel, users, state

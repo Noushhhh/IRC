@@ -26,10 +26,12 @@ int main(int ac, char **av)
 		Serv.setSock(SOCK_STREAM, PROTOCOL);
 		Serv.bindSock();
 		Serv.listenTo(BACKLOG);
+		std::cout <<"test" <<std::endl;
 	}
-	catch(const Server::ServerException e)
+	catch(const Server::ServerException &e)
 	{
 		std::cerr << e.errorMsg() << '\n';
+		return (1);
 	}
 
 	int new_socket;
@@ -43,15 +45,16 @@ int main(int ac, char **av)
 		if (new_socket > 0)
 		{
 			if (!Serv.addUser(new_socket))
-				return 0; // msg User couldnt be add
+				return 0; // msg User couldnt be added
 		}
 		else if (new_socket < 0)
 		{
 			std::cout << "error: accept: " << std::strerror(errno) << std::endl;
 		}
+		std::cout << "new_sock = " << new_socket << std::endl;
+		Serv.pollDispatch();
 		// char buff[250];
 		// while (recv(new_socket, buff, sizeof(buff), 0) > 0) // use poll 
-		// //recv(new_socket, buff, sizeof(buff), 0);
 		// {
 		// 	std::cout << buff;
 		// 	memset(buff, 0, 250);
