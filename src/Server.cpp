@@ -82,6 +82,7 @@ void					Server::setSock(int type, int protocol)
 	_addr.sin_family = AF_INET;
 	_addr.sin_addr.s_addr = INADDR_ANY;
 	_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	// fcntl(_sock, F_SETFD, O_NONBLOCK);
 	if ((_sock = socket(_addr.sin_family, type, protocol)) < 0)
 		throw (Server::ServerException(SOCKET));
 }
@@ -114,9 +115,10 @@ void					Server::pollDispatch()
 	int i = 0;
 	while (i < usrNbr && pollarray[i].events & POLLIN)
 	{
+		std::cerr << "test" << std::endl;
 		if (recv(pollarray[i].fd, buff, sizeof(buff), 0) > 0)
 		{
-			std::cout << buff;
+			std::cerr << "test" << buff;
 			memset(buff, 0, 250);
 		}
 		else

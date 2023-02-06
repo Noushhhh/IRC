@@ -22,11 +22,13 @@
 #include <netinet/in.h>
 #include <cerrno>
 #include <list>
+#include <list>
 #include <vector>
 #include <sstream>
 #include <unistd.h>
 #include <poll.h>
 #include <cstdlib>
+#include <fcntl.h>
 
 #include "Server.hpp"
 #include "User.hpp"
