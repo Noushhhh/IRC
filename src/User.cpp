@@ -14,39 +14,32 @@
 
 User::User()
 {
-	// std::cerr << "Debug message: User Default Constructor called" << std::endl;
+    // std::cerr << "Debug message: User Default Constructor called" << std::endl;
 }
 
-User::User(int sockfd) : _sockfd(sockfd)
+User::User(int sockfd, sockaddr_in addr) : _sockfd(sockfd), _addr(addr)
 {
-	_username = "jambon";
-	_nickname = "jambon";
-	// std::cerr << "Debug message: User Default Constructor called" << std::endl;
+    _username = "jambon";
+    _nickname = "jambon";
+    _realname = "jambon";
+    // std::cerr << "Debug message: User Default Constructor called" << std::endl;
 }
 
 User::User(const User &src)
 {
-	*this = src;
-	// std::cerr << "Debug message: User Default Copy Constructor called" << std::endl;
+    *this = src;
+    // std::cerr << "Debug message: User Default Copy Constructor called" << std::endl;
 }
 
 User::~User()
 {
-	// std::cerr << "Debug message: User Default Destructor called" << std::endl;
+    // std::cerr << "Debug message: User Default Destructor called" << std::endl;
 }
 
 User &User::operator=(const User &src)
 {
-	this->_sockfd = src._sockfd;
-	this->_username = src._username;
-	this->_nickname = src._nickname;
-	return (*this);
+    this->_sockfd = src._sockfd;
+    this->_username = src._username;
+    this->_nickname = src._nickname;
+    return (*this);
 }
-
-/**************************************************************/
-/*                                                            */
-/*			               GETTERS                            */
-/*                                                            */
-/**************************************************************/
-
-int	User::getSockfd() const {return (_sockfd);}

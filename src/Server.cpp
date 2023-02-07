@@ -17,23 +17,23 @@ _sock(0),
 _port(9999),
 _password("0000")
 {
-	_addr.sin_family = AF_INET; // use IPv4 or IPv6, whichever
-	_addr.sin_port = htons(_port);
-	// _addr.sin_addr.s_addr = inet_addr("127.0.0.1"); // or INADDR_ANY >> set random usable IP Address
-	std::memset(_addr.sin_zero, 0, sizeof( _addr.sin_zero));
-	// std::cerr << "Debug message: Server Default Constructor called" << std::endl;
+    _addr.sin_family = AF_INET; // use IPv4 or IPv6, whichever
+    _addr.sin_port = htons(_port);
+    // _addr.sin_addr.s_addr = inet_addr("127.0.0.1"); // or INADDR_ANY >> set random usable IP Address
+    std::memset(_addr.sin_zero, 0, sizeof( _addr.sin_zero));
+    // std::cerr << "Debug message: Server Default Constructor called" << std::endl;
 }
 
 Server::Server(int port, std::string password) :
 _sock(0),
 _port(port),
-_password(password)
+_password(password) // replace port by type uint
 {
-	_addr.sin_family = AF_INET; // use IPv4 or IPv6, whichever
-	_addr.sin_port = htons(_port);
-	// _addr.sin_addr.s_addr = inet_addr("127.0.0.1"); // or INADDR_ANY >> set random usable IP Address
-	std::memset(_addr.sin_zero, 0, sizeof( _addr.sin_zero));
-	// std::cerr << "Debug message: Server Constructor called" << std::endl;
+    _addr.sin_family = AF_INET; // use IPv4 or IPv6, whichever
+    _addr.sin_port = htons(_port);
+    // _addr.sin_addr.s_addr = inet_addr("127.0.0.1"); // or INADDR_ANY >> set random usable IP Address
+    std::memset(_addr.sin_zero, 0, sizeof( _addr.sin_zero));
+    // std::cerr << "Debug message: Server Constructor called" << std::endl;
 }
 
 Server::Server(const Server &src) :
@@ -41,134 +41,194 @@ _port(src._port),
 _password(src._password),
 _addr(src._addr)
 {
-	*this = src;
+    *this = src;
 }
 
 Server &Server::operator=(const Server &src)
 {
-	this->_sock = src._sock;
-	this->_addr = src._addr;
-	return (*this);
+    this->_sock = src._sock;
+    this->_addr = src._addr;
+    return (*this);
 }
 
 Server::~Server()
 {
-	// std::cerr << "Debug message: Server Destructor called" << std::endl;
+    // std::cerr << "Debug message: Server Destructor called" << std::endl;
 }
 
 /**************************************************************/
 /*                                                            */
-/*			               GETTERS                            */
+/*                         GETTERS                            */
 /*                                                            */
 /**************************************************************/
 
-int						Server::getSock()		const	{ return (_sock);			}
-int						Server::getPort()		const	{ return (_port);			}
-std::string				Server::getPassword()	const	{ return (_password);		}
-struct sockaddr_in		Server::getAdress()		const	{ return (_addr); 			}
-// std::list< User >	&Server::getUserList()	const	{ return (_usersList);		}
-// std::list< Channel >	&Server::getChanList()	const	{ return (_channelsList);	}
-// std::list< Command >	&Server::getCmdList()	const	{ return (commandsList);	}
+int                     Server::getSock()       const   { return (_sock);           }
+int                     Server::getPort()       const   { return (_port);           }
+std::string             Server::getPassword()   const   { return (_password);       }
+struct sockaddr_in      Server::getAdress()     const   { return (_addr);           }
+// std::list< User >    &Server::getUserList()  const   { return (_usersList);      }
+// std::list< Channel > &Server::getChanList()  const   { return (_channelsList);   }
+// std::list< Command > &Server::getCmdList()   const   { return (commandsList);    }
 
 
 /**************************************************************/
 /*                                                            */
-/*			            MEMBER FUNCTIONS                      */
+/*                      MEMBER FUNCTIONS                      */
 /*                                                            */
 /**************************************************************/
 
-void					Server::setSock(int type, int protocol)
+bool                    Server::init()
 {
-	_addr.sin_family = AF_INET;
-	_addr.sin_addr.s_addr = INADDR_ANY;
-	_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
-	// fcntl(_sock, F_SETFD, O_NONBLOCK);
-	if ((_sock = socket(_addr.sin_family, type, protocol)) < 0)
-		throw (Server::ServerException(SOCKET));
+    try
+        {
+            this->setSock(SOCK_STREAM, PROTOCOL);
+            this->bindSock();
+            this->listenTo(BACKLOG);
+            std::cout << "test" <<std::endl;
+        }
+        catch(const Server::ServerException &e)
+        {
+            std::cerr << e.errorMsg() << '\n';
+            return false ;
+        }
+        return true ;
 }
 
-void					Server::bindSock()
+bool                    Server::acceptUsers()
 {
-	if (bind(_sock, (struct sockaddr *)&_addr, sizeof(_addr)) < 0)
-		throw(Server::ServerException(BIND));
+    int new_socket;
+    socklen_t addr_size;
+    struct sockaddr_in their_addr;
+	// accept if pass ok and nickname ok
+
+    // while (1)
+    // {
+        addr_size = sizeof(their_addr);
+        new_socket = accept(this->getSock(), (struct sockaddr *)&their_addr, &addr_size);
+        if (new_socket > 0)
+        {
+            if (!this->addUser(new_socket, their_addr))
+                return false; // msg User couldnt be added
+        }
+        else if (new_socket < 0)
+        {
+            std::cout << "error: accept: " << std::strerror(errno) << std::endl;
+        }
+        std::cout << "new_sock = " << new_socket << std::endl;
+		
+		//display msg when client connecting
+		const char *msg = "Welcome to the future\n";
+		int len, bytes_sent;
+		len = strlen(msg);
+		bytes_sent = send(new_socket, msg, len, 0);
+		(void) bytes_sent;
+
+
+        // this->pollDispatch();
+
+        // char buff[250];
+        // while (recv(new_socket, buff, sizeof(buff), 0) > 0) // use poll
+        // {
+        //  std::cout << buff;
+        //  memset(buff, 0, 250);
+        // }
+    // }
+
+		return true ;
 }
 
-void					Server::listenTo(int backlog)
+void                    Server::setSock(int type, int protocol)
 {
-	if (listen(_sock, backlog) < 0)
-		throw(Server::ServerException(LISTEN));
+    _addr.sin_family = AF_INET;
+    _addr.sin_addr.s_addr = INADDR_ANY;
+    _addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    // fcntl(_sock, F_SETFD, O_NONBLOCK);
+    if ((_sock = socket(_addr.sin_family, type, protocol)) < 0)
+        throw (Server::ServerException(SOCKET));
 }
 
-void					Server::pollDispatch()
+void                    Server::bindSock()
 {
-	std::list< User >::iterator 	it = _usersList.begin();
-	int								usrNbr = _usersList.size();
-	char buff[250];
-
-	struct pollfd	pollarray[usrNbr];
-	for (int i = 0; i < usrNbr; i ++)
-	{
-		pollarray[i].fd = (*it).getSockfd();
-		it ++;
-	}
-	poll(pollarray, usrNbr, -1);
-	int i = 0;
-	while (i < usrNbr && pollarray[i].events & POLLIN)
-	{
-		std::cerr << "test" << std::endl;
-		if (recv(pollarray[i].fd, buff, sizeof(buff), 0) > 0)
-		{
-			std::cerr << "test" << buff;
-			memset(buff, 0, 250);
-		}
-		else
-		{
-			;
-		}
-		//send to all channel users
-		i ++;
-	}
+    if (bind(_sock, (struct sockaddr *)&_addr, sizeof(_addr)) < 0)
+        throw(Server::ServerException(BIND));
 }
 
-bool					Server::addUser(int sockfd)
+void                    Server::listenTo(int backlog)
 {
-	// if bad passw
-	User newUser(sockfd);
-	this->_usersList.push_back(newUser);
-	//commande NICK et PASS
-	return (true);
+    if (listen(_sock, backlog) < 0)
+        throw(Server::ServerException(LISTEN));
+}
+
+void                    Server::pollDispatch()
+{
+    std::list< User >::iterator     it = _usersList.begin();
+    int                             usrNbr = _usersList.size();
+    char buff[250];
+
+    struct pollfd   pollarray[usrNbr];
+    for (int i = 0; i < usrNbr; i ++)
+    {
+        pollarray[i].fd = (*it)._sockfd;
+        it ++;
+    }
+    poll(pollarray, usrNbr, -1);
+    int i = 0;
+    while (i < usrNbr && pollarray[i].events & POLLIN)
+    {
+        std::cerr << "test" << std::endl;
+        if (recv(pollarray[i].fd, buff, sizeof(buff), 0) > 0)
+        {
+            std::cerr << "test" << buff;
+            memset(buff, 0, 250);
+        }
+        else
+        {
+            ;
+        }
+        //send to all channel users
+        i ++;
+    }
+}
+
+bool                    Server::addUser(int sockfd, sockaddr_in addr)
+{
+    // if bad passw
+    User newUser(sockfd, addr);
+    this->_usersList.push_back(newUser);
+    //commande NICK et PASS
+    return (true);
 }
 
 /**************************************************************/
 /*                                                            */
-/*			            EXCEPTION CLASSES                     */
+/*                      EXCEPTION CLASSES                     */
 /*                                                            */
 /**************************************************************/
 
 Server::ServerException::ServerException(int exType) : exceptionType(exType)
 {
-	;
+    ;
 }
 
 const std::string Server::ServerException::errorMsg() const throw()
 {
-	if (exceptionType == SOCKET)
-	{
-		std::string str = "error: socket: ";
-		str.append(std::strerror(errno)); 
-		return (str);
-	}
-	else if (exceptionType == BIND)
-	{
-		std::string str2 = "error: bind: ";
-		str2.append(std::strerror(errno)); 
-		return (str2);
-	}
-	else if (exceptionType == LISTEN)
-	{
-		std::string str3 = "error: listen: ";
-		str3.append(std::strerror(errno)); 
-		return (str3);
-	}
-	return ("jsp frere");
+    if (exceptionType == SOCKET)
+    {
+        std::string str = "error: socket: ";
+        str.append(std::strerror(errno));
+        return (str);
+    }
+    else if (exceptionType == BIND)
+    {
+        std::string str2 = "error: bind: ";
+        str2.append(std::strerror(errno));
+        return (str2);
+    }
+    else if (exceptionType == LISTEN)
+    {
+        std::string str3 = "error: listen: ";
+        str3.append(std::strerror(errno));
+        return (str3);
+    }
+    return ("jsp frere");
 }
