@@ -113,8 +113,11 @@ bool                    Server::acceptUsers()
 		std::cout << "error: accept: " << std::strerror(errno) << std::endl;
 	}
 	std::cout << "new_sock = " << new_socket << std::endl;
-	
-	//display msg when client connecting
+
+	//display msg when client connecting - DO IT WITH POLL INSTEAD OF SEND
+    // display "WELCOME TO THE FUTURE\n"
+    // display "PASS MESSAGE ?"
+
 	const char *msg = "Welcome to the future\n";
 	int len, bytes_sent;
 	len = strlen(msg);
@@ -123,6 +126,18 @@ bool                    Server::acceptUsers()
 
 		return true ;
 }
+
+// PAssword : checks if good / sends message if good only after getting nick and user 
+// mutltiple commands . \r \n at the end of command. 
+// Parse with split with spaces
+// tableau de fonctions avec commandes correspondantes
+// 
+
+// bool                    checkPass();
+// {
+
+// }
+
 
 // void					close()
 // {

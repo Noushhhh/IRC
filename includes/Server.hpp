@@ -43,6 +43,7 @@ class Server
 // functions
         bool                    init();
         bool                    acceptUsers();
+        bool                    checkPass();
 		//void					close();
 		//void					receiveData();
 		
