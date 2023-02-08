@@ -16,7 +16,7 @@ INCLUDES			= 	includes/irc.hpp 		\
 						includes/User.hpp
 
 CMD = 			c++
-FLAGS = 		-Wall -Werror -Wextra -std=c++98 -fsanitize=address -g3 #-MD
+FLAGS = 		-Wall -Werror -Wextra -std=c++98 #-fsanitize=address -g3 #-MD
 DEP = 			${OBJS:.o=.d}
 
 all: 			library $(NAME)

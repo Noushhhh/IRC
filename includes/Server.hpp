@@ -45,9 +45,9 @@ class Server
         bool                    acceptUsers();
         void                    bindSock();
         void                    listenTo(int backlog);
-        void                    pollDispatch();
 
-        bool                    addUser(int sockfd, sockaddr_in addr);
+        bool                    pollDispatch();
+        bool                    addUser();
 
     class ServerException : public std::exception
     {
@@ -59,11 +59,12 @@ class Server
     };
     private :
 
-        int                 _sock;
-        const int           _port;
-        const std::string   _password;
-        struct sockaddr_in  _addr;
-        std::list< User >   _usersList; //List d'utilisateurs du serveur
+        int                         _sock;
+        const int                   _port;
+        const std::string           _password;
+        struct sockaddr_in          _addr;
+        std::vector< struct pollfd > _pollFds; //element new a delete
+        std::list< class User >     _usersList; //List d'utilisateurs du serveur
         // std::list< Channel > *_channelsList; //List d'utilisateurs du serveur
         // std::list< Comand >  *_comandsList; //List d'utilisateurs du serveur
 

@@ -77,61 +77,20 @@ struct sockaddr_in      Server::getAdress()     const   { return (_addr);       
 /*                                                            */
 /**************************************************************/
 
-bool                    Server::init()
-{
-    try
-        {
-            this->setSock(SOCK_STREAM, PROTOCOL);
-            this->bindSock();
-            this->listenTo(BACKLOG);
-            std::cout << "test" <<std::endl;
-        }
-        catch(const Server::ServerException &e)
-        {
-            std::cerr << e.errorMsg() << '\n';
-            return false ;
-        }
-        return true ;
-}
-
-bool                    Server::acceptUsers()
-{
-    int new_socket;
-    socklen_t addr_size;
-    struct sockaddr_in their_addr;
-	// accept if pass ok and nickname ok
-
-	addr_size = sizeof(their_addr);
-	new_socket = accept(this->getSock(), (struct sockaddr *)&their_addr, &addr_size);
-	if (new_socket > 0)
-	{
-		if (!this->addUser(new_socket, their_addr))
-			return false; // msg User couldnt be added
-	}
-	else if (new_socket < 0)
-	{
-		std::cout << "error: accept: " << std::strerror(errno) << std::endl;
-	}
-	std::cout << "new_sock = " << new_socket << std::endl;
-	
-	//display msg when client connecting
-	const char *msg = "Welcome to the future\n";
-	int len, bytes_sent;
-	len = strlen(msg);
-	bytes_sent = send(new_socket, msg, len, 0);
-	(void) bytes_sent;
-
-		return true ;
-}
-
 void                    Server::setSock(int type, int protocol)
 {
     _addr.sin_family = AF_INET;
     _addr.sin_addr.s_addr = INADDR_ANY;
     _addr.sin_addr.s_addr = inet_addr("127.0.0.1");
-    // fcntl(_sock, F_SETFD, O_NONBLOCK);
     if ((_sock = socket(_addr.sin_family, type, protocol)) < 0)
+	{
         throw (Server::ServerException(SOCKET));
+	}
+	int val = 1;
+	if (setsockopt(_sock, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val)))
+		throw (Server::ServerException(SOCKET));
+	if (fcntl(_sock, F_SETFL, O_NONBLOCK == - 1))
+		throw (Server::ServerException(SOCKET));
 }
 
 void                    Server::bindSock()
@@ -146,41 +105,94 @@ void                    Server::listenTo(int backlog)
         throw(Server::ServerException(LISTEN));
 }
 
-void                    Server::pollDispatch()
+bool                    Server::init()
 {
-    std::list< User >::iterator     it = _usersList.begin();
-    int                             usrNbr = _usersList.size();
-    char buff[250];
-
-    struct pollfd   pollarray[usrNbr];
-    for (int i = 0; i < usrNbr; i ++)
-    {
-        pollarray[i].fd = (*it)._sockfd;
-        it ++;
-    }
-    poll(pollarray, usrNbr, -1);
-    int i = 0;
-    while (i < usrNbr && pollarray[i].events & POLLIN)
-    {
-        std::cerr << "test" << std::endl;
-        if (recv(pollarray[i].fd, buff, sizeof(buff), 0) > 0)
-        {
-            std::cerr << "test" << buff;
-            memset(buff, 0, 250);
-        }
-        else
-        {
-            ;
-        }
-        //send to all channel users
-        i ++;
-    }
+    try
+	{
+		this->setSock(SOCK_STREAM, PROTOCOL);
+		this->bindSock();
+		this->listenTo(BACKLOG);
+	}
+	catch(const Server::ServerException &e)
+	{
+		std::cerr << e.errorMsg() << '\n';
+		return false ;
+	}
+	return true ;
 }
 
-bool                    Server::addUser(int sockfd, sockaddr_in addr)
+bool                    Server::pollDispatch()
+{
+    struct pollfd server_fd = {_sock, POLLIN, 0};
+    _pollFds.push_back(server_fd);
+    std::vector< struct pollfd >::iterator    it = _pollFds.begin();
+
+	while (1)
+    {
+        it = _pollFds.begin();
+
+		if (poll (_pollFds.begin().base(), _pollFds.size(), -1) == -1)
+        {
+            return (false);
+        }
+		for (it = _pollFds.begin(); it != _pollFds.end(); it ++)
+		{
+            if (it->revents == 0)
+                continue;
+
+			if ((it->events & POLLHUP) == POLLHUP)
+            {
+                // for (std::list< User >::iterator lit = _usersList.begin(); lit != _usersList.end(); lit ++)
+                // {
+                //     if (lit->_sockfd == it->fd)
+                //     {
+                //         _usersList.erase(lit);
+                //         break;
+                //     }
+                // }
+                // _pollFds.erase(it);
+                // std::cout << _usersList.size() << std::endl;
+                // std::cout << _pollFds.size() << std::endl;
+                // break ;
+            }
+
+            if ((it->revents & POLLIN) == POLLIN)
+            {
+                if (it->fd == _sock)
+                {
+                    if (this->addUser() == false)
+                        return (false);
+                    break ;
+                }
+                //receive message, stock it and parse it
+                char buff[250];
+                memset(buff, 0, 250);
+                recv(it->fd, buff, 250, 0);
+                std::cout << buff;
+                //send message or execute command and send reply
+            }
+		}
+	}
+    return (true);
+}
+
+bool                    Server::addUser()
 {
     // if bad passw
-    User newUser(sockfd, addr);
+    int                 newFd;
+    struct sockaddr_in  newAddr;
+    socklen_t           nSize = 0;
+
+    newFd = accept(_sock, (struct sockaddr *)&newAddr, &nSize);
+    if (newFd < 0)
+        return (false);
+    struct pollfd *tmpfd = new struct pollfd;
+    tmpfd->fd = newFd;
+    tmpfd->events = POLLIN;
+    tmpfd->revents = 0;
+    _pollFds.push_back(*tmpfd);
+
+    User newUser(newFd, newAddr);
     this->_usersList.push_back(newUser);
     //commande NICK et PASS
     return (true);

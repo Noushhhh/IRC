@@ -21,9 +21,9 @@ int main(int ac, char **av)
 	
 	Server Serv(std::atoi(av[1]), std::string(av[2]));
 	Serv.init();
+
 	while (1)
 	{
-		Serv.acceptUsers();
 		Serv.pollDispatch();
 	}
 

@@ -29,12 +29,14 @@
 #include <poll.h>
 #include <cstdlib>
 #include <fcntl.h>
+#include <strings.h>
 
 #include "Server.hpp"
 #include "User.hpp"
 #include "Replies.hpp"
 
 #define BACKLOG 10
+#define TIMEOUTLIMIT -1
 
 // crete a server with a socket. Listen entries in particular entry to get new msgs / clients
 // In server >> Chanel, users, state
