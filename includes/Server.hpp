@@ -43,6 +43,11 @@ class Server
 // functions
         bool                    init();
         bool                    acceptUsers();
+        bool                    checkPass();
+		//void					close();
+		//void					receiveData();
+		
+
         void                    bindSock();
         void                    listenTo(int backlog);
 
