@@ -113,6 +113,7 @@ bool                    Server::acceptUsers()
         else if (new_socket < 0)
         {
             std::cout << "error: accept: " << std::strerror(errno) << std::endl;
+			close(new_socket);
         }
         std::cout << "new_sock = " << new_socket << std::endl;
 		
@@ -136,6 +137,13 @@ bool                    Server::acceptUsers()
 
 		return true ;
 }
+
+// void					close()
+// {
+// 	// rm all users with delete and close sockets
+// }
+
+//void					receiveData();
 
 void                    Server::setSock(int type, int protocol)
 {
