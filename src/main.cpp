@@ -20,54 +20,12 @@ int main(int ac, char **av)
 		return 0;
 	
 	Server Serv(std::atoi(av[1]), std::string(av[2]));
-
-	try
-	{
-		Serv.setSock(SOCK_STREAM, PROTOCOL);
-		Serv.bindSock();
-		Serv.listenTo(BACKLOG);
-	}
-	catch(const Server::ServerException &e)
-	{
-		std::cerr << e.errorMsg() << '\n';
-		return (1);
-	}
-
-	int new_socket;
-	socklen_t addr_size;
-	struct sockaddr their_addr;
-
-	if ((new_socket = accept(Serv.getSock(), (struct sockaddr *)&their_addr, &addr_size)) == -1)
-	{
-		std::cout << "error: accept: " << std::strerror(errno) << std::endl;
-		return (1);
-	}
-	fcntl(Serv.getSock(), F_SETFL, O_NONBLOCK);
-	fcntl(new_socket, F_SETFL, O_NONBLOCK);
-
+	Serv.init();
 	while (1)
 	{
-		addr_size = sizeof(their_addr);
-		new_socket = accept(Serv.getSock(), (struct sockaddr *)&their_addr, &addr_size);
-		if (new_socket > 0)
-		{
-			if (!Serv.addUser(new_socket))
-				return 0; // msg User couldnt be added
-			fcntl(new_socket, F_SETFL, O_NONBLOCK);
-		}
-		else if (new_socket < 0)
-		{
-			std::cout << "error: accept: " << std::strerror(errno) << std::endl;
-			return (1);
-		}
-		std::cout << "new_sock = " << new_socket << std::endl;
+		Serv.acceptUsers();
 		Serv.pollDispatch();
-		// char buff[250];
-		// while (recv(new_socket, buff, sizeof(buff), 0) > 0) // use poll 
-		// {
-		// 	std::cout << buff;
-		// 	memset(buff, 0, 250);
-		// }
 	}
+
 	return 0;
 }
