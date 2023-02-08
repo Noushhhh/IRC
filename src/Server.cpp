@@ -101,39 +101,25 @@ bool                    Server::acceptUsers()
     struct sockaddr_in their_addr;
 	// accept if pass ok and nickname ok
 
-    // while (1)
-    // {
-        addr_size = sizeof(their_addr);
-        new_socket = accept(this->getSock(), (struct sockaddr *)&their_addr, &addr_size);
-        if (new_socket > 0)
-        {
-            if (!this->addUser(new_socket, their_addr))
-                return false; // msg User couldnt be added
-        }
-        else if (new_socket < 0)
-        {
-            std::cout << "error: accept: " << std::strerror(errno) << std::endl;
-			close(new_socket);
-        }
-        std::cout << "new_sock = " << new_socket << std::endl;
-		
-		//display msg when client connecting
-		const char *msg = "Welcome to the future\n";
-		int len, bytes_sent;
-		len = strlen(msg);
-		bytes_sent = send(new_socket, msg, len, 0);
-		(void) bytes_sent;
-
-
-        // this->pollDispatch();
-
-        // char buff[250];
-        // while (recv(new_socket, buff, sizeof(buff), 0) > 0) // use poll
-        // {
-        //  std::cout << buff;
-        //  memset(buff, 0, 250);
-        // }
-    // }
+	addr_size = sizeof(their_addr);
+	new_socket = accept(this->getSock(), (struct sockaddr *)&their_addr, &addr_size);
+	if (new_socket > 0)
+	{
+		if (!this->addUser(new_socket, their_addr))
+			return false; // msg User couldnt be added
+	}
+	else if (new_socket < 0)
+	{
+		std::cout << "error: accept: " << std::strerror(errno) << std::endl;
+	}
+	std::cout << "new_sock = " << new_socket << std::endl;
+	
+	//display msg when client connecting
+	const char *msg = "Welcome to the future\n";
+	int len, bytes_sent;
+	len = strlen(msg);
+	bytes_sent = send(new_socket, msg, len, 0);
+	(void) bytes_sent;
 
 		return true ;
 }
