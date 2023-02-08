@@ -26,7 +26,6 @@ int main(int ac, char **av)
 		Serv.setSock(SOCK_STREAM, PROTOCOL);
 		Serv.bindSock();
 		Serv.listenTo(BACKLOG);
-		std::cout <<"test" <<std::endl;
 	}
 	catch(const Server::ServerException &e)
 	{
@@ -38,6 +37,14 @@ int main(int ac, char **av)
 	socklen_t addr_size;
 	struct sockaddr their_addr;
 
+	if ((new_socket = accept(Serv.getSock(), (struct sockaddr *)&their_addr, &addr_size)) == -1)
+	{
+		std::cout << "error: accept: " << std::strerror(errno) << std::endl;
+		return (1);
+	}
+	fcntl(Serv.getSock(), F_SETFL, O_NONBLOCK);
+	fcntl(new_socket, F_SETFL, O_NONBLOCK);
+
 	while (1)
 	{
 		addr_size = sizeof(their_addr);
@@ -46,10 +53,12 @@ int main(int ac, char **av)
 		{
 			if (!Serv.addUser(new_socket))
 				return 0; // msg User couldnt be added
+			fcntl(new_socket, F_SETFL, O_NONBLOCK);
 		}
 		else if (new_socket < 0)
 		{
 			std::cout << "error: accept: " << std::strerror(errno) << std::endl;
+			return (1);
 		}
 		std::cout << "new_sock = " << new_socket << std::endl;
 		Serv.pollDispatch();
