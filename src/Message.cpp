@@ -118,52 +118,60 @@ bool Message::isRequest()
 
 }
 
+
+std::string * Message::splitMessage()
+{
+	char *string_to_split = new char[_message.length()+1];
+	char *token = strtok(string_to_split, " ");
+	std::string *split_message;
+	int			it = 0;
+
+	while(token != NULL)
+	{
+		split_message[it] = token;
+		token = strtok(NULL, "\r \n");
+		it++;
+	}
+	delete[] string_to_split;
+	return (split_message);
+}
+
 bool Message::parseMessage()
 {
-	std::string		*split_message;
-	std::string		token;
-	int				it = 0;
-	int				pos = 0;
 
-	if (!_message) 
+	if (_message.empty()) 
 	{
-		std::cout << "not a request." << std::endl;
+		std::cout << "empty message." << std::endl;
 		return false;
 	}
 
-	while (pos != _message.length())
+	std::string *split_mesage = splitMessage();
+
+	int i = 0;
+	while(i <= HANDLEDCOMMANDSNB)
 	{
-		token = _message.substr(pos, _message.find(" "));
-		split_message[it] = token;
-		pos = _message.find(" ");
-		it++;
+		if (_handledCommands[i] == split_mesage[0])
+			break ;
+		i++;
+	}
+	if (i > HANDLEDCOMMANDSNB) // check if > or >=
+	{
+		std::cout << "Not a request" << std::endl;
+		return false;
+	}
+	else
+	{
+		//int args_nb = sizeof(split_mesage) / sizeof(std::string);
+		if
+		(void)*_ptrF[i](split_mesage);
+		
+
+
 	}
 
-	int it1 = 0;
-	std::string parameters;
-	while (split_message[it1] != 0) // std::empty ?
-	{
-		for (int it2 = 0; it2 < HANDLEDCOMMANDSNB; it2++)
-		{
-			if (split_message[it1] == _handledCommands[it2])
-			{
-				for (int it2 = 0; i < HANDLEDCOMMANDSNB; i++)
-				{
-					if (split_message[it1] == _handledCommands[it1])
-					{
-						
-					}
-					i++;
-				}
-				(void)(this->*_ptrF[i])())
-			}
-			it1++;
-		}
-	}
-	// for (int i = 0; i < it; i++)
-	// {
-	// 	if ()
-	// }
+
+
+
 }
 
 

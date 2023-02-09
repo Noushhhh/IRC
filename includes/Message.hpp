@@ -23,6 +23,7 @@ class Message
 public	:
 
 	std::string						_message;
+
 	bool							_isRequest;
 	std::string						_handledCommands[HANDLEDCOMMANDSNB];
 	void							(Message::*_ptrF[HANDLEDCOMMANDSNB])(std::string command, std::string parameters);
@@ -38,26 +39,27 @@ public	:
 	
 	Message &operator=(const Message &src);
 
-	bool	isRequest();
-	bool	parseMessage();
+	bool			isRequest();
+	std::string*	splitMessage();
+	bool			parseMessage();
 
-	void	Pass(std::string command, std::string parameters);
-	void	Nick(std::string command, std::string parameters);
-	void	User(std::string command, std::string parameters);
-	void	Quit(std::string command, std::string parameters);
-	void	Join(std::string command, std::string parameters);
-	void	Part(std::string command, std::string parameters);
-	void	Mode(std::string command, std::string parameters);
-	void	Topic(std::string command, std::string parameters);
-	void	Names(std::string command, std::string parameters);
-	void	List(std::string command, std::string parameters);
-	void	Invite(std::string command, std::string parameters);
-	void	Kick(std::string command, std::string parameters);
-	void	Msg(std::string command, std::string parameters);
-	void	Privmsg(std::string command, std::string parameters);
-	void	Notice(std::string command, std::string parameters);
-	void	Ping(std::string command, std::string parameters);
-	void	Pong(std::string command, std::string parameters);
+	void	Pass(std::string *splitMessage);
+	void	Nick(std::string *splitMessage);
+	void	User(std::string *splitMessage);
+	void	Quit(std::string *splitMessage);
+	void	Join(std::string *splitMessage);
+	void	Part(std::string *splitMessage);
+	void	Mode(std::string *splitMessage);
+	void	Topic(std::string *splitMessage);
+	void	Names(std::string *splitMessage);
+	void	List(std::string *splitMessage);
+	void	Invite(std::string *splitMessage);
+	void	Kick(std::string *splitMessage);
+	void	Msg(std::string *splitMessage);
+	void	Privmsg(std::string *splitMessage);
+	void	Notice(std::string *splitMessage);
+	void	Ping(std::string *splitMessage);
+	void	Pong(std::string *splitMessage);
 
 };
 
