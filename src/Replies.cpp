@@ -21,7 +21,7 @@ Replies::Replies()
 
 Replies::Replies(const Replies &src)
 {
-	*this = classInstance;
+	*this = src;
 	// std::cerr << "Debug message: Replies Default Copy Constructor called" << std::endl;
 }
 
@@ -30,7 +30,7 @@ Replies::~Replies()
 	// std::cerr << "Debug message: Replies Default Destructor called" << std::endl;
 }
 
-Classename &Replies::operator=(const Replies &src)
+Replies &Replies::operator=(const Replies &src)
 {
 	
 }

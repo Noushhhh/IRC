@@ -42,7 +42,6 @@ class Server
 
 // functions
         bool                    init();
-        bool                    acceptUsers();
         bool                    checkPass();
 		//void					close();
 		//void					receiveData();
@@ -53,6 +52,7 @@ class Server
 
         bool                    pollDispatch();
         bool                    addUser();
+        bool                    closeUser(std::vector< struct pollfd >::iterator it);
 
     class ServerException : public std::exception
     {
@@ -64,12 +64,12 @@ class Server
     };
     private :
 
-        int                         _sock;
-        const int                   _port;
-        const std::string           _password;
-        struct sockaddr_in          _addr;
-        std::vector< struct pollfd > _pollFds; //element new a delete
-        std::list< class User >     _usersList; //List d'utilisateurs du serveur
+        int                                     _sock;
+        const int                               _port;
+        const std::string                       _password;
+        struct sockaddr_in                      _addr;
+        std::vector< struct pollfd >            _pollFds; //element new a delete
+        std::list< class User >                 _usersList; //List d'utilisateurs du serveur
         // std::list< Channel > *_channelsList; //List d'utilisateurs du serveur
         // std::list< Comand >  *_comandsList; //List d'utilisateurs du serveur
 

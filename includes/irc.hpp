@@ -12,6 +12,9 @@
 
 #ifndef IRC_HPP
 #define IRC_HPP
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -33,10 +36,12 @@
 
 #include "Server.hpp"
 #include "User.hpp"
+#include "Message.hpp"
 #include "Replies.hpp"
 
-#define BACKLOG 10
-#define TIMEOUTLIMIT -1
+#define BACKLOG         10
+#define TIMEOUTLIMIT    -1
+#define MAX_CHAR        20480
 
 // crete a server with a socket. Listen entries in particular entry to get new msgs / clients
 // In server >> Chanel, users, state

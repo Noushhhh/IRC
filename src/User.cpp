@@ -43,3 +43,16 @@ User &User::operator=(const User &src)
     this->_nickname = src._nickname;
     return (*this);
 }
+
+/**************************************************************/
+/*                                                            */
+/*                         GETTERS                            */
+/*                                                            */
+/**************************************************************/
+
+int             User::getSockfd()     const {return (_sockfd);}
+std::string     User::getUsername()   const {return (_username);}
+std::string     User::getNickname()   const {return (_nickname);}
+std::string     User::getRealname()   const {return (_realname);}
+Message         User::getUserInput()  const {return (_userInput);}
+bool            User::getIsOp()       const {return (_isOp);}

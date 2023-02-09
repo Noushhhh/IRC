@@ -14,15 +14,19 @@
 #define USER_HPP
 
 #include "irc.hpp"
+#include "Message.hpp"
 
 class User
 {
-    public  :
+    private  :
         int         _sockfd;
         sockaddr_in _addr;
         std::string _username;
         std::string _nickname;
         std::string _realname;
+        Message     _userInput; 
+        bool        _isOp;
+
 
 
     // PASS Check if the passwd is ok if not reject user
@@ -34,6 +38,14 @@ class User
         User(int sockfd, sockaddr_in addr);
         User(const User &src);
         ~User();
+
+        int             getSockfd()     const;
+        std::string     getUsername()   const;
+        std::string     getNickname()   const;
+        std::string     getRealname()   const;
+        Message         getUserInput()  const;
+        bool            getIsOp()       const;
+
 
         User &operator=(const User &src);
 

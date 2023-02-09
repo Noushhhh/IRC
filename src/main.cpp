@@ -22,9 +22,10 @@ int main(int ac, char **av)
 	Server Serv(std::atoi(av[1]), std::string(av[2]));
 	Serv.init();
 
-	while (1)
+	if (!Serv.pollDispatch())
 	{
-		Serv.pollDispatch();
+		std::cerr << "an error has occured during server runtime, eron : "
+		<< std::strerror(errno) << std::endl;
 	}
 
 	return 0;

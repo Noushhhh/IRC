@@ -123,40 +123,27 @@ bool                    Server::init()
 
 bool                    Server::pollDispatch()
 {
-    struct pollfd server_fd = {_sock, POLLIN, 0};
-    _pollFds.push_back(server_fd);
-    std::vector< struct pollfd >::iterator    it = _pollFds.begin();
+    struct pollfd                           server_fd = {_sock, POLLIN, 0};
+    std::vector< struct pollfd >::iterator  it = _pollFds.begin();
+    char                                    buff[MAX_CHAR];
 
+    _pollFds.push_back(server_fd);
 	while (1)
     {
         it = _pollFds.begin();
 
-		if (poll (_pollFds.begin().base(), _pollFds.size(), -1) == -1)
+		if (poll (_pollFds.begin().base(), _pollFds.size(), -1) < 0)
         {
             return (false);
         }
 		for (it = _pollFds.begin(); it != _pollFds.end(); it ++)
 		{
-            if (it->revents == 0)
+            if (it->events == 0)
                 continue;
-
-			if ((it->events & POLLHUP) == POLLHUP)
-            {
-                // for (std::list< User >::iterator lit = _usersList.begin(); lit != _usersList.end(); lit ++)
-                // {
-                //     if (lit->_sockfd == it->fd)
-                //     {
-                //         _usersList.erase(lit);
-                //         break;
-                //     }
-                // }
-                // _pollFds.erase(it);
-                // std::cout << _usersList.size() << std::endl;
-                // std::cout << _pollFds.size() << std::endl;
-                // break ;
-            }
-
-            if ((it->revents & POLLIN) == POLLIN)
+			// if ((it->revents & POLLHUP) == POLLHUP)
+            // {
+            // }
+            else if ((it->revents & POLLIN) == POLLIN)
             {
                 if (it->fd == _sock)
                 {
@@ -164,10 +151,14 @@ bool                    Server::pollDispatch()
                         return (false);
                     break ;
                 }
+                memset(buff, 0, MAX_CHAR);
+                if (recv(it->fd, buff, MAX_CHAR, 0) == 0)
+                {
+                    if (!this->closeUser(it))
+                        return (false);
+                    break ;
+                }
                 //receive message, stock it and parse it
-                char buff[250];
-                memset(buff, 0, 250);
-                recv(it->fd, buff, 250, 0);
                 std::cout << buff;
                 //send message or execute command and send reply
             }
@@ -188,7 +179,7 @@ bool                    Server::addUser()
         return (false);
     struct pollfd *tmpfd = new struct pollfd;
     tmpfd->fd = newFd;
-    tmpfd->events = POLLIN;
+    tmpfd->events = POLLIN|POLLHUP;
     tmpfd->revents = 0;
     _pollFds.push_back(*tmpfd);
 
@@ -196,6 +187,25 @@ bool                    Server::addUser()
     this->_usersList.push_back(newUser);
     //commande NICK et PASS
     return (true);
+}
+
+bool                    Server::closeUser(std::vector< struct pollfd >::iterator it)
+{
+    //supress from all channels he belongs to
+
+    for (std::list< User >::iterator lit = _usersList.begin(); lit != _usersList.end(); lit ++)
+    {
+        if (lit->getSockfd() == it->fd)
+        {
+            _usersList.erase(lit);
+            break;
+        }
+    }
+    if (close(it->fd) < 0)
+        return (false);
+    _pollFds.erase(it);
+    return (true) ;
+
 }
 
 /**************************************************************/
