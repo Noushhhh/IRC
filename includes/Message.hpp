@@ -15,7 +15,6 @@
 
 #include "irc.hpp"
 
-#define HANDLEDCOMMANDS "{ "PASS", "NICK", "USER", "QUIT", "JOIN", "PART", "MODE", "TOPIC", "NAMES", "LIST", "INVITE", "KICK", "MSG", "PRIVMSG", "NOTICE", "PING", "PONG" }"
 #define HANDLEDCOMMANDSNB 17
 
 class Message
@@ -24,9 +23,8 @@ public	:
 
 	std::string						_message;
 
-	bool							_isRequest;
 	std::string						_handledCommands[HANDLEDCOMMANDSNB];
-	void							(Message::*_ptrF[HANDLEDCOMMANDSNB])(std::string command, std::string parameters);
+	void							(Message::*_ptrF[HANDLEDCOMMANDSNB])(std::string *splitMessage);
 	// std::string						*_commands;
 	// std::string						*_parameters;
 
@@ -39,27 +37,26 @@ public	:
 	
 	Message &operator=(const Message &src);
 
-	bool			isRequest();
 	std::string*	splitMessage();
 	bool			parseMessage();
 
-	void	Pass(std::string *splitMessage);
-	void	Nick(std::string *splitMessage);
-	void	User(std::string *splitMessage);
-	void	Quit(std::string *splitMessage);
-	void	Join(std::string *splitMessage);
-	void	Part(std::string *splitMessage);
-	void	Mode(std::string *splitMessage);
-	void	Topic(std::string *splitMessage);
-	void	Names(std::string *splitMessage);
-	void	List(std::string *splitMessage);
-	void	Invite(std::string *splitMessage);
-	void	Kick(std::string *splitMessage);
-	void	Msg(std::string *splitMessage);
-	void	Privmsg(std::string *splitMessage);
-	void	Notice(std::string *splitMessage);
-	void	Ping(std::string *splitMessage);
-	void	Pong(std::string *splitMessage);
+	bool	Pass(std::string *splitMessage);
+	bool	Nick(std::string *splitMessage);
+	bool	User(std::string *splitMessage);
+	bool	Quit(std::string *splitMessage);
+	bool	Join(std::string *splitMessage);
+	bool	Part(std::string *splitMessage);
+	bool	Mode(std::string *splitMessage);
+	bool	Topic(std::string *splitMessage);
+	bool	Names(std::string *splitMessage);
+	bool	List(std::string *splitMessage);
+	bool	Invite(std::string *splitMessage);
+	bool	Kick(std::string *splitMessage);
+	bool	Msg(std::string *splitMessage);
+	bool	Privmsg(std::string *splitMessage);
+	bool	Notice(std::string *splitMessage);
+	bool	Ping(std::string *splitMessage);
+	bool	Pong(std::string *splitMessage);
 
 };
 

@@ -112,13 +112,6 @@ Message &Message::operator=(const Message &src)
 
 }
 
-bool Message::isRequest()
-{
-
-
-}
-
-
 std::string * Message::splitMessage()
 {
 	char *string_to_split = new char[_message.length()+1];
@@ -162,15 +155,8 @@ bool Message::parseMessage()
 	else
 	{
 		//int args_nb = sizeof(split_mesage) / sizeof(std::string);
-		if
-		(void)*_ptrF[i](split_mesage);
-		
-
-
+		return (void)*_ptrF[i](split_mesage);
 	}
-
-
-
 
 }
 
