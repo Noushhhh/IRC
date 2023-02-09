@@ -38,17 +38,17 @@ class Server
         // std::list< Command > &getCmdList()   const;
 
 // setters
+        bool                    init();
         void                    setSock(int type, int protocol);
+        void                    bindSock();
+        void                    listenTo(int backlog);
 
 // functions
-        bool                    init();
         bool                    checkPass();
 		//void					close();
 		//void					receiveData();
 		
 
-        void                    bindSock();
-        void                    listenTo(int backlog);
 
         bool                    pollDispatch();
         bool                    addUser();
