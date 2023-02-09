@@ -148,14 +148,20 @@ bool                    Server::pollDispatch()
                 if (it->fd == _sock)
                 {
                     if (this->addUser() == false)
+                    {
+                        //close all sockets
                         return (false);
+                    }
                     break ;
                 }
                 memset(buff, 0, MAX_CHAR);
                 if (recv(it->fd, buff, MAX_CHAR, 0) == 0)
                 {
                     if (!this->closeUser(it))
+                    {
+                        //close all sockets
                         return (false);
+                    }
                     break ;
                 }
                 //receive message, stock it and parse it
@@ -164,6 +170,7 @@ bool                    Server::pollDispatch()
             }
 		}
 	}
+    //free all except 1 and close all sockets
     return (true);
 }
 
@@ -192,7 +199,6 @@ bool                    Server::addUser()
 bool                    Server::closeUser(std::vector< struct pollfd >::iterator it)
 {
     //supress from all channels he belongs to
-
     for (std::list< User >::iterator lit = _usersList.begin(); lit != _usersList.end(); lit ++)
     {
         if (lit->getSockfd() == it->fd)

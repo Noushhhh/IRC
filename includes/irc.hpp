@@ -35,6 +35,7 @@
 #include <strings.h>
 
 #include "Server.hpp"
+#include "Channel.hpp"
 #include "User.hpp"
 #include "Message.hpp"
 #include "Replies.hpp"

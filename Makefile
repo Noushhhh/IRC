@@ -5,6 +5,7 @@ NAME = 			irc_serv
 SRC_FILES = main.cpp \
 			Server.cpp	\
 			Message.cpp	\
+			Channel.cpp	\
 			User.cpp	
 
 SRC = 			${addprefix src/, ${SRC_FILES}} \
@@ -15,6 +16,7 @@ OBJS =			${SRC:.cpp=.o}
 INCLUDES			= 	includes/irc.hpp 		\
 						includes/Server.hpp	\
 						includes/Message.hpp	\
+						includes/Channel.hpp	\
 						includes/User.hpp
 
 CMD = 			c++

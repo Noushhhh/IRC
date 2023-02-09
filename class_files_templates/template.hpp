@@ -26,8 +26,16 @@ public	:
 	Classname();
 	Classname(const Classname &src);
 	~Classname();
-	
+
+	//getters
+
+	//functions
+
+	//operators
+
 	Classname &operator=(const Classname &src);
+
+	//exceptions classes
 };
 
 
