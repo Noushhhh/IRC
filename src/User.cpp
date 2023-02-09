@@ -11,31 +11,48 @@
 /* ************************************************************************** */
 
 #include "../includes/irc.hpp"
-#include "../includes/User.hpp"
-
 
 User::User()
 {
-	// std::cerr << "Debug message: User Default Constructor called" << std::endl;
+    // std::cerr << "Debug message: User Default Constructor called" << std::endl;
 }
 
-User::User(int sockfd) : _sockfd(sockfd)
+User::User(int sockfd, sockaddr_in addr) : _sockfd(sockfd), _addr(addr)
 {
-	// std::cerr << "Debug message: User Default Constructor called" << std::endl;
+    _username = "jambon";
+    _nickname = "jambon";
+    _realname = "jambon";
+    // std::cerr << "Debug message: User Default Constructor called" << std::endl;
 }
 
 User::User(const User &src)
 {
-	*this = src;
-	// std::cerr << "Debug message: User Default Copy Constructor called" << std::endl;
+    *this = src;
+    // std::cerr << "Debug message: User Default Copy Constructor called" << std::endl;
 }
 
 User::~User()
 {
-	// std::cerr << "Debug message: User Default Destructor called" << std::endl;
+    // std::cerr << "Debug message: User Default Destructor called" << std::endl;
 }
 
 User &User::operator=(const User &src)
 {
-	
+    this->_sockfd = src._sockfd;
+    this->_username = src._username;
+    this->_nickname = src._nickname;
+    return (*this);
 }
+
+/**************************************************************/
+/*                                                            */
+/*                         GETTERS                            */
+/*                                                            */
+/**************************************************************/
+
+int             User::getSockfd()     const {return (_sockfd);}
+std::string     User::getUsername()   const {return (_username);}
+std::string     User::getNickname()   const {return (_nickname);}
+std::string     User::getRealname()   const {return (_realname);}
+Message         User::getUserInput()  const {return (_userInput);}
+bool            User::getIsOp()       const {return (_isOp);}
