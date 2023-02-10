@@ -24,7 +24,6 @@ class User
         std::string _username;
         std::string _nickname;
         std::string _realname;
-        Message     _userInput; 
         bool        _isOp;
 
 
@@ -43,13 +42,10 @@ class User
         std::string     getUsername()   const;
         std::string     getNickname()   const;
         std::string     getRealname()   const;
-        Message         getUserInput()  const;
         bool            getIsOp()       const;
 
 
         User &operator=(const User &src);
-
-
 };
 
 #endif

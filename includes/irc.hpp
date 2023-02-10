@@ -33,7 +33,7 @@
 #include <cstdlib>
 #include <fcntl.h>
 #include <strings.h>
-
+#include <limits.h>
 #include "Server.hpp"
 #include "Channel.hpp"
 #include "User.hpp"
@@ -42,7 +42,12 @@
 
 #define BACKLOG         10
 #define TIMEOUTLIMIT    -1
-#define MAX_CHAR        20480
+#define MAX_CHAR        512
+
+#define SO_EE_ORIGIN_NONE    0
+#define SO_EE_ORIGIN_LOCAL   1
+#define SO_EE_ORIGIN_ICMP    2
+#define SO_EE_ORIGIN_ICMP6   3
 
 // crete a server with a socket. Listen entries in particular entry to get new msgs / clients
 // In server >> Chanel, users, state

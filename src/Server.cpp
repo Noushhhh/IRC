@@ -15,11 +15,12 @@
 Server::Server() :
 _sock(0),
 _port(9999),
-_password("0000")
+_password("0000"),
+_usersListIt(_usersList.begin()),
+_channelsListIt(_channelsList.begin())
 {
-    _addr.sin_family = AF_INET; // use IPv4 or IPv6, whichever
+    _addr.sin_family = AF_INET;
     _addr.sin_port = htons(_port);
-    // _addr.sin_addr.s_addr = inet_addr("127.0.0.1"); // or INADDR_ANY >> set random usable IP Address
     std::memset(_addr.sin_zero, 0, sizeof( _addr.sin_zero));
     // std::cerr << "Debug message: Server Default Constructor called" << std::endl;
 }
@@ -27,11 +28,12 @@ _password("0000")
 Server::Server(int port, std::string password) :
 _sock(0),
 _port(port),
-_password(password) // replace port by type uint
+_password(password),
+_usersListIt(_usersList.begin()),
+_channelsListIt(_channelsList.begin())
 {
-    _addr.sin_family = AF_INET; // use IPv4 or IPv6, whichever
+    _addr.sin_family = AF_INET;
     _addr.sin_port = htons(_port);
-    // _addr.sin_addr.s_addr = inet_addr("127.0.0.1"); // or INADDR_ANY >> set random usable IP Address
     std::memset(_addr.sin_zero, 0, sizeof( _addr.sin_zero));
     // std::cerr << "Debug message: Server Constructor called" << std::endl;
 }
@@ -62,12 +64,15 @@ Server::~Server()
 /*                                                            */
 /**************************************************************/
 
-int                     Server::getSock()       const   { return (_sock);           }
-int                     Server::getPort()       const   { return (_port);           }
-std::string             Server::getPassword()   const   { return (_password);       }
-struct sockaddr_in      Server::getAdress()     const   { return (_addr);           }
-// std::list< User >    &Server::getUserList()  const   { return (_usersList);      }
-// std::list< Channel > &Server::getChanList()  const   { return (_channelsList);   }
+int                                 Server::getSock()           const   { return (_sock);           }
+int                                 Server::getPort()           const   { return (_port);           }
+std::string                         Server::getPassword()       const   { return (_password);       }
+struct sockaddr_in                  Server::getAdress()         const   { return (_addr);           }
+std::list< User >::iterator         Server::getUserListIt()     const   { return (_usersListIt);    }
+std::list< Channel >::iterator      Server::getChanListIt()     const   { return (_channelsListIt); }
+std::list< User >                   *Server::getUserList()              { return (&_usersList);      }
+std::list< Channel >                *Server::getChanList()              { return (&_channelsList);   }
+
 // std::list< Command > &Server::getCmdList()   const   { return (commandsList);    }
 
 
@@ -126,6 +131,7 @@ bool                    Server::pollDispatch()
     struct pollfd                           server_fd = {_sock, POLLIN, 0};
     std::vector< struct pollfd >::iterator  it = _pollFds.begin();
     char                                    buff[MAX_CHAR];
+    std::string                             msg;
 
     _pollFds.push_back(server_fd);
 	while (1)
@@ -138,6 +144,7 @@ bool                    Server::pollDispatch()
         }
 		for (it = _pollFds.begin(); it != _pollFds.end(); it ++)
 		{
+        fcntl(it->fd, F_SETFL, O_NONBLOCK == - 1);
             if (it->events == 0)
                 continue;
 			// if ((it->revents & POLLHUP) == POLLHUP)
@@ -154,18 +161,26 @@ bool                    Server::pollDispatch()
                     }
                     break ;
                 }
-                memset(buff, 0, MAX_CHAR);
-                if (recv(it->fd, buff, MAX_CHAR, 0) == 0)
+                size_t r;
+                while (errno != EAGAIN && errno != EWOULDBLOCK)
                 {
-                    if (!this->closeUser(it))
+                    memset(buff, 0, MAX_CHAR);
+                    std::cout << "r : " << r << "errno : " << errno << std::endl;
+                    r = recv(it->fd, buff, MAX_CHAR - 1, 0);
+                    std::cout << "michel" <<std::endl;
+                    msg.append(std::string(buff));
+                    if (r == 0)
                     {
-                        //close all sockets
-                        return (false);
+                        if (!this->closeUser(it))
+                        {
+                            //close all sockets
+                            return (false);
+                        }
+                        break ;
                     }
-                    break ;
                 }
+                std::cerr << "msg : " << buff << std::endl;
                 //receive message, stock it and parse it
-                std::cout << buff;
                 //send message or execute command and send reply
             }
 		}

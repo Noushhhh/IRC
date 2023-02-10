@@ -20,10 +20,29 @@ int main(int ac, char **av)
 	
 	Server Serv(std::atoi(av[1]), std::string(av[2]));
 	Serv.init();
+	try
+	{
+		User KarlSagan;
+		Channel michel("#dasdasdas", KarlSagan);
+		std::cout << "chan creator : " << michel.getChanCreator().getUsername()
+		<< std::endl;
+		Serv.getChanList()->push_back(michel);
+
+		std::list<Channel>::iterator it = Serv.getChanList()->begin();
+		std::cout << &it <<std::endl;
+		std::cout << "size of channelList : " << Serv.getChanList()->size() << std::endl;
+		std::cout << "from chan : " << michel.getChanCreator().getUsername() << std::endl;
+		std::cout << "from serv : " << it->getChanCreator().getUsername()
+		<< std::endl;
+	}
+	catch(const Channel::BadNameException &e)
+	{
+		std::cerr << e.badName() << '\n';
+	}
 
 	if (!Serv.pollDispatch())
 	{
-		std::cerr << "an error has occured during server runtime, eron : "
+		std::cerr << "an error has occured during server runtime, errno : "
 		<< std::strerror(errno) << std::endl;
 	}
 
