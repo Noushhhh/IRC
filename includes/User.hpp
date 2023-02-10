@@ -21,6 +21,7 @@ class User
 		const int	_sockfd;
 		const int	_username;
 		std::string _nickname;
+		std::string	_givenPassword;
 
 	// PASS Check if the passwd is ok if not reject user
 	// NICK set nickename for user
@@ -33,6 +34,12 @@ class User
 		~User();
 		
 		User &operator=(const User &src);
+
+//setter
+		void setPassword(std::string given_password);
+
+//getter
+		std::string getPassword();
 };
 
 

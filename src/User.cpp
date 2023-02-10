@@ -39,3 +39,8 @@ User &User::operator=(const User &src)
 {
 	
 }
+
+void User::setPassword(std::string given_password)
+{
+	this->_givenPassword = given_password;
+}

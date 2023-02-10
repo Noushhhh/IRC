@@ -21,17 +21,18 @@ class Message
 {
 public	:
 
+	User							_fromUser;
 	std::string						_message;
-
 	std::string						_handledCommands[HANDLEDCOMMANDSNB];
-	void							(Message::*_ptrF[HANDLEDCOMMANDSNB])(std::string *splitMessage);
+	size_t							_argsNb;
+	bool							(Message::*_ptrF[HANDLEDCOMMANDSNB])(std::string *splitMessage);
 	// std::string						*_commands;
 	// std::string						*_parameters;
 
 public	:
 
 	Message();
-	Message(std::string message);
+	Message(User fromUser, std::list<Channel> channelList, std::string message);
 	Message(const Message &src);
 	~Message();
 	

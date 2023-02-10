@@ -56,7 +56,7 @@ Message::Message() : _message(""), // init members
 	// std::cerr << "Debug message: Message Default Constructor called" << std::endl;
 }
 
-Message::Message(std::string message) : _message(message)
+Message::Message(User fromUser, std::string message) : _message(message), _fromUser(fromUser)
 {
 	this->_ptrF[0] = (&Message::Pass);
 	this->_ptrF[1] = (&Message::Nick);
@@ -152,29 +152,40 @@ bool Message::parseMessage()
 		std::cout << "Not a request" << std::endl;
 		return false;
 	}
+	size_t args_nb = sizeof(splitMsg) / sizeof(std::string);
 	else
 	{
 		//int args_nb = sizeof(split_mesage) / sizeof(std::string);
-		return (void)*_ptrF[i](split_mesage);
+		return (bool)(this->*_ptrF[i])(split_mesage);
 	}
+}
+
+
+bool	Message::Pass(std::string *splitMsg)
+{
+	if (argsNb != 2)
+	{
+		std::cout << "error: message: pass: wrong number of arguments." << std::endl;
+	}
+	_fromUser->set
+
 
 }
 
 
-// void	Pass(std::string command, std::string parameters);
-// void	Nick(std::string command, std::string parameters);
-// void	User(std::string command, std::string parameters);
-// void	Quit(std::string command, std::string parameters);
-// void	Join(std::string command, std::string parameters);
-// void	Part(std::string command, std::string parameters);
-// void	Mode(std::string command, std::string parameters);
-// void	Topic(std::string command, std::string parameters);
-// void	Names(std::string command, std::string parameters);
-// void	List(std::string command, std::string parameters);
-// void	Invite(std::string command, std::string parameters);
-// void	Kick(std::string command, std::string parameters);
-// void	Msg(std::string command, std::string parameters);
-// void	Privmsg(std::string command, std::string parameters);
-// void	Notice(std::string command, std::string parameters);
-// void	Ping(std::string command, std::string parameters);
-// void	Pong(std::string command, std::string parameters);
+// bool	Nick(std::string *splitMsg);
+// bool	User(std::string *splitMsg);
+// bool	Quit(std::string *splitMsg);
+// bool	Join(std::string *splitMsg);
+// bool	Part(std::string *splitMsg);
+// bool	Mode(std::string *splitMsg);
+// bool	Topic(std::string *splitMsg);
+// bool	Names(std::string *splitMsg);
+// bool	List(std::string *splitMsg);
+// bool	Invite(std::string *splitMsg);
+// bool	Kick(std::string *splitMsg);
+// bool	Msg(std::string *splitMsg);
+// bool	Privmsg(std::string *splitMsg);
+// bool	Notice(std::string *splitMsg);
+// bool	Ping(std::string *splitMsg);
+// bool	Pong(std::string *splitMsg);

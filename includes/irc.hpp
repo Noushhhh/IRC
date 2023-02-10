@@ -28,6 +28,7 @@
 
 #include "Server.hpp"
 #include "User.hpp"
+#include "Message"
 #include "Replies.hpp"
 
 #define BACKLOG 10
