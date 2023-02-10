@@ -58,4 +58,3 @@ int             User::getSockfd()     const {return (_sockfd);}
 // std::string     User::getUsername()   const {return (_username);}
 std::string     User::getNickname()   const {return (_nickname);}
 // std::string     User::getRealname()   const {return (_realname);}
-
