@@ -14,12 +14,14 @@
 #define USER_HPP
 
 #include "irc.hpp"
+#include "Message.hpp"
 
 class User
 {
 	private	:
-		const int	_sockfd;
-		const int	_username;
+		int	_sockfd;
+		sockaddr_in _addr;
+		//const int	_username;
 		std::string _nickname;
 		std::string	_givenPassword;
 
@@ -39,9 +41,17 @@ class User
 		void setPassword(std::string given_password);
 
 //getter
-		std::string getPassword();
+		std::string		getPassword()	const;
+        int             getSockfd()     const;
+        std::string     getUsername()   const;
+        std::string     getNickname()   const;
+        std::string     getRealname()   const;
+        Message         getUserInput()  const;
+        bool            getIsOp()       const;
+
+
+        User &operator=(const User &src);
+
 };
-
-
 
 #endif

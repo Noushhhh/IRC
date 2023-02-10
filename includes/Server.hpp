@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/01/25 16:34:08 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/01/27 17:14:08 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,53 +19,63 @@
 #define LISTEN 2
 
 #include "irc.hpp"
+#include "User.hpp"
 
 class Server
 {
-	public	:
+    public  :
 
-		Server(int port, std::string password);
-		~Server();
+        Server(int port, std::string password);
+        ~Server();
 
 // getters
-		int						getSock()		const;
-		int						getPort()		const;
-		std::string				getPassword()	const;
-		struct sockaddr_in		getAdress()		const;
-		// std::list< User >	&getUserList()	const;
-		// std::list< Channel >	&getChanList()	const;
-		// std::list< Command >	&getCmdList()	const;
+        int                     getSock()       const;
+        int                     getPort()       const;
+        std::string             getPassword()   const;
+        struct sockaddr_in      getAdress()     const;
+        std::list< User >       &getUserList()  const;
+        // std::list< Channel > &getChanList()  const;
+        // std::list< Command > &getCmdList()   const;
 
 // setters
-		void					setSock(int type, int protocol);
+        bool                    init();
+        void                    setSock(int type, int protocol);
+        void                    bindSock();
+        void                    listenTo(int backlog);
 
 // functions
-		void					bindSock();
-		void					listenTo(int backlog);
+        bool                    checkPass();
+		//void					close();
+		//void					receiveData();
+		
 
-		bool					addUser(int sockfd);
 
-	class ServerException : public std::exception
-	{
-		private :
-			int	exceptionType;
-		public	:
-			ServerException(int exType);
-			const std::string	errorMsg() const throw();
-	};
-	private	:
+        bool                    pollDispatch();
+        bool                    addUser();
+        bool                    closeUser(std::vector< struct pollfd >::iterator it);
 
-		int					_sock;
-		const int			_port;
-		const std::string	_password;
-		struct sockaddr_in	_addr;
-		std::list< User >	_usersList; //List d'utilisateurs du serveur
-		// std::list< Channel >	*_channelsList; //List d'utilisateurs du serveur
-		// std::list< Comand >	*_comandsList; //List d'utilisateurs du serveur
+    class ServerException : public std::exception
+    {
+        private :
+            int exceptionType;
+        public  :
+            ServerException(int exType);
+            const std::string   errorMsg() const throw();
+    };
+    private :
 
-		Server();
-		Server(const Server & newServ);
-		Server &operator=(const Server & newServ);
+        int                                     _sock;
+        const int                               _port;
+        const std::string                       _password;
+        struct sockaddr_in                      _addr;
+        std::vector< struct pollfd >            _pollFds; //element new a delete
+        std::list< class User >                 _usersList; //List d'utilisateurs du serveur
+        // std::list< Channel > *_channelsList; //List d'utilisateurs du serveur
+        // std::list< Comand >  *_comandsList; //List d'utilisateurs du serveur
+
+        Server();
+        Server(const Server & newServ);
+        Server &operator=(const Server & newServ);
 };
 
 #endif

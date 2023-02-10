@@ -3,26 +3,30 @@ NAME = 			irc_serv
 #PARSING_FILES = 	
 
 SRC_FILES = main.cpp \
-			Server.cpp
+			Server.cpp	\
+			Message.cpp	\
+			User.cpp	
 
 SRC = 			${addprefix src/, ${SRC_FILES}} \
 			#	${addprefix parsing/, ${PARSING_FILES}} \
 
 OBJS =			${SRC:.cpp=.o}
 
-INCLUDES			= 	#irc.hpp \
-						Server.hpp
+INCLUDES			= 	includes/irc.hpp 		\
+						includes/Server.hpp	\
+						includes/Message.hpp	\
+						includes/User.hpp
 
 CMD = 			c++
-FLAGS = 		-Wall -Werror -Wextra -std=c++98 #-MD
+FLAGS = 		-Wall -Werror -Wextra -std=c++98 -fsanitize=address -g3 #-MD
 DEP = 			${OBJS:.o=.d}
 
 all: 			library $(NAME)
 
-$(NAME): 		$(OBJS) $(INCLUDES) Makefile
+$(NAME): 		$(OBJS) $(INCLUDES) 
 				$(CMD) $(FLAGS) $(OBJS) -o $(NAME)
 				
-%.o: 			%.cpp $(INCLUDES)
+%.o: 			%.cpp $(INCLUDES) Makefile
 				$(CMD) $(FLAGS) -c $< -o $@
 
 clean:

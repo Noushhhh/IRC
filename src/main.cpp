@@ -20,42 +20,13 @@ int main(int ac, char **av)
 		return 0;
 	
 	Server Serv(std::atoi(av[1]), std::string(av[2]));
+	Serv.init();
 
-	try
+	if (!Serv.pollDispatch())
 	{
-		Serv.setSock(SOCK_STREAM, PROTOCOL);
-		Serv.bindSock();
-		Serv.listenTo(BACKLOG);
-	}
-	catch(const Server::ServerException e)
-	{
-		std::cerr << e.errorMsg() << '\n';
+		std::cerr << "an error has occured during server runtime, eron : "
+		<< std::strerror(errno) << std::endl;
 	}
 
-	int new_socket;
-	socklen_t addr_size;
-	struct sockaddr their_addr;
-
-	while (1)
-	{
-		addr_size = sizeof(their_addr);
-		new_socket = accept(Serv.getSock(), (struct sockaddr *)&their_addr, &addr_size);
-		if (new_socket > 0)
-		{
-			if (!Serv.addUser(new_socket))
-				return 0; // msg User couldnt be add
-		}
-		else if (new_socket < 0)
-		{
-			std::cout << "error: accept: " << std::strerror(errno) << std::endl;
-		}
-		// char buff[250];
-		// while (recv(new_socket, buff, sizeof(buff), 0) > 0) // use poll 
-		// //recv(new_socket, buff, sizeof(buff), 0);
-		// {
-		// 	std::cout << buff;
-		// 	memset(buff, 0, 250);
-		// }
-	}
 	return 0;
 }
