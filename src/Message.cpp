@@ -163,7 +163,7 @@ bool Message::parseMessage()
 
 bool	Message::Pass(std::string *splitMsg)
 {
-	if (argsNb != 2)
+	if (_argsNb != 2)
 	{
 		std::cout << "error: message: pass: wrong number of arguments." << std::endl;
 	}

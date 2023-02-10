@@ -31,7 +31,7 @@ class User
 	public	:
 
 		User();
-		User(int sockfd);
+		User(int sockfd, sockaddr_in addr);
 		User(const User &src);
 		~User();
 		
