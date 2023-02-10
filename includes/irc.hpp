@@ -38,6 +38,7 @@
 #include "User.hpp"
 #include "Message.hpp"
 #include "Replies.hpp"
+#include "Channel.hpp"
 
 #define BACKLOG         10
 #define TIMEOUTLIMIT    -1

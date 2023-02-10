@@ -18,27 +18,30 @@
 
 class User
 {
-    private  :
-        int         _sockfd;
-        sockaddr_in _addr;
-        std::string _username;
-        std::string _nickname;
-        std::string _realname;
-        Message     _userInput; 
-        bool        _isOp;
+	private	:
+		int	_sockfd;
+		sockaddr_in _addr;
+		//const int	_username;
+		std::string _nickname;
+		std::string	_givenPassword;
 
+	// PASS Check if the passwd is ok if not reject user
+	// NICK set nickename for user
 
+	public	:
 
-    // PASS Check if the passwd is ok if not reject user
-    // NICK set nickname for user
+		User();
+		User(int sockfd, sockaddr_in addr);
+		User(const User &src);
+		~User();
+		
+		User &operator=(const User &src);
 
-    public  :
+//setter
+		void setPassword(std::string given_password);
 
-        User();
-        User(int sockfd, sockaddr_in addr);
-        User(const User &src);
-        ~User();
-
+//getter
+		std::string		getPassword()	const;
         int             getSockfd()     const;
         std::string     getUsername()   const;
         std::string     getNickname()   const;
@@ -48,7 +51,6 @@ class User
 
 
         User &operator=(const User &src);
-
 
 };
 

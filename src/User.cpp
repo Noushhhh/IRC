@@ -19,9 +19,9 @@ User::User()
 
 User::User(int sockfd, sockaddr_in addr) : _sockfd(sockfd), _addr(addr)
 {
-    _username = "jambon";
+    // _username = "jambon";
     _nickname = "jambon";
-    _realname = "jambon";
+    // _realname = "jambon";
     // std::cerr << "Debug message: User Default Constructor called" << std::endl;
 }
 
@@ -39,11 +39,15 @@ User::~User()
 User &User::operator=(const User &src)
 {
     this->_sockfd = src._sockfd;
-    this->_username = src._username;
+    // this->_username = src._username;
     this->_nickname = src._nickname;
     return (*this);
 }
 
+void User::setPassword(std::string given_password)
+{
+	this->_givenPassword = given_password;
+}
 /**************************************************************/
 /*                                                            */
 /*                         GETTERS                            */
@@ -51,8 +55,6 @@ User &User::operator=(const User &src)
 /**************************************************************/
 
 int             User::getSockfd()     const {return (_sockfd);}
-std::string     User::getUsername()   const {return (_username);}
+// std::string     User::getUsername()   const {return (_username);}
 std::string     User::getNickname()   const {return (_nickname);}
-std::string     User::getRealname()   const {return (_realname);}
-Message         User::getUserInput()  const {return (_userInput);}
-bool            User::getIsOp()       const {return (_isOp);}
+// std::string     User::getRealname()   const {return (_realname);}

@@ -30,7 +30,7 @@ Channel::~Channel()
 	// std::cerr << "Debug message: Channel Default Destructor called" << std::endl;
 }
 
-Classename &Channel::operator=(const Channel &src)
+Channel &Channel::operator=(const Channel &src)
 {
 	
 }
