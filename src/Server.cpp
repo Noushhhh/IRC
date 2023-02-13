@@ -15,11 +15,12 @@
 Server::Server() :
 _sock(0),
 _port(9999),
-_password("0000")
+_password("0000"),
+_usersListIt(_usersList.begin()),
+_channelsListIt(_channelsList.begin())
 {
-    _addr.sin_family = AF_INET; // use IPv4 or IPv6, whichever
+    _addr.sin_family = AF_INET;
     _addr.sin_port = htons(_port);
-    // _addr.sin_addr.s_addr = inet_addr("127.0.0.1"); // or INADDR_ANY >> set random usable IP Address
     std::memset(_addr.sin_zero, 0, sizeof( _addr.sin_zero));
     // std::cerr << "Debug message: Server Default Constructor called" << std::endl;
 }
@@ -27,11 +28,12 @@ _password("0000")
 Server::Server(int port, std::string password) :
 _sock(0),
 _port(port),
-_password(password) // replace port by type uint
+_password(password),
+_usersListIt(_usersList.begin()),
+_channelsListIt(_channelsList.begin())
 {
-    _addr.sin_family = AF_INET; // use IPv4 or IPv6, whichever
+    _addr.sin_family = AF_INET;
     _addr.sin_port = htons(_port);
-    // _addr.sin_addr.s_addr = inet_addr("127.0.0.1"); // or INADDR_ANY >> set random usable IP Address
     std::memset(_addr.sin_zero, 0, sizeof( _addr.sin_zero));
     // std::cerr << "Debug message: Server Constructor called" << std::endl;
 }
@@ -62,12 +64,15 @@ Server::~Server()
 /*                                                            */
 /**************************************************************/
 
-int                     Server::getSock()       const   { return (_sock);           }
-int                     Server::getPort()       const   { return (_port);           }
-std::string             Server::getPassword()   const   { return (_password);       }
-struct sockaddr_in      Server::getAdress()     const   { return (_addr);           }
-// std::list< User >    &Server::getUserList()  const   { return (_usersList);      }
-// std::list< Channel > &Server::getChanList()  const   { return (_channelsList);   }
+int                                 Server::getSock()           const   { return (_sock);           }
+int                                 Server::getPort()           const   { return (_port);           }
+std::string                         Server::getPassword()       const   { return (_password);       }
+struct sockaddr_in                  Server::getAdress()         const   { return (_addr);           }
+std::list< User >::iterator         Server::getUserListIt()     const   { return (_usersListIt);    }
+std::list< Channel >::iterator      Server::getChanListIt()     const   { return (_channelsListIt); }
+std::list< User >                   *Server::getUserList()              { return (&_usersList);      }
+std::list< Channel >                *Server::getChanList()              { return (&_channelsList);   }
+
 // std::list< Command > &Server::getCmdList()   const   { return (commandsList);    }
 
 
@@ -79,6 +84,7 @@ struct sockaddr_in      Server::getAdress()     const   { return (_addr);       
 
 void                    Server::setSock(int type, int protocol)
 {
+    
     _addr.sin_family = AF_INET;
     _addr.sin_addr.s_addr = INADDR_ANY;
     _addr.sin_addr.s_addr = inet_addr("127.0.0.1");
@@ -89,8 +95,13 @@ void                    Server::setSock(int type, int protocol)
 	int val = 1;
 	if (setsockopt(_sock, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val)))
 		throw (Server::ServerException(SOCKET));
-	if (fcntl(_sock, F_SETFL, O_NONBLOCK == - 1))
+    std::cout << "sock = " << _sock << std::endl;
+	if (fcntl(_sock, F_SETFL, O_NONBLOCK < 0))
 		throw (Server::ServerException(SOCKET));
+
+    struct pollfd                           server_fd = {_sock, POLLIN, 0};
+
+    _pollFds.push_back(server_fd);
 }
 
 void                    Server::bindSock()
@@ -123,15 +134,12 @@ bool                    Server::init()
 
 bool                    Server::pollDispatch()
 {
-    struct pollfd                           server_fd = {_sock, POLLIN, 0};
-    std::vector< struct pollfd >::iterator  it = _pollFds.begin();
     char                                    buff[MAX_CHAR];
+    std::string                             msg;
+    std::vector< struct pollfd >::iterator  it;
 
-    _pollFds.push_back(server_fd);
 	while (1)
     {
-        it = _pollFds.begin();
-
 		if (poll (_pollFds.begin().base(), _pollFds.size(), -1) < 0)
         {
             return (false);
@@ -140,30 +148,42 @@ bool                    Server::pollDispatch()
 		{
             if (it->events == 0)
                 continue;
-			// if ((it->revents & POLLHUP) == POLLHUP)
-            // {
-            // }
             else if ((it->revents & POLLIN) == POLLIN)
             {
                 if (it->fd == _sock)
                 {
                     if (this->addUser() == false)
+                    {
+                        //close all sockets
                         return (false);
+                    }
                     break ;
                 }
-                memset(buff, 0, MAX_CHAR);
-                if (recv(it->fd, buff, MAX_CHAR, 0) == 0)
+                ssize_t r = 0;
+                while (errno != EAGAIN && errno != EWOULDBLOCK)
                 {
-                    if (!this->closeUser(it))
-                        return (false);
-                    break ;
+                    memset(buff, 0, MAX_CHAR);
+                    r = recv(it->fd, buff, MAX_CHAR - 1, MSG_DONTWAIT);
+                    msg.append(std::string(buff));
+                    if (r == 0)
+                    {
+                        if (!this->closeUser(it))
+                        {
+                            // close all sockets
+                            return (false);
+                        }
+                        break ;
+                    }
                 }
+                std::cerr << msg;
+                msg = "";
+                errno = 0;
                 //receive message, stock it and parse it
-                std::cout << buff;
                 //send message or execute command and send reply
             }
 		}
 	}
+    //free all except 1 and close all sockets
     return (true);
 }
 
@@ -189,10 +209,9 @@ bool                    Server::addUser()
     return (true);
 }
 
-bool                    Server::closeUser(std::vector< struct pollfd >::iterator it)
+bool                    Server::closeUser(std::vector< struct pollfd >::iterator &it)
 {
     //supress from all channels he belongs to
-
     for (std::list< User >::iterator lit = _usersList.begin(); lit != _usersList.end(); lit ++)
     {
         if (lit->getSockfd() == it->fd)
@@ -204,6 +223,7 @@ bool                    Server::closeUser(std::vector< struct pollfd >::iterator
     if (close(it->fd) < 0)
         return (false);
     _pollFds.erase(it);
+    it = _pollFds.begin();
     return (true) ;
 
 }
