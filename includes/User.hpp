@@ -14,7 +14,6 @@
 #define USER_HPP
 
 #include "irc.hpp"
-#include "Message.hpp"
 
 class User
 {
@@ -39,6 +38,7 @@ class User
 
 //setter
 		void setPassword(std::string given_password);
+		void setNickname(std::string nickname);
 
 //getter
 		std::string		getPassword()	const;

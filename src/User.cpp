@@ -48,6 +48,12 @@ void User::setPassword(std::string given_password)
 {
 	this->_givenPassword = given_password;
 }
+
+void User::setPNickname(std::string nickname)
+{
+	this->_nickname = nickname;
+}
+
 /**************************************************************/
 /*                                                            */
 /*                         GETTERS                            */

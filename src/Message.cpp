@@ -12,9 +12,9 @@
 
 #include "../includes/irc.hpp"
 #include "../includes/Message.hpp"
+#include "../includes/User.hpp"
 
-
-Message::Message() : _message(""), // init members
+Message::Message() : _message("") // init members
 {
 
 	this->_ptrF[0] = (&Message::Pass);
@@ -56,7 +56,8 @@ Message::Message() : _message(""), // init members
 	// std::cerr << "Debug message: Message Default Constructor called" << std::endl;
 }
 
-Message::Message(User fromUser, std::string message) : _message(message), _fromUser(fromUser)
+Message::Message(std::list <User> &user_list, std::list<Channel> &channel_list, User &from_user, std::string message) :
+_message(message), _channelList(channel_list),_fromUser(from_user)
 {
 	this->_ptrF[0] = (&Message::Pass);
 	this->_ptrF[1] = (&Message::Nick);
@@ -109,7 +110,12 @@ Message::~Message()
 
 Message &Message::operator=(const Message &src)
 {
-
+	// this->_fromUser = src._fromUser;
+	// _channelList = src._channelList;
+	// _message = src._message;
+	// _handledCommands = src.handledCommands;
+	// _argsNb = src._argsNb;
+	// bool							(Message::*_ptrF[HANDLEDCOMMANDSNB])(std::string *splitMessage);
 }
 
 std::string * Message::splitMessage()
@@ -152,10 +158,9 @@ bool Message::parseMessage()
 		std::cout << "Not a request" << std::endl;
 		return false;
 	}
-	size_t args_nb = sizeof(splitMsg) / sizeof(std::string);
 	else
 	{
-		//int args_nb = sizeof(split_mesage) / sizeof(std::string);
+		size_t args_nb = sizeof(splitMessage) / sizeof(std::string);
 		return (bool)(this->*_ptrF[i])(split_mesage);
 	}
 }
@@ -163,17 +168,43 @@ bool Message::parseMessage()
 
 bool	Message::Pass(std::string *splitMsg)
 {
-	if (_argsNb != 2)
+	if (_argsNb < 2)
 	{
-		std::cout << "error: message: pass: wrong number of arguments." << std::endl;
+		send(this->_fromUser.getSockfd(), "ERR_NEEDMOREPARAMS", 18, 0); 
+		return false;
 	}
-	_fromUser->set
+	if (this->_fromUser.getPassword().empty())
+	{
+		this->_fromUser.setPassword(splitMsg[1]);
+		return true;
+	}
+	else
+	{
+		send(this->_fromUser.getSockfd(), "ERR_ALREADYREGISTRED", 20, 0); 
+		return false;
+	}
+}
 
+
+bool	Message::Nick(std::string *splitMsg)
+{
+	if (_argsNb < 2)
+	{
+		send(this->_fromUser.getSockfd(), "ERR_NONICKNAMEGIVEN", 19, 0); 
+		return false;
+	}
+
+	// ERR_ERRONEUSNICKNAME
+	std::list<User>::const_iterator it;
+	it = std::find()
+
+	for (std::list::const_iterator it = 0; it != this._channelList.size() )
+
+	
 
 }
 
 
-// bool	Nick(std::string *splitMsg);
 // bool	User(std::string *splitMsg);
 // bool	Quit(std::string *splitMsg);
 // bool	Join(std::string *splitMsg);

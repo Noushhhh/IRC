@@ -8,7 +8,6 @@ SRC_FILES = main.cpp \
 			User.cpp	
 
 SRC = 			${addprefix src/, ${SRC_FILES}} \
-			#	${addprefix parsing/, ${PARSING_FILES}} \
 
 OBJS =			${SRC:.cpp=.o}
 
