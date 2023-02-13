@@ -45,21 +45,21 @@ public	:
 
 	bool	Pass(std::string *splitMessage);
 	bool	Nick(std::string *splitMessage);
-	// bool	User(std::string *splitMessage);
-	// bool	Quit(std::string *splitMessage);
-	// bool	Join(std::string *splitMessage);
-	// bool	Part(std::string *splitMessage);
-	// bool	Mode(std::string *splitMessage);
-	// bool	Topic(std::string *splitMessage);
-	// bool	Names(std::string *splitMessage);
-	// bool	List(std::string *splitMessage);
-	// bool	Invite(std::string *splitMessage);
-	// bool	Kick(std::string *splitMessage);
-	// bool	Msg(std::string *splitMessage);
-	// bool	Privmsg(std::string *splitMessage);
-	// bool	Notice(std::string *splitMessage);
-	// bool	Ping(std::string *splitMessage);
-	// bool	Pong(std::string *splitMessage);
+	bool	User(std::string *splitMessage);
+	bool	Quit(std::string *splitMessage);
+	bool	Join(std::string *splitMessage);
+	bool	Part(std::string *splitMessage);
+	bool	Mode(std::string *splitMessage);
+	bool	Topic(std::string *splitMessage);
+	bool	Names(std::string *splitMessage);
+	bool	List(std::string *splitMessage);
+	bool	Invite(std::string *splitMessage);
+	bool	Kick(std::string *splitMessage);
+	bool	Msg(std::string *splitMessage);
+	bool	Privmsg(std::string *splitMessage);
+	bool	Notice(std::string *splitMessage);
+	bool	Ping(std::string *splitMessage);
+	bool	Pong(std::string *splitMessage);
 
 };
 
