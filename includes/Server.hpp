@@ -53,7 +53,7 @@ class Server
 		
         bool                    pollDispatch();
         bool                    addUser();
-        bool                    closeUser(std::vector< struct pollfd >::iterator it);
+        bool                    closeUser(std::vector< struct pollfd >::iterator &it);
 
     class ServerException : public std::exception
     {

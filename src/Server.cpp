@@ -172,7 +172,6 @@ bool                    Server::pollDispatch()
                             // close all sockets
                             return (false);
                         }
-                        it = _pollFds.begin();
                         break ;
                     }
                 }
@@ -210,7 +209,7 @@ bool                    Server::addUser()
     return (true);
 }
 
-bool                    Server::closeUser(std::vector< struct pollfd >::iterator it)
+bool                    Server::closeUser(std::vector< struct pollfd >::iterator &it)
 {
     //supress from all channels he belongs to
     for (std::list< User >::iterator lit = _usersList.begin(); lit != _usersList.end(); lit ++)
@@ -224,6 +223,7 @@ bool                    Server::closeUser(std::vector< struct pollfd >::iterator
     if (close(it->fd) < 0)
         return (false);
     _pollFds.erase(it);
+    it = _pollFds.begin();
     return (true) ;
 
 }
