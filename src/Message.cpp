@@ -46,8 +46,9 @@ Message &Message::operator=(const Message &src)
 void Message::splitMessage()
 {
 	char *string_to_split = new char[_rawMessage.length()+1];
-	char *token = strtok(string_to_split, " ");
-
+	char *token = strtok(string_to_split, " "); // segfault here
+	std::cout <<" YO" << std::endl;
+	
 	while(token != NULL)
 	{
 		_splitMessage.push_back(token);
@@ -58,7 +59,7 @@ void Message::splitMessage()
 
 bool Message::parseMessage()
 {
-
+	
 	if (_rawMessage.empty()) 
 	{
 		std::cout << "empty message." << std::endl;
@@ -66,6 +67,7 @@ bool Message::parseMessage()
 	}
 
 	splitMessage();
+	
 	
 	return true ;
 }

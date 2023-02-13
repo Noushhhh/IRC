@@ -249,7 +249,7 @@ bool                    Server::pollDispatch()
                     }
                 }
                 std::cerr << msg;
-              //  handleMessage(msg); // add user in params, ask max how to get 
+				handleMessage(*(getUserItWithFd(it->fd)), msg); // check if reference of uesr good
                 msg = "";
                 errno = 0;
                 //receive message, stock it and parse it
@@ -305,34 +305,50 @@ bool                    Server::closeUser(std::vector< struct pollfd >::iterator
 }
 
 
-// bool                    Server::handleMessage(User &user, std::string raw_message)
-// {
 
-//     Message message(raw_message);
+std::list< User >::iterator			Server::getUserItWithFd(int fd)
+{
+	for (std::list< User >::iterator lit = _usersList.begin(); lit != _usersList.end(); lit ++)
+    {
+        if (lit->getSockfd() == fd)
+        {
+            return (lit);
+        }
+    }
+	return _usersList.end();
+}
 
-//     if (!message.parseMessage())
-//     {
-//         return false ;
-//     }
-//     message.splitMessage();
-//     int i = 0;
-// 	while(i <= HANDLEDCOMMANDSNB)
-// 	{
-// 		if (_handledCommands[i] == message._splitMessage[0])
-// 			break ;
-// 		i++;
-// 	}
-// 	if (i >= HANDLEDCOMMANDSNB) // check if > or >=
-// 	{
-// 		std::cout << "Not a request" << std::endl;
-// 		return false;
-// 	}
-// 	else
-// 	{
-// 		message._argsNb = message._splitMessage.size();
-// 		return (bool)(this->*_ptrF[i])(user, &message);
-// 	}
-// }
+bool                    Server::handleMessage(User &user, std::string raw_message)
+{
+
+    Message message(raw_message);
+		// check if user empty 
+
+	std::cout << user.getSockfd();
+
+    if (!message.parseMessage())
+    {
+        return false ;
+    }
+    message.splitMessage();
+    int i = 0;
+	while(i <= HANDLEDCOMMANDSNB)
+	{
+		if (_handledCommands[i] == message._splitMessage[0])
+			break ;
+		i++;
+	}
+	if (i >= HANDLEDCOMMANDSNB)
+	{
+		std::cout << "Not a request" << std::endl;
+		return false;
+	}
+	else
+	{
+		message._argsNb = message._splitMessage.size();
+		return (bool)(this->*_ptrF[i])(user, message);
+	}
+}
 
 /**************************************************************/
 /*                                                            */
@@ -427,4 +443,3 @@ bool	Server::Nick(User &user, Message &message)
 // bool	Notice(User &user, Message &message);
 // bool	Ping(User &user, Message &message);
 // bool	Pong(User &user, Message &message);
-

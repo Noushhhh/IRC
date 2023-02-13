@@ -40,6 +40,8 @@ class Server
         std::list< Channel >::iterator  getChanListIt()     const;
         std::list< User >               *getUserList();
         std::list< Channel >            *getChanList();
+
+        std::list< User >::iterator      getUserItWithFd(int fd);
         // std::list< Command > &getCmdList()   const;
 
 // setters
