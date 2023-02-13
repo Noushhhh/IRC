@@ -15,6 +15,24 @@
 
 #include "irc.hpp"
 
+// #define	ERR_NOSUCHNICK			401
+// #define ERR_NOSUCHSERVER		402
+// #define	ERR_NOSUCHCHANNEL		403
+// #define	ERR_CANNOTSENDTOCHAN	404
+// #define	ERR_TOOMANYCHANNELS		405
+// #define	ERR_WASNOSUCHNICK		406
+// #define
+// #define
+// #define
+// #define
+// #define
+// #define
+// #define
+// #define
+// #define
+// #define
+// #define
+
 class Replies
 {
 private	:
