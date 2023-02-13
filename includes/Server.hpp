@@ -17,10 +17,12 @@
 #define PROTOCOL 0
 #define BIND 1
 #define LISTEN 2
+#define HANDLEDCOMMANDSNB 17
 
 #include "irc.hpp"
 #include "User.hpp"
 #include "Channel.hpp"
+#include "Message.hpp"
 
 class Server
 {
@@ -55,6 +57,57 @@ class Server
         bool                    addUser();
         bool                    closeUser(std::vector< struct pollfd >::iterator &it);
 
+        bool                    handleMessage(User &user, std::string raw_message);
+
+// commands
+
+    bool	Pass(User &user, Message &message);
+	bool	Nick(User &user, Message &message);
+	bool	cmdUser(User &user, Message &message);
+	bool	Quit(User &user, Message &message);
+	bool	Join(User &user, Message &message);
+	bool	Part(User &user, Message &message);
+	bool	Mode(User &user, Message &message);
+	bool	Topic(User &user, Message &message);
+	bool	Names(User &user, Message &message);
+	bool	List(User &user, Message &message);
+	bool	Invite(User &user, Message &message);
+	bool	Kick(User &user, Message &message);
+	bool	Msg(User &user, Message &message);
+	bool	Privmsg(User &user, Message &message);
+	bool	Notice(User &user, Message &message);
+	bool	Ping(User &user, Message &message);
+	bool	Pong(User &user, Message &message);
+
+// USER
+
+// PASS
+// NICK
+// USER
+// QUIT
+// 
+
+// CHANNEL
+// JOIN
+// PART
+// MODE :  O - give "channel creator" status;
+        // o - give/take channel operator privilege;
+        // v - give/take the voice privilege; + si affinite mais pas oblige
+// TOPIC
+// NAMES
+// LIST
+// INVITE
+// KICK
+
+// MSG
+// PRIVMSG
+// NOTICE - same as privmsg pour les bots (a bot never receives message when calling notice)
+
+// MISCELLANEOUS
+// PING
+// PONG
+
+
     class ServerException : public std::exception
     {
         private :
@@ -74,6 +127,10 @@ class Server
         std::list< User >::iterator             _usersListIt;
         std::list< Channel >                    _channelsList;
         std::list< Channel >::iterator          _channelsListIt;
+
+    //message
+        std::string						        _handledCommands[HANDLEDCOMMANDSNB];
+        bool							        (Server::*_ptrF[HANDLEDCOMMANDSNB])(User &user, Message &message);
 
         Server();
         Server(const Server & newServ);

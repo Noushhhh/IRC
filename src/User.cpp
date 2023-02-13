@@ -48,7 +48,7 @@ void User::setPassword(std::string given_password)
 	this->_givenPassword = given_password;
 }
 
-void User::setPNickname(std::string nickname)
+void User::setNickname(std::string nickname)
 {
 	this->_nickname = nickname;
 }
@@ -59,7 +59,8 @@ void User::setPNickname(std::string nickname)
 /*                                                            */
 /**************************************************************/
 
-int             User::getSockfd()     const {return (_sockfd);}
+int             User::getSockfd()       const {return (_sockfd);}
+std::string     User::getPassword()     const {return (_givenPassword);}
 // std::string     User::getUsername()   const {return (_username);}
 std::string     User::getNickname()   const {return (_nickname);}
 // std::string     User::getRealname()   const {return (_realname);}
