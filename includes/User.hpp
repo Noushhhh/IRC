@@ -34,8 +34,6 @@ class User
 		User(const User &src);
 		~User();
 		
-		User &operator=(const User &src);
-
 //setter
 		void setPassword(std::string given_password);
 		void setNickname(std::string nickname);
@@ -43,15 +41,10 @@ class User
 //getter
 		std::string		getPassword()	const;
         int             getSockfd()     const;
-        std::string     getUsername()   const;
         std::string     getNickname()   const;
-        std::string     getRealname()   const;
-        Message         getUserInput()  const;
-        bool            getIsOp()       const;
 
 
         User &operator=(const User &src);
-
 };
 
 #endif

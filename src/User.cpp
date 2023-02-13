@@ -12,20 +12,18 @@
 
 #include "../includes/irc.hpp"
 
-User::User()
+User::User() :_nickname("nonick")
 {
     // std::cerr << "Debug message: User Default Constructor called" << std::endl;
 }
 
 User::User(int sockfd, sockaddr_in addr) : _sockfd(sockfd), _addr(addr)
 {
-    // _username = "jambon";
     _nickname = "jambon";
-    // _realname = "jambon";
     // std::cerr << "Debug message: User Default Constructor called" << std::endl;
 }
 
-User::User(const User &src)
+User::User(const User &src) : _nickname("nonick")
 {
     *this = src;
     // std::cerr << "Debug message: User Default Copy Constructor called" << std::endl;
@@ -38,6 +36,7 @@ User::~User()
 
 User &User::operator=(const User &src)
 {
+    (void) src;
     this->_sockfd = src._sockfd;
     // this->_username = src._username;
     this->_nickname = src._nickname;

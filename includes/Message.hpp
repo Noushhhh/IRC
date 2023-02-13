@@ -20,6 +20,7 @@
 
 class Message
 {
+<<<<<<< HEAD
 public	:
 
 	User							&_fromUser;
@@ -60,6 +61,46 @@ public	:
 	// bool	Notice(std::string *splitMessage);
 	// bool	Ping(std::string *splitMessage);
 	// bool	Pong(std::string *splitMessage);
+=======
+	public	:
+
+		User							_fromUser;
+		std::string						_message;
+		std::string						_handledCommands[HANDLEDCOMMANDSNB];
+		size_t							_argsNb;
+		bool							(Message::*_ptrF[HANDLEDCOMMANDSNB])(std::string *splitMessage);
+		// std::string						*_commands;
+		// std::string						*_parameters;
+
+
+		Message();
+		Message(User fromUser, std::list<Channel> channelList, std::string message);
+		Message(const Message &src);
+		~Message();
+		
+		Message &operator=(const Message &src);
+
+		std::string*	splitMessage();
+		bool			parseMessage();
+
+		bool	Pass(std::string *splitMessage);
+		bool	Nick(std::string *splitMessage);
+		bool	User(std::string *splitMessage);
+		bool	Quit(std::string *splitMessage);
+		bool	Join(std::string *splitMessage);
+		bool	Part(std::string *splitMessage);
+		bool	Mode(std::string *splitMessage);
+		bool	Topic(std::string *splitMessage);
+		bool	Names(std::string *splitMessage);
+		bool	List(std::string *splitMessage);
+		bool	Invite(std::string *splitMessage);
+		bool	Kick(std::string *splitMessage);
+		bool	Msg(std::string *splitMessage);
+		bool	Privmsg(std::string *splitMessage);
+		bool	Notice(std::string *splitMessage);
+		bool	Ping(std::string *splitMessage);
+		bool	Pong(std::string *splitMessage);
+>>>>>>> 66e74021fa5ed950f8ddbefa471cebe9a309eee7
 
 };
 

@@ -15,18 +15,15 @@
 
 int main(int ac, char **av)
 {
-
 	if (ac < 3)
 		return 0;
 	
 	Server Serv(std::atoi(av[1]), std::string(av[2]));
 	Serv.init();
-
 	if (!Serv.pollDispatch())
 	{
-		std::cerr << "an error has occured during server runtime, eron : "
+		std::cerr << "an error has occured during server runtime, errno : "
 		<< std::strerror(errno) << std::endl;
 	}
-
 	return 0;
 }
