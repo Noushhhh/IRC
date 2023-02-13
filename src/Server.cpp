@@ -22,6 +22,42 @@ _channelsListIt(_channelsList.begin())
     _addr.sin_family = AF_INET;
     _addr.sin_port = htons(_port);
     std::memset(_addr.sin_zero, 0, sizeof( _addr.sin_zero));
+
+    this->_ptrF[0] = (&Server::Pass);
+	this->_ptrF[1] = (&Server::Nick);
+	// this->_ptrF[2] = (&Server::cmdUser);
+	// this->_ptrF[3] = (&Server::Quit);
+	// this->_ptrF[4] = (&Server::Join);
+	// this->_ptrF[5] = (&Server::Part);
+	// this->_ptrF[6] = (&Server::Mode);
+	// this->_ptrF[7] = (&Server::Topic);
+	// this->_ptrF[8] = (&Server::Names);
+	// this->_ptrF[9] = (&Server::List);
+	// this->_ptrF[10] = (&Server::Invite);
+	// this->_ptrF[11] = (&Server::Kick);
+	// this->_ptrF[12] = (&Server::Msg);
+	// this->_ptrF[13] = (&Server::Privmsg);
+	// this->_ptrF[14] = (&Server::Notice);
+	// this->_ptrF[15] = (&Server::Ping);
+	// this->_ptrF[16] = (&Server::Pong);
+
+	this->_handledCommands[0] = "PASS";
+	this->_handledCommands[1] = "NICK";
+	this->_handledCommands[2] = "USER";
+	this->_handledCommands[3] = "QUIT";
+	this->_handledCommands[4] = "JOIN";
+	this->_handledCommands[5] = "PART";
+	this->_handledCommands[6] = "MODE";
+	this->_handledCommands[7] = "TOPIC";
+	this->_handledCommands[8] = "NAMES";
+	this->_handledCommands[9] = "LIST";
+	this->_handledCommands[10] = "INVITE";
+	this->_handledCommands[11] = "KICK";
+	this->_handledCommands[12] = "MSG";
+	this->_handledCommands[13] = "PRIVMSG";
+	this->_handledCommands[14] = "NOTICE";
+	this->_handledCommands[15] = "PING";
+	this->_handledCommands[16] = "PONG";
     // std::cerr << "Debug message: Server Default Constructor called" << std::endl;
 }
 
@@ -35,6 +71,43 @@ _channelsListIt(_channelsList.begin())
     _addr.sin_family = AF_INET;
     _addr.sin_port = htons(_port);
     std::memset(_addr.sin_zero, 0, sizeof( _addr.sin_zero));
+ 
+    this->_ptrF[0] = (&Server::Pass);
+	this->_ptrF[1] = (&Server::Nick);
+	// this->_ptrF[2] = (&Server::cmdUser);
+	// this->_ptrF[3] = (&Server::Quit);
+	// this->_ptrF[4] = (&Server::Join);
+	// this->_ptrF[5] = (&Server::Part);
+	// this->_ptrF[6] = (&Server::Mode);
+	// this->_ptrF[7] = (&Server::Topic);
+	// this->_ptrF[8] = (&Server::Names);
+	// this->_ptrF[9] = (&Server::List);
+	// this->_ptrF[10] = (&Server::Invite);
+	// this->_ptrF[11] = (&Server::Kick);
+	// this->_ptrF[12] = (&Server::Msg);
+	// this->_ptrF[13] = (&Server::Privmsg);
+	// this->_ptrF[14] = (&Server::Notice);
+	// this->_ptrF[15] = (&Server::Ping);
+	// this->_ptrF[16] = (&Server::Pong);
+
+	this->_handledCommands[0] = "PASS";
+	this->_handledCommands[1] = "NICK";
+	this->_handledCommands[2] = "USER";
+	this->_handledCommands[3] = "QUIT";
+	this->_handledCommands[4] = "JOIN";
+	this->_handledCommands[5] = "PART";
+	this->_handledCommands[6] = "MODE";
+	this->_handledCommands[7] = "TOPIC";
+	this->_handledCommands[8] = "NAMES";
+	this->_handledCommands[9] = "LIST";
+	this->_handledCommands[10] = "INVITE";
+	this->_handledCommands[11] = "KICK";
+	this->_handledCommands[12] = "MSG";
+	this->_handledCommands[13] = "PRIVMSG";
+	this->_handledCommands[14] = "NOTICE";
+	this->_handledCommands[15] = "PING";
+	this->_handledCommands[16] = "PONG";
+
     // std::cerr << "Debug message: Server Constructor called" << std::endl;
 }
 
@@ -176,6 +249,7 @@ bool                    Server::pollDispatch()
                     }
                 }
                 std::cerr << msg;
+              //  handleMessage(msg); // add user in params, ask max how to get 
                 msg = "";
                 errno = 0;
                 //receive message, stock it and parse it
@@ -209,6 +283,9 @@ bool                    Server::addUser()
     return (true);
 }
 
+
+
+
 bool                    Server::closeUser(std::vector< struct pollfd >::iterator &it)
 {
     //supress from all channels he belongs to
@@ -225,8 +302,37 @@ bool                    Server::closeUser(std::vector< struct pollfd >::iterator
     _pollFds.erase(it);
     it = _pollFds.begin();
     return (true) ;
-
 }
+
+
+// bool                    Server::handleMessage(User &user, std::string raw_message)
+// {
+
+//     Message message(raw_message);
+
+//     if (!message.parseMessage())
+//     {
+//         return false ;
+//     }
+//     message.splitMessage();
+//     int i = 0;
+// 	while(i <= HANDLEDCOMMANDSNB)
+// 	{
+// 		if (_handledCommands[i] == message._splitMessage[0])
+// 			break ;
+// 		i++;
+// 	}
+// 	if (i >= HANDLEDCOMMANDSNB) // check if > or >=
+// 	{
+// 		std::cout << "Not a request" << std::endl;
+// 		return false;
+// 	}
+// 	else
+// 	{
+// 		message._argsNb = message._splitMessage.size();
+// 		return (bool)(this->*_ptrF[i])(user, &message);
+// 	}
+// }
 
 /**************************************************************/
 /*                                                            */
@@ -261,3 +367,64 @@ const std::string Server::ServerException::errorMsg() const throw()
     }
     return ("jsp frere");
 }
+
+/**************************************************************/
+/*                                                            */
+/*                      COMMANDS                              */
+/*                                                            */
+/**************************************************************/
+
+bool	Server::Pass(User &user, Message &message)
+{
+	if (message._argsNb < 2)
+	{
+		send(user.getSockfd(), "ERR_NEEDMOREPARAMS", 18, 0); 
+		return false;
+	}
+	if (user.getPassword().empty())
+	{
+		user.setPassword(message._splitMessage[1]);
+		return true;
+	}
+	else
+	{
+		send(user.getSockfd(), "ERR_ALREADYREGISTRED", 20, 0); 
+		return false;
+	}
+	return true ;
+}
+
+
+bool	Server::Nick(User &user, Message &message)
+{
+	if (message._argsNb < 2)
+	{
+		send(user.getSockfd(), "ERR_NONICKNAMEGIVEN", 19, 0); 
+		return false;
+	}
+
+	// ERR_ERRONEUSNICKNAME
+	// std::list<User>::const_iterator it;
+	// it = std::find()
+
+	// for (std::list::const_iterator it = 0; it != this._channelList.size() )
+	return true ;
+}
+
+
+// bool	cmdUser(User &user, Message &message);
+// bool	Quit(User &user, Message &message);
+// bool	Join(User &user, Message &message);
+// bool	Part(User &user, Message &message);
+// bool	Mode(User &user, Message &message);
+// bool	Topic(User &user, Message &message);
+// bool	Names(User &user, Message &message);
+// bool	List(User &user, Message &message);
+// bool	Invite(User &user, Message &message);
+// bool	Kick(User &user, Message &message);
+// bool	Msg(User &user, Message &message);
+// bool	Privmsg(User &user, Message &message);
+// bool	Notice(User &user, Message &message);
+// bool	Ping(User &user, Message &message);
+// bool	Pong(User &user, Message &message);
+

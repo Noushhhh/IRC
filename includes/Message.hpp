@@ -16,32 +16,28 @@
 #include "irc.hpp"
 #include "User.hpp"
 
-#define HANDLEDCOMMANDSNB 17
+
 
 class Message
 {
 public	:
 
-	User							&_fromUser;
-	std::list <Channel>				&_channelList;
-	std::string						_message;
-	std::string						_handledCommands[HANDLEDCOMMANDSNB];
+	std::string						_rawMessage;
+	std::vector <std::string>		_splitMessage;
+	// std::string						_handledCommands[HANDLEDCOMMANDSNB];
 	size_t							_argsNb;
-	bool							(Message::*_ptrF[HANDLEDCOMMANDSNB])(std::string *splitMessage);
+	// bool							(Message::*_ptrF[HANDLEDCOMMANDSNB])();
 	// std::string						*_commands;
 	// std::string						*_parameters;
 
 public	:
 
 	Message();
-	Message(std::list <User> &user_list, std::list<Channel> &channel_list, User &from_user, std::string message);
+	Message(std::string message);
 	Message(const Message &src);
 	~Message();
 	
 	Message &operator=(const Message &src);
-
-	std::string*	splitMessage();
-	bool			parseMessage();
 
 	bool	Pass(std::string *splitMessage);
 	bool	Nick(std::string *splitMessage);
@@ -60,35 +56,10 @@ public	:
 	bool	Notice(std::string *splitMessage);
 	bool	Ping(std::string *splitMessage);
 	bool	Pong(std::string *splitMessage);
+	void						splitMessage(); // add error pass in bool function
+	bool						parseMessage();
 
 };
 
-// USER
-
-// PASS
-// NICK
-// USER
-// QUIT
-// 
-
-// CHANNEL
-// JOIN
-// PART
-// MODE :  O - give "channel creator" status;
-        // o - give/take channel operator privilege;
-        // v - give/take the voice privilege; + si affinite mais pas oblige
-// TOPIC
-// NAMES
-// LIST
-// INVITE
-// KICK
-
-// MSG
-// PRIVMSG
-// NOTICE - same as privmsg pour les bots (a bot never receives message when calling notice)
-
-// MISCELLANEOUS
-// PING
-// PONG
 
 #endif
