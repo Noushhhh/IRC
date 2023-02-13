@@ -84,6 +84,7 @@ std::list< Channel >                *Server::getChanList()              { return
 
 void                    Server::setSock(int type, int protocol)
 {
+    
     _addr.sin_family = AF_INET;
     _addr.sin_addr.s_addr = INADDR_ANY;
     _addr.sin_addr.s_addr = inet_addr("127.0.0.1");
@@ -94,8 +95,13 @@ void                    Server::setSock(int type, int protocol)
 	int val = 1;
 	if (setsockopt(_sock, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val)))
 		throw (Server::ServerException(SOCKET));
-	if (fcntl(_sock, F_SETFL, O_NONBLOCK == - 1))
+    std::cout << "sock = " << _sock << std::endl;
+	if (fcntl(_sock, F_SETFL, O_NONBLOCK < 0))
 		throw (Server::ServerException(SOCKET));
+
+    struct pollfd                           server_fd = {_sock, POLLIN, 0};
+
+    _pollFds.push_back(server_fd);
 }
 
 void                    Server::bindSock()
@@ -128,28 +134,20 @@ bool                    Server::init()
 
 bool                    Server::pollDispatch()
 {
-    struct pollfd                           server_fd = {_sock, POLLIN, 0};
-    std::vector< struct pollfd >::iterator  it = _pollFds.begin();
     char                                    buff[MAX_CHAR];
     std::string                             msg;
+    std::vector< struct pollfd >::iterator  it;
 
-    _pollFds.push_back(server_fd);
 	while (1)
     {
-        it = _pollFds.begin();
-
 		if (poll (_pollFds.begin().base(), _pollFds.size(), -1) < 0)
         {
             return (false);
         }
 		for (it = _pollFds.begin(); it != _pollFds.end(); it ++)
 		{
-        fcntl(it->fd, F_SETFL, O_NONBLOCK == - 1);
             if (it->events == 0)
                 continue;
-			// if ((it->revents & POLLHUP) == POLLHUP)
-            // {
-            // }
             else if ((it->revents & POLLIN) == POLLIN)
             {
                 if (it->fd == _sock)
@@ -161,25 +159,26 @@ bool                    Server::pollDispatch()
                     }
                     break ;
                 }
-                size_t r;
+                ssize_t r = 0;
                 while (errno != EAGAIN && errno != EWOULDBLOCK)
                 {
                     memset(buff, 0, MAX_CHAR);
-                    std::cout << "r : " << r << "errno : " << errno << std::endl;
-                    r = recv(it->fd, buff, MAX_CHAR - 1, 0);
-                    std::cout << "michel" <<std::endl;
+                    r = recv(it->fd, buff, MAX_CHAR - 1, MSG_DONTWAIT);
                     msg.append(std::string(buff));
                     if (r == 0)
                     {
                         if (!this->closeUser(it))
                         {
-                            //close all sockets
+                            // close all sockets
                             return (false);
                         }
+                        it = _pollFds.begin();
                         break ;
                     }
                 }
-                std::cerr << "msg : " << buff << std::endl;
+                std::cerr << msg;
+                msg = "";
+                errno = 0;
                 //receive message, stock it and parse it
                 //send message or execute command and send reply
             }
