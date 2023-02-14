@@ -16,6 +16,7 @@ INCLUDES			= 	includes/irc.hpp 		\
 						includes/Server.hpp	\
 						includes/Message.hpp	\
 						includes/Channel.hpp	\
+						includes/Replies.hpp	\
 						includes/User.hpp
 
 CMD = 			c++
