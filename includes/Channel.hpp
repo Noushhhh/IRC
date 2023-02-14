@@ -27,9 +27,9 @@ class Channel
 private	:
 
 	std::string			_name;
-	std::string			_identifier; //only for SAFE channel see : https://www.rfc-editor.org/rfc/rfc2811#section-2.2
 	std::string			_nameErrorSrc;
 	std::string			_password; //optional
+	std::string			_topic;
 	bool				_isPswdProtected;
 	User				_creator;
 	std::list< User >	_usersList; //if empty, delete chan except if char is SAFE
@@ -42,15 +42,15 @@ public	:
 	Channel(const Channel &src);
 	Channel & operator=(const Channel &src);
 	Channel(const std::string &name, User &chanCreator);
-	Channel(const std::string &name, const std::string &pswd, User &chanCreator);
+	Channel(const std::string &name, const std::string &pswd, std::string topic, User &chanCreator);
 	~Channel();
 
 	//getters
 
 	std::string			getName()			const;
-	std::string			getIdentifier()		const;
 	std::string			getNameErrorSrc()	const;
 	std::string			getPswd()			const;
+	std::string			getTopic()			const;
 	bool				getPswdStatus()		const;
 	User				getChanCreator()	const;
 	std::list< User >	getUsersList()		const;

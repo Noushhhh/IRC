@@ -17,7 +17,7 @@ int main(int ac, char **av)
 {
 	if (ac < 3)
 		return 0;
-	
+
 	Server Serv(std::atoi(av[1]), std::string(av[2]));
 	Serv.init();
 	if (!Serv.pollDispatch())

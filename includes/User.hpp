@@ -15,6 +15,7 @@
 
 #include "irc.hpp"
 
+
 class User
 {
 	private	:
