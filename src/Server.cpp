@@ -389,47 +389,9 @@ const std::string Server::ServerException::errorMsg() const throw()
 /*                                                            */
 /**************************************************************/
 
-bool	Server::Pass(User &user, Message &message)
-{
-	if (message._argsNb < 2)
-	{
-		send(user.getSockfd(), "ERR_NEEDMOREPARAMS", 18, 0); 
-		return false;
-	}
-	if (user.getPassword().empty())
-	{
-		message._it = message._splitMessage.begin() + 1;
-		user.setPassword(*message._it);
-		return true;
-	}
-	else
-	{
-		send(user.getSockfd(), "ERR_ALREADYREGISTRED", 20, 0); 
-		return false;
-	}
-	return true ;
-}
 
 
-bool	Server::Nick(User &user, Message &message)
-{
-	if (message._argsNb < 2)
-	{
-		send(user.getSockfd(), "ERR_NONICKNAMEGIVEN", 19, 0); 
-		return false;
-	}
-	std::string nickname = *message._splitMessage.(begin() + 1);
-	for (_usersListIt = _usersList.begin(); _usersListIt != _usersList.end(); _usersListIt++)
-	{
-		if (_usersListIt->getNickname() == message._splitMessage.begin() + 1)
-	}
-	// ERR_ERRONEUSNICKNAME
-	// std::list<User>::const_iterator it;
-	// it = std::find()
 
-	// for (std::list::const_iterator it = 0; it != this._channelList.size() )
-	return true ;
-}
 
 
 // bool	cmdUser(User &user, Message &message);
