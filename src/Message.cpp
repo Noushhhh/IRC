@@ -42,28 +42,30 @@ Message &Message::operator=(const Message &src)
 	return *this;
 }
 
-void Message::splitMessage()
+bool Message::splitMessage()
 {
 	char *string_to_split = new char[_rawMessage.length()+1];
 	std::strcpy(string_to_split, _rawMessage.c_str());
-	char *token = strtok(string_to_split, " "); // segfault here
-	
+	char *token = strtok(string_to_split, "\r \n");
+	if (!token)
+		return false ;
 	while(token != NULL)
 	{
 		_splitMessage.push_back(token);
 		token = strtok(NULL, "\r \n");
 	}
 	delete[] string_to_split;
+	return true ;
 }
 
 bool Message::parseMessage()
 {
-	
 	if (_rawMessage.empty()) 
 	{
 		std::cout << "empty message." << std::endl;
 		return false;
 	}
+	
 
 	return true ;
 }

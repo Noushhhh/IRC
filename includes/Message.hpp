@@ -53,7 +53,7 @@ public	:
 	bool	Notice(std::string *splitMessage);
 	bool	Ping(std::string *splitMessage);
 	bool	Pong(std::string *splitMessage);
-	void						splitMessage(); // add error pass in bool function
+	bool						splitMessage(); // add error pass in bool function
 	bool						parseMessage();
 
 };
