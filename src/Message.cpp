@@ -22,7 +22,6 @@ Message::Message() :  _rawMessage(""), _argsNb(0) // init members
 Message::Message(std::string message) : _rawMessage(message)
 {
 
-
 } // init members
 
 Message::Message(const Message &src)
@@ -46,8 +45,8 @@ Message &Message::operator=(const Message &src)
 void Message::splitMessage()
 {
 	char *string_to_split = new char[_rawMessage.length()+1];
+	std::strcpy(string_to_split, _rawMessage.c_str());
 	char *token = strtok(string_to_split, " "); // segfault here
-	std::cout <<" YO" << std::endl;
 	
 	while(token != NULL)
 	{
@@ -67,8 +66,10 @@ bool Message::parseMessage()
 	}
 
 	splitMessage();
-	
-	
+	for (std::vector<std::string>::iterator it = _splitMessage.begin(); it != _splitMessage.begin(); it++)
+	{
+		std::cout << *it << std::endl;
+	}
 	return true ;
 }
 

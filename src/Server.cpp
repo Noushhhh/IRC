@@ -168,7 +168,7 @@ void                    Server::setSock(int type, int protocol)
 	int val = 1;
 	if (setsockopt(_sock, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val)))
 		throw (Server::ServerException(SOCKET));
-    std::cout << "sock = " << _sock << std::endl;
+    std::cout << "Server sock = " << _sock << std::endl;
 	if (fcntl(_sock, F_SETFL, O_NONBLOCK < 0))
 		throw (Server::ServerException(SOCKET));
 
@@ -324,7 +324,7 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
     Message message(raw_message);
 		// check if user empty 
 
-	std::cout << user.getSockfd();
+	std::cout << "sock number in handle msg: " << user.getSockfd();
 
     if (!message.parseMessage())
     {
