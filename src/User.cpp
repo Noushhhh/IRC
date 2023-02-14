@@ -59,8 +59,7 @@ void User::setNickname(std::string nickname)
 /*                                                            */
 /**************************************************************/
 
-int             User::getSockfd()       const {return (_sockfd);}
-std::string     User::getPassword()     const {return (_givenPassword);}
-// std::string     User::getUsername()   const {return (_username);}
-std::string     User::getNickname()   const {return (_nickname);}
-// std::string     User::getRealname()   const {return (_realname);}
+int                     User::getSockfd()           const {return (_sockfd);}
+std::string             User::getPassword()         const {return (_givenPassword);}
+std::string             User::getNickname()         const {return (_nickname);}
+std::list< Channel >    User::getJoinedChans()	const {return (_joinedChannels)}

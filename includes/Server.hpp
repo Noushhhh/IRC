@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/01/27 17:14:08 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/02/14 17:31:32 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,35 +81,6 @@ class Server
 	bool	Ping(User &user, Message &message);
 	bool	Pong(User &user, Message &message);
 
-// USER
-
-// PASS
-// NICK
-// USER
-// QUIT
-// 
-
-// CHANNEL
-// JOIN
-// PART
-// MODE :  O - give "channel creator" status;
-        // o - give/take channel operator privilege;
-        // v - give/take the voice privilege; + si affinite mais pas oblige
-// TOPIC
-// NAMES
-// LIST
-// INVITE
-// KICK
-
-// MSG
-// PRIVMSG
-// NOTICE - same as privmsg pour les bots (a bot never receives message when calling notice)
-
-// MISCELLANEOUS
-// PING
-// PONG
-
-
     class ServerException : public std::exception
     {
         private :
@@ -126,9 +97,9 @@ class Server
         struct sockaddr_in                      _addr;
         std::vector< struct pollfd >            _pollFds; //element new a delete
         std::list< User >                       _usersList; //List d'utilisateurs du serveur
-        std::list< User >::iterator             _usersListIt;
+        std::list< User >::iterator             _uIt;
         std::list< Channel >                    _channelsList;
-        std::list< Channel >::iterator          _channelsListIt;
+        std::list< Channel >::iterator          _cIt;
 
     //message
         std::string						        _handledCommands[HANDLEDCOMMANDSNB];

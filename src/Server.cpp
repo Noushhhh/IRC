@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/01/30 11:35:41 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/02/14 17:31:32 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ Server::Server() :
 _sock(0),
 _port(9999),
 _password("0000"),
-_usersListIt(_usersList.begin()),
-_channelsListIt(_channelsList.begin())
+_uIt(_usersList.begin()),
+_cIt(_channelsList.begin())
 {
     _addr.sin_family = AF_INET;
     _addr.sin_port = htons(_port);
@@ -65,8 +65,8 @@ Server::Server(int port, std::string password) :
 _sock(0),
 _port(port),
 _password(password),
-_usersListIt(_usersList.begin()),
-_channelsListIt(_channelsList.begin())
+_uIt(_usersList.begin()),
+_cIt(_channelsList.begin())
 {
     _addr.sin_family = AF_INET;
     _addr.sin_port = htons(_port);
@@ -76,9 +76,9 @@ _channelsListIt(_channelsList.begin())
 	this->_ptrF[1] = (&Server::Nick);
 	// this->_ptrF[2] = (&Server::cmdUser);
 	// this->_ptrF[3] = (&Server::Quit);
-	// this->_ptrF[4] = (&Server::Join);
+	this->_ptrF[4] = (&Server::Join);
 	// this->_ptrF[5] = (&Server::Part);
-	// this->_ptrF[6] = (&Server::Mode);
+	this->_ptrF[6] = (&Server::Mode);
 	// this->_ptrF[7] = (&Server::Topic);
 	// this->_ptrF[8] = (&Server::Names);
 	// this->_ptrF[9] = (&Server::List);
@@ -141,8 +141,8 @@ int                                 Server::getSock()           const   { return
 int                                 Server::getPort()           const   { return (_port);           }
 std::string                         Server::getPassword()       const   { return (_password);       }
 struct sockaddr_in                  Server::getAdress()         const   { return (_addr);           }
-std::list< User >::iterator         Server::getUserListIt()     const   { return (_usersListIt);    }
-std::list< Channel >::iterator      Server::getChanListIt()     const   { return (_channelsListIt); }
+std::list< User >::iterator         Server::getUserListIt()     const   { return (_uIt);    }
+std::list< Channel >::iterator      Server::getChanListIt()     const   { return (_cIt); }
 std::list< User >                   *Server::getUserList()              { return (&_usersList);      }
 std::list< Channel >                *Server::getChanList()              { return (&_channelsList);   }
 
@@ -223,6 +223,7 @@ bool                    Server::pollDispatch()
                 continue;
             else if ((it->revents & POLLIN) == POLLIN)
             {
+				std::cout << "TEST" << std::endl;
                 if (it->fd == _sock)
                 {
                     if (this->addUser() == false)
@@ -318,6 +319,7 @@ std::list< User >::iterator			Server::getUserItWithFd(int fd)
 
 bool                    Server::handleMessage(User &user, std::string raw_message)
 {
+	std::string err_buff;
 	if (raw_message.empty() || raw_message == "\n" || raw_message == "\r")
 		return false ;
 	//std::cout << std::endl << raw_message << std::endl;
@@ -332,19 +334,20 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 	message._it = message._splitMessage.begin();
 	while(_handledCommands[i] != *message._it && i < HANDLEDCOMMANDSNB)
 		i++;
-	std::cout << "YO " << std::endl;
-	std::cout << "_handledCommands[0] = " << _handledCommands[0] << std::endl;
-	std::cout << "*message._it = " << *message._it << std::endl;
-	std::cout << "index handle message" << i << std::endl;
+	// std::cout << "YO " << std::endl;
+	// std::cout << "_handledCommands[0] = " << _handledCommands[0] << std::endl;
+	// std::cout << "*message._it = " << *message._it << std::endl;
+	// std::cout << "index handle message" << i << std::endl;
 	if (i >= HANDLEDCOMMANDSNB)
 	{
-		std::cout << std::endl << "Not a request" << std::endl;
+		err_buff = ERR_UNKNOWNNCOMMAND(*message._splitMessage.begin());
+		send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
 		return false;
 	}
 	else
 	{
 		message._argsNb = message._splitMessage.size();
-		std::cout << "args nb " << message._argsNb << std::endl;
+		std::cout << "ACAB args nb " << message._argsNb << std::endl;
 		return (bool)(this->*_ptrF[i])(user, message);
 	}
 }

@@ -19,11 +19,12 @@
 class User
 {
 	private	:
-		int	_sockfd;
-		sockaddr_in _addr;
+		int						_sockfd;
+		sockaddr_in 			_addr;
 		//const int	_username;
-		std::string _nickname;
-		std::string	_givenPassword;
+		std::string 			_nickname;
+		std::string				_givenPassword;
+		std::list < Channel >	_joinedChannels;
 
 	// PASS Check if the passwd is ok if not reject user
 	// NICK set nickename for user
@@ -40,9 +41,10 @@ class User
 		void setNickname(std::string nickname);
 
 //getter
-		std::string		getPassword()	const;
-        int             getSockfd()     const;
-        std::string     getNickname()   const;
+		std::string				getPassword()		const;
+        int             		getSockfd()    		const;
+        std::string     		getNickname()  		const;
+		std::list< Channel >	getJoinedChans()	const;
 
 
         User &operator=(const User &src);
