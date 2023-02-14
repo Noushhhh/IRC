@@ -65,11 +65,6 @@ bool Message::parseMessage()
 		return false;
 	}
 
-	splitMessage();
-	for (std::vector<std::string>::iterator it = _splitMessage.begin(); it != _splitMessage.begin(); it++)
-	{
-		std::cout << *it << std::endl;
-	}
 	return true ;
 }
 

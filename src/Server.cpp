@@ -252,8 +252,6 @@ bool                    Server::pollDispatch()
 				handleMessage(*(getUserItWithFd(it->fd)), msg); // check if reference of uesr good
                 msg = "";
                 errno = 0;
-                //receive message, stock it and parse it
-                //send message or execute command and send reply
             }
 		}
 	}
@@ -323,29 +321,31 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 
     Message message(raw_message);
 		// check if user empty 
-
-	std::cout << "sock number in handle msg: " << user.getSockfd();
+	//std::cout << "sock number in handle msg: " << user.getSockfd();
 
     if (!message.parseMessage())
     {
         return false ;
     }
     message.splitMessage();
+	// for (std::vector<std::string>::iterator it = message._splitMessage.begin(); it != message._splitMessage.end(); it++)
+	// {
+	// 	std::cout << std::endl << "YO 1"<< *it << std::endl;
+	// }
     int i = 0;
-	while(i <= HANDLEDCOMMANDSNB)
-	{
-		if (_handledCommands[i] == message._splitMessage[0])
-			break ;
+	message._it = message._splitMessage.begin();
+	while(_handledCommands[i] != *message._it && i < HANDLEDCOMMANDSNB)
 		i++;
-	}
+	std::cout << "index handle message" << i << std::endl;
 	if (i >= HANDLEDCOMMANDSNB)
 	{
-		std::cout << "Not a request" << std::endl;
+		std::cout << std::endl << "Not a request" << std::endl;
 		return false;
 	}
 	else
 	{
 		message._argsNb = message._splitMessage.size();
+		std::cout << "args nb " << message._argsNb << std::endl;
 		return (bool)(this->*_ptrF[i])(user, message);
 	}
 }
@@ -399,7 +399,8 @@ bool	Server::Pass(User &user, Message &message)
 	}
 	if (user.getPassword().empty())
 	{
-		user.setPassword(message._splitMessage[1]);
+		message._it = message._splitMessage.begin() + 1;
+		user.setPassword(*message._it);
 		return true;
 	}
 	else

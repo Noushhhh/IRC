@@ -22,13 +22,10 @@ class Message
 {
 public	:
 
-	std::string						_rawMessage;
-	std::vector <std::string>		_splitMessage;
-	// std::string						_handledCommands[HANDLEDCOMMANDSNB];
-	size_t							_argsNb;
-	// bool							(Message::*_ptrF[HANDLEDCOMMANDSNB])();
-	// std::string						*_commands;
-	// std::string						*_parameters;
+	std::string							_rawMessage;
+	std::vector <std::string>			_splitMessage;
+	std::vector <std::string>::iterator	_it;
+	size_t								_argsNb;
 
 public	:
 
