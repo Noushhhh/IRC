@@ -15,58 +15,91 @@
 
 #include "irc.hpp"
 
-#define RPL_WELCOME				(nickname) \ "welcome to Internet Relay Network " + nickname + " ! \n"
-#define RPL_YOURHOST			(servername) \ "your host is " + servername ".\n"
-#define RPL_CREATED				"This server was created, in the 6th year of the 6th decade of the 6th century."
+/*********************************** REPLIES ***********************************/
 
-#define	RPL_AWAY				(nickname, msg) \ nickname + " :" + msg
-#define RPL_UNAWAY				":You are no longer away"
-#define	ERR_NOSUCHNICK			"401"
-#define	ERR_NOSUCHSERVER		"402"
-#define	ERR_NOSUCHCHANNEL		"403"
-#define ERR_CANNOTSENDTOCHAN	"404"
-#define ERR_TOOMANYCHANNELS		"405"
-#define ERR_TOOMANYTARGETS		"407"
-#define ERR_NOORIGIN			"409"
-#define ERR_NORECIPIENT			"411"
-#define ERR_NOTEXTTOSEND		"412"
-#define ERR_NOTOPLEVEL			"413"
-#define ERR_WILDTOPLEVEL		"414"
-#define ERR_UNKNOWNNCOMMAND		"421"
-#define ERR_NOADMININFO			"423"
-// #define ERR_FILEERROR			"424" si on fait les bobos
-#define ERR_NONICKNAMEGIVEN		"431"
-#define ERR_NICKNAMEINUSE		"433"
-#define ERR_USERNOTINCHANNEL	"441"
-#define ERR_NOTONCHANNEL		"442"
-#define ERR_USERONCHANNEL		"443"
-#define ERR_NOLOGIN				"444"
-#define ""
-#define ""
-#define ""
-#define ""
-#define ""
-#define ""
-#define ""
-#define ""
-#define ""
+//01 to 03, welcome rpl
 
-class Replies
-{
-private	:
+#define RPL_WELCOME(nickname)       "welcome to Internet Relay Network " + nickname + " ! \n"
+#define RPL_YOURHOST(servername)    "your host is " + servername ".\n"
+#define RPL_CREATED				    "This server was created, in the 6th year of the 6th decade of the 6th century."
 
+//AWAY 301 / 305 / 306
 
-public	:
+#define	RPL_AWAY(nickname)          nickname + " :Is away" //send when you send a msg to an away user
+#define RPL_UNAWAY				    ":You are no longer away"
+#define	RPL_NOAWAY				    ":You have been marked as being away"
 
-	Replies();
-	Replies(const Replies &src);
-	~Replies();
-	
-	Replies &operator=(const Replies &src);
+//LIST 322 / 323
 
-	
-};
+#define	RPL_LIST(channel, topic)    channel + " :" + topic
+#define RPL_LISTEND				    ": end of LIST"
 
+//TOPIC / 331 / 332
+
+#define	RPL_NOTOPIC(channel)        channel + " :No topic is set"
+#define	RPL_TOPIC(channel, topic)   channel + " :" + topic
+
+//INVITE / 341
+
+#define	RPL_INVITING(channel, nick) nick + " :Was succesfully invited to " + channel 
+
+//OPER / 381
+
+#define RPL_YOUREOPER			    " :You are now an IRC operator"
+
+//USER 392 / 393 / 394 / 395
+
+#define	RPL_USERSTART			                                " :UserID Terminal Host" //sent first
+#define	RPL_USERS(username, ttyline /*jsp cque c*/, hostname)   ": " + username + " " + ttyline + " " + hostname
+#define RPL_ENDOFUSERS			                                " :End of users"
+#define RPL_NOUSERS				                                ":Nobody logged in"
+
+// MODE / 221 (jcomprends pas trop auqnd elle s'envoie elle) / 501
+
+#define	RPL_UMODIS(userModeStr)     " :" + userModeStr
+
+/************************************ ERRORS ************************************/
+
+#define ERR_NEEDMOREPARAMS(cmd) \   cmd + " :Not enough parameters" // 461
+#define ERR_UNKNOWNNCOMMAND(cmd)    cmd + " :Unknown command" // 421
+#define ERR_PASSWDMISMATCH		    ":Password incorrect" // 464
+#define ERR_NOPRIVILEGES		    " :Permission Denied- You're not an IRC operator" // 481
+
+//NICK
+
+#define	ERR_NOSUCHNICK(nick)        nick + " :No such nick" // 401
+#define ERR_NONICKNAMEGIVEN		    " :No nickname given" //431
+#define ERR_ERRONEUSNICKNAME(nick)  nick + " :Erroneous nickname" //432 when a nick contains invalid char
+#define ERR_NICKNAMEINUSE(nick)     nick + " :Nickname is in use" // 433
+
+//USER
+
+#define ERR_ALREADYREGISTERED	    ":Unauthorized command (already registered)" // 462, send as a response to a second USER call trying to overide user info 
+
+//MODE
+
+#define ERR_UMODEUNKNOWNFLAG	    ":Unknown MODE flag" // 501
+#define ERR_USERSDONTMATCH		    ":Cannot change mode for other users" // 502
+
+//PRIVMSG and NOTICE
+
+#define ERR_NOTEXTTOSEND		    " :No text to send" // 412
+#define ERR_NORECIPIENT(cmd)        " :No recipient given" + cmd // 411 no target to PRIVMSG
+#define ERR_TOOMANYTARGETS		    ": there are too many targets to your PM"
+
+//CHANNEL RELATED
+
+#define	ERR_NOSUCHCHANNEL(channel)      channel + " :No such channel" // 403
+#define ERR_CANNOTSENDTOCHAN(channel)   channel + " :Cannot send to channel" // 404
+#define ERR_UNAVAILRESOURCE(nickOrChan) nickOrChan + " :is temporarily unavailable" //437 pas sur du bail
+#define ERR_NOTONCHANNEL(chan)          chan + " :You are not on that channel" // 442
+#define ERR_USERONCHANNEL(chan, user)   user + " :Is already on channel " + chan // 443
+#define ERR_USERNOTINCHANNEL(nick, chan)nick + ": is not on channel " + chan // 441
+#define ERR_CHANOPRIVSNEEDED(chan)      chan + " :You're not channel operator" // 482
+
+// PING & PONG
+
+#define ERR_NOORIGIN			" :No origin specified" // 409 for ping and pong
 
 
 #endif

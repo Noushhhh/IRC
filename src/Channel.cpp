@@ -20,9 +20,9 @@ Channel::Channel()
 }
 
 Channel::Channel(const std::string &name, User &chanCreator) :
-_identifier(""), 
 _nameErrorSrc(""),
-_password("")
+_password(""),
+_topic("")
 {
 	//must check for duplicate name in creation command
 	if (!isNameValid(name))
@@ -34,13 +34,13 @@ _password("")
 	_usersList.push_back(chanCreator);
 }
 
-Channel::Channel(const std::string &name, const std::string &pswd, User &chanCreator) :
-_identifier(""), 
+Channel::Channel(const std::string &name, const std::string &pswd, const std::string topic, User &chanCreator) :
 _nameErrorSrc("")
 {
 	if (!isNameValid(name))
 		throw (Channel::BadNameException(_nameErrorSrc));
 	_name = name;
+	_topic = topic;
 	if (_type != UNMOD)
 		_creator = chanCreator;
 	_password = pswd;
@@ -60,8 +60,14 @@ Channel::~Channel()
 
 Channel &Channel::operator=(const Channel &src)
 {
-	this->_usersList = src._usersList;
-	this->_name		= src._name;
+	this->_name				= src._name;
+	this->_password			= src._password;
+	this->_topic			= src._password;
+	this->_isPswdProtected	= src._isPswdProtected;
+	this->_creator			= src._creator;
+	this->_usersList		= src._usersList;
+	this->_opList			= src._opList;
+	this->_type				= src._type;
 	return (*this);
 }
 
@@ -72,9 +78,9 @@ Channel &Channel::operator=(const Channel &src)
 /**************************************************************/
 
 	std::string			Channel::getName()			const {return (_name);}
-	std::string			Channel::getIdentifier()	const {return (_identifier);}
 	std::string			Channel::getNameErrorSrc()	const {return (_nameErrorSrc);}
 	std::string			Channel::getPswd()			const {return (_password);}
+	std::string			Channel::getTopic()			const {return (_topic);}
 	bool				Channel::getPswdStatus()	const {return (_isPswdProtected);}
 	User				Channel::getChanCreator()	const {return (_creator);}
 	std::list< User >	Channel::getUsersList()		const {return (_usersList);}
