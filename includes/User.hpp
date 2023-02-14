@@ -24,6 +24,7 @@ class User
 		//const int	_username;
 		std::string _nickname;
 		std::string	_givenPassword;
+		bool		_isRegistered;
 
 	// PASS Check if the passwd is ok if not reject user
 	// NICK set nickename for user
@@ -38,12 +39,13 @@ class User
 //setter
 		void setPassword(std::string given_password);
 		void setNickname(std::string nickname);
+		void setRegistered(void);
 
 //getter
 		std::string		getPassword()	const;
         int             getSockfd()     const;
         std::string     getNickname()   const;
-
+		bool			getRegistered()   const;
 
         User &operator=(const User &src);
 };

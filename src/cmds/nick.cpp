@@ -16,18 +16,28 @@ bool	Server::Nick(User &user, Message &message)
 {
 	if (message._argsNb < 2)
 	{
-		send(user.getSockfd(), "ERR_NONICKNAMEGIVEN", 19, 0); 
+		send(user.getSockfd(), ERR_NONICKNAMEGIVEN, 19, 0);  // how to automatize size of reply ?
 		return false;
 	}
-	std::string nickname = *message._splitMessage.(begin() + 1);
+    message._it = message._splitMessage.begin() + 1;
+    std::string nickname = *message._it;
 	for (_usersListIt = _usersList.begin(); _usersListIt != _usersList.end(); _usersListIt++)
 	{
-		if (_usersListIt->getNickname() == message._splitMessage.begin() + 1)
+		if (_usersListIt->getNickname() == nickname)
+        {
+            std::cout << ERR_ERRONEUSNICKNAME(nickname) << std::endl; // how to automatize size of reply ?
+            return false ;
+        }
 	}
-	// ERR_ERRONEUSNICKNAME
+	
 	// std::list<User>::const_iterator it;
 	// it = std::find()
 
 	// for (std::list::const_iterator it = 0; it != this._channelList.size() )
 	return true ;
 }
+
+#define	ERR_NOSUCHNICK(nick)        nick + " :No such nick" // 401
+#define ERR_NONICKNAMEGIVEN		    " :No nickname given" //431
+#define ERR_ERRONEUSNICKNAME(nick)  nick + " :Erroneous nickname" //432 when a nick contains invalid char
+#define ERR_NICKNAMEINUSE(nick)     nick + " :Nickname is in use" // 433

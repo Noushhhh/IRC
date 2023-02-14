@@ -12,12 +12,12 @@
 
 #include "../includes/irc.hpp"
 
-User::User() :_nickname("nonick")
+User::User() : _nickname("noNick"), _isRegistered(false)
 {
     // std::cerr << "Debug message: User Default Constructor called" << std::endl;
 }
 
-User::User(int sockfd, sockaddr_in addr) : _sockfd(sockfd), _addr(addr)
+User::User(int sockfd, sockaddr_in addr) : _sockfd(sockfd), _addr(addr), _isRegistered(false)
 {
     _nickname = "jambon";
     // std::cerr << "Debug message: User Default Constructor called" << std::endl;
@@ -43,6 +43,9 @@ User &User::operator=(const User &src)
     return (*this);
 }
 
+
+// setters
+
 void User::setPassword(std::string given_password)
 {
 	this->_givenPassword = given_password;
@@ -51,6 +54,11 @@ void User::setPassword(std::string given_password)
 void User::setNickname(std::string nickname)
 {
 	this->_nickname = nickname;
+}
+
+void User::setRegistered(void)
+{
+    this->_isRegistered = true;
 }
 
 /**************************************************************/
@@ -62,5 +70,6 @@ void User::setNickname(std::string nickname)
 int             User::getSockfd()       const {return (_sockfd);}
 std::string     User::getPassword()     const {return (_givenPassword);}
 // std::string     User::getUsername()   const {return (_username);}
-std::string     User::getNickname()   const {return (_nickname);}
+std::string     User::getNickname()     const {return (_nickname);}
+bool			User::getRegistered()   const { return (_isRegistered);};
 // std::string     User::getRealname()   const {return (_realname);}
