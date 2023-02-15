@@ -42,6 +42,17 @@ bool	Server::Nick(User &user, Message &message)
             return false ;
         }
     }
-    user.setNickname(nickname);
+    if (!user.getRegistered())
+    {
+        user.setNickname(nickname);
+        std::string nickmsg = "New nick in use: " + nickname;
+        send(user.getSockfd(), nickmsg.c_str(), nickmsg.length(), 0);
+    }
+    else
+    {
+        std::string nickmsg = user.getNickname() + "changed his nickname to: " + nickname;
+        send(user.getSockfd(), nickmsg.c_str(), nickmsg.length(), 0);
+        user.setNickname(nickname);
+    }
 	return true ;
 }
