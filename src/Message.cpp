@@ -49,6 +49,7 @@ bool Message::splitMessage()
 	char *token = strtok(string_to_split, "\r \n");
 	if (!token)
 		return false ;
+	_cmd = token;
 	while(token != NULL)
 	{
 		_splitMessage.push_back(token);

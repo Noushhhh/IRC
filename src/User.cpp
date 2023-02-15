@@ -43,7 +43,6 @@ User &User::operator=(const User &src)
     return (*this);
 }
 
-
 // setters
 
 void User::setPassword(std::string given_password)
@@ -61,6 +60,21 @@ void User::setRegistered(void)
     this->_isRegistered = true;
 }
 
+void User::setUsername(std::string username)
+{
+	this->_username = username;
+}
+
+void User::setRealname(std::string username)
+{
+	this->_username = username;
+}
+
+void User::setBitMode(uint8_t bit)
+{
+    this->_bitMode = bit;
+}
+
 /**************************************************************/
 /*                                                            */
 /*                         GETTERS                            */
@@ -69,7 +83,8 @@ void User::setRegistered(void)
 
 int             User::getSockfd()       const {return (_sockfd);}
 std::string     User::getPassword()     const {return (_givenPassword);}
-// std::string     User::getUsername()   const {return (_username);}
 std::string     User::getNickname()     const {return (_nickname);}
 bool			User::getRegistered()   const { return (_isRegistered);};
-// std::string     User::getRealname()   const {return (_realname);}
+std::string     User::getUsername()   const {return (_username);}
+std::string     User::getRealname()   const {return (_realname);}
+uint8_t         User::getBitMode() const {return (_bitMode);}

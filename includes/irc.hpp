@@ -20,6 +20,7 @@
 #include <sys/socket.h>
 #include <cstring>
 #include <iostream>
+#include <string>
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>

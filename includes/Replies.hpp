@@ -60,7 +60,7 @@
 
 /************************************ ERRORS ************************************/
 
-#define ERR_NEEDMOREPARAMS(cmd) \   cmd + " :Not enough parameters" // 461
+#define ERR_NEEDMOREPARAMS(cmd)     cmd + " :Not enough parameters" // 461
 #define ERR_UNKNOWNNCOMMAND(cmd)    cmd + " :Unknown command" // 421
 #define ERR_PASSWDMISMATCH		    ":Password incorrect" // 464
 #define ERR_NOPRIVILEGES		    " :Permission Denied- You're not an IRC operator" // 481

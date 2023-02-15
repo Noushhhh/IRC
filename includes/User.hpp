@@ -21,13 +21,12 @@ class User
 	private	:
 		int	_sockfd;
 		sockaddr_in _addr;
-		//const int	_username;
 		std::string _nickname;
 		std::string	_givenPassword;
 		bool		_isRegistered;
-
-	// PASS Check if the passwd is ok if not reject user
-	// NICK set nickename for user
+		std::string	_username;
+		std::string	_realname;
+		uint8_t		_bitMode;
 
 	public	:
 
@@ -37,15 +36,19 @@ class User
 		~User();
 		
 //setter
-		void setPassword(std::string given_password);
-		void setNickname(std::string nickname);
-		void setRegistered(void);
+		void			setPassword(std::string given_password);
+		void			setNickname(std::string nickname);
+		void			setRegistered(void);
+		void			setUsername(std::string username);
+		void			setRealname(std::string realname);
+		void			setBitMode(uint8_t bit);
 
 //getter
 		std::string		getPassword()	const;
         int             getSockfd()     const;
         std::string     getNickname()   const;
 		bool			getRegistered()   const;
+		uint8_t         getBitMode() const;
 
         User &operator=(const User &src);
 };
