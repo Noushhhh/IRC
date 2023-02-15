@@ -16,7 +16,8 @@ bool	Server::Nick(User &user, Message &message)
 {
 	if (message._argsNb < 2)
 	{
-		send(user.getSockfd(), ERR_NONICKNAMEGIVEN, 19, 0);  // how to automatize size of reply ?
+        std::string err_msg1 = ERR_NONICKNAMEGIVEN;
+		send(user.getSockfd(), err_msg1.c_str(), err_msg1.length(), 0);
 		return false;
 	}
     message._it = message._splitMessage.begin() + 1;
@@ -25,10 +26,21 @@ bool	Server::Nick(User &user, Message &message)
 	{
 		if (_usersListIt->getNickname() == nickname)
         {
-            std::cout << ERR_ERRONEUSNICKNAME(nickname) << std::endl; // how to automatize size of reply ?
+            std::string err_msg2 = ERR_ERRONEUSNICKNAME(nickname);
+            send(user.getSockfd(), err_msg2.c_str(), err_msg2.length(), 0);
             return false ;
         }
 	}
+    for (int i = 0; i < nickname.length(); i++)
+    {
+        if (!isprint(nickname[i]))
+        {
+            std::string err_msg3 = ERR_ERRONEUSNICKNAME(nickname);
+            send(user.getSockfd(), err_msg3.c_str(), err_msg3.length(), 0);
+            return false ;
+        }
+    }
+    
 	
 	// std::list<User>::const_iterator it;
 	// it = std::find()
