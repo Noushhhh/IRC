@@ -24,14 +24,16 @@ bool	Server::Nick(User &user, Message &message)
     std::string nickname = *message._it;
 	for (_usersListIt = _usersList.begin(); _usersListIt != _usersList.end(); _usersListIt++)
 	{
+        std::cout << "nickname user " << _usersListIt->getNickname() << std::endl;
+        std::cout << "nickname givem" << nickname << std::endl;
 		if (_usersListIt->getNickname() == nickname)
         {
-            std::string err_msg2 = ERR_ERRONEUSNICKNAME(nickname);
+            std::string err_msg2 = ERR_NICKNAMEINUSE(nickname);
             send(user.getSockfd(), err_msg2.c_str(), err_msg2.length(), 0);
             return false ;
         }
 	}
-    for (int i = 0; i < nickname.length(); i++)
+    for (size_t i = 0; i < nickname.length(); i++)
     {
         if (!isprint(nickname[i]))
         {
@@ -40,12 +42,7 @@ bool	Server::Nick(User &user, Message &message)
             return false ;
         }
     }
-    
-	
-	// std::list<User>::const_iterator it;
-	// it = std::find()
-
-	// for (std::list::const_iterator it = 0; it != this._channelList.size() )
+    user.setNickname(nickname);
 	return true ;
 }
 
