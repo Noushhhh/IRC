@@ -25,7 +25,7 @@ _channelsListIt(_channelsList.begin())
 
     this->_ptrF[0] = (&Server::Pass);
 	this->_ptrF[1] = (&Server::Nick);
-	// this->_ptrF[2] = (&Server::cmdUser);
+	this->_ptrF[2] = (&Server::cmdUser);
 	// this->_ptrF[3] = (&Server::Quit);
 	// this->_ptrF[4] = (&Server::Join);
 	// this->_ptrF[5] = (&Server::Part);
@@ -74,7 +74,7 @@ _channelsListIt(_channelsList.begin())
  
     this->_ptrF[0] = (&Server::Pass);
 	this->_ptrF[1] = (&Server::Nick);
-	// this->_ptrF[2] = (&Server::cmdUser);
+	this->_ptrF[2] = (&Server::cmdUser);
 	// this->_ptrF[3] = (&Server::Quit);
 	// this->_ptrF[4] = (&Server::Join);
 	// this->_ptrF[5] = (&Server::Part);
@@ -388,7 +388,6 @@ const std::string Server::ServerException::errorMsg() const throw()
 /*                      COMMANDS                              */
 /*                                                            */
 /**************************************************************/
-
 
 
 

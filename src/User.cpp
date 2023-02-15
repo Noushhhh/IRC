@@ -36,9 +36,10 @@ User::~User()
 
 User &User::operator=(const User &src)
 {
-    (void) src;
+    //(void) src;
+    (void) _addr;
     this->_sockfd = src._sockfd;
-    // this->_username = src._username;
+    this->_username = src._username;
     this->_nickname = src._nickname;
     return (*this);
 }

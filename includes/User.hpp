@@ -15,11 +15,10 @@
 
 #include "irc.hpp"
 
-
 class User
 {
 	private	:
-		int	_sockfd;
+		int			_sockfd;
 		sockaddr_in _addr;
 		std::string _nickname;
 		std::string	_givenPassword;
@@ -44,10 +43,12 @@ class User
 		void			setBitMode(uint8_t bit);
 
 //getter
-		std::string		getPassword()	const;
         int             getSockfd()     const;
+		std::string		getPassword()	const;
         std::string     getNickname()   const;
 		bool			getRegistered()   const;
+		std::string		getUsername()	const;
+		std::string		getRealname()	const;
 		uint8_t         getBitMode() const;
 
         User &operator=(const User &src);
