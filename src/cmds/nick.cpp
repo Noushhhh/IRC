@@ -45,8 +45,3 @@ bool	Server::Nick(User &user, Message &message)
     user.setNickname(nickname);
 	return true ;
 }
-
-#define	ERR_NOSUCHNICK(nick)        nick + " :No such nick" // 401
-#define ERR_NONICKNAMEGIVEN		    " :No nickname given" //431
-#define ERR_ERRONEUSNICKNAME(nick)  nick + " :Erroneous nickname" //432 when a nick contains invalid char
-#define ERR_NICKNAMEINUSE(nick)     nick + " :Nickname is in use" // 433
