@@ -14,16 +14,16 @@
 
 bool	Server::cmdUser(User &user, Message &message)
 {
-    std::cout << message._argsNb << std::endl;
+    std::string err_msg;
     if (message._argsNb != 6)
     {
-        std::string err_msg1 = ERR_NEEDMOREPARAMS(message._cmd);
-		send(user.getSockfd(), err_msg1.c_str(), err_msg1.length(), 0);
+        err_msg = ERR_NEEDMOREPARAMS(message._cmd);
+		send(user.getSockfd(), err_msg.c_str(), err_msg.length(), 0);
 		return false;
 	}
     if (user.getRegistered())
     {
-        std::string err_msg = ERR_ALREADYREGISTERED;
+        err_msg = ERR_ALREADYREGISTERED;
 		send(user.getSockfd(), err_msg.c_str(), err_msg.length(), 0);
 		return false;
     }
@@ -32,7 +32,8 @@ bool	Server::cmdUser(User &user, Message &message)
     message._it++;
     if ((*message._it).length() != 1 || !((*message._it).find_first_not_of("012345678")) || (*(message._it + 1) != "*"))
     {
-        std::cout << "wrong format for user mode: try: '0 *'" << std::endl;
+        err_msg = "wrong format for user mode: try: '0 *'\n";
+        send(user.getSockfd(), err_msg.c_str(), err_msg.length(), 0);
         return false ;
     }
     user.setBitMode((uint8_t) std::stoi(*message._it));
@@ -43,22 +44,10 @@ bool	Server::cmdUser(User &user, Message &message)
         user.setRegistered();
     else
     {
-        std::string err_msg = ERR_PASSWDMISMATCH;
+        err_msg = ERR_PASSWDMISMATCH;
         send(user.getSockfd(), err_msg.c_str(), err_msg.length(), 0);
     }
     std::string welcome_msg = RPL_WELCOME(user.getNickname());
 	send(user.getSockfd(), welcome_msg.c_str(), welcome_msg.length(), 0);
     return true ;
 }
-
-
-// Example:
-
-//    USER guest 0 * :Ronnie Reagan   ; User registering themselves with a
-//                                    username of "guest" and real name
-//                                    "Ronnie Reagan".
-
-//    USER guest 8 * :Ronnie Reagan   ; User registering themselves with a
-//                                    username of "guest" and real name
-//                                    "Ronnie Reagan", and asking to be set
-//                                    invisible.
