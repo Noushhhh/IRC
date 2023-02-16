@@ -26,6 +26,8 @@ class User
 		std::string	_username;
 		std::string	_realname;
 		uint8_t		_bitMode;
+		std::string	_ping;
+		std::string	_pong;
 
 	public	:
 
@@ -41,6 +43,8 @@ class User
 		void			setUsername(std::string username);
 		void			setRealname(std::string realname);
 		void			setBitMode(uint8_t bit);
+		void			setPing(std::string ping);
+		void			setPong(std::string pong);
 
 //getter
         int             getSockfd()     const;
@@ -50,6 +54,8 @@ class User
 		std::string		getUsername()	const;
 		std::string		getRealname()	const;
 		uint8_t         getBitMode() const;
+		std::string		getPing() const;
+		std::string		getPong() const;
 
         User &operator=(const User &src);
 };

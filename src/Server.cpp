@@ -320,7 +320,6 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 {
 	if (raw_message.empty() || raw_message == "\n" || raw_message == "\r")
 		return false ;
-	//std::cout << std::endl << raw_message << std::endl;
 	Message message(raw_message);
 		// check if user empty 
 	//std::cout << "sock number in handle msg: " << user.getSockfd();
@@ -332,10 +331,6 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 	message._it = message._splitMessage.begin();
 	while(_handledCommands[i] != *message._it && i < HANDLEDCOMMANDSNB)
 		i++;
-	std::cout << "YO " << std::endl;
-	std::cout << "_handledCommands[0] = " << _handledCommands[0] << std::endl;
-	std::cout << "*message._it = " << *message._it << std::endl;
-	std::cout << "index handle message" << i << std::endl;
 	if (i >= HANDLEDCOMMANDSNB)
 	{
 		std::cout << std::endl << "Not a request" << std::endl;
