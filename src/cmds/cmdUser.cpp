@@ -30,15 +30,20 @@ bool	Server::cmdUser(User &user, Message &message)
     message._it = message._splitMessage.begin() + 1;
     user.setUsername(*message._it);
     message._it++;
-    if ((*message._it).length() != 1 || !((*message._it).find_first_not_of("23")))
+    if ((*message._it).length() != 1 || !((*message._it).find_first_not_of("012345678")) || (*(message._it + 1) != "*"))
     {
-        std::cout << "wrong format for user mode: must be 2 or 3" << std::endl;
+        std::cout << "wrong format for user mode: try: '0 *'" << std::endl;
         return false ;
     }
     user.setBitMode((uint8_t) std::stoi(*message._it));
     message._it + 2;
     user.setRealname(*message._it + " " + *(message._it + 1));
     // split with separator ":""
+    if (user.getPassword() == this->getPassword())
+        user.setRegistered();
+    std::string welcome_msg = "WELCOME TO THE FUTURE " + user.getNickname() + "\n";
+	send(user.getSockfd(), welcome_msg.c_str(), welcome_msg.length(), 0);
+    // welcome msg
     return true ;
 }
 
