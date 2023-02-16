@@ -38,12 +38,16 @@ bool	Server::cmdUser(User &user, Message &message)
     user.setBitMode((uint8_t) std::stoi(*message._it));
     message._it + 2;
     user.setRealname(*message._it + " " + *(message._it + 1));
-    // split with separator ":""
+    // split with separator ":" when merge with max spit function
     if (user.getPassword() == this->getPassword())
         user.setRegistered();
-    std::string welcome_msg = "WELCOME TO THE FUTURE " + user.getNickname() + "\n";
+    else
+    {
+        std::string err_msg = ERR_PASSWDMISMATCH;
+        send(user.getSockfd(), err_msg.c_str(), err_msg.length(), 0);
+    }
+    std::string welcome_msg = RPL_WELCOME(user.getNickname());
 	send(user.getSockfd(), welcome_msg.c_str(), welcome_msg.length(), 0);
-    // welcome msg
     return true ;
 }
 
