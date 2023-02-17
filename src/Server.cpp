@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/02/14 17:31:32 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/02/15 13:13:46 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -347,7 +347,7 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 	else
 	{
 		message._argsNb = message._splitMessage.size();
-		std::cout << "ACAB args nb " << message._argsNb << std::endl;
+		std::cout << "ACAB args nb " << message._argsNb << " i = " << i << std::endl;
 		return (bool)(this->*_ptrF[i])(user, message);
 	}
 }

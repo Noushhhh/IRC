@@ -21,7 +21,6 @@ Channel::Channel()
 
 Channel::Channel(const std::string &name, User &chanCreator) :
 _nameErrorSrc(""),
-_password(""),
 _topic("")
 {
 	//must check for duplicate name in creation command
@@ -34,13 +33,13 @@ _topic("")
 	_usersList.push_back(chanCreator);
 }
 
-Channel::Channel(const std::string &name, const std::string &pswd, const std::string topic, User &chanCreator) :
-_nameErrorSrc("")
+Channel::Channel(const std::string &name, const std::string &pswd, User &chanCreator) :
+_nameErrorSrc(""),
+_topic("")
 {
 	if (!isNameValid(name))
 		throw (Channel::BadNameException(_nameErrorSrc));
 	_name = name;
-	_topic = topic;
 	if (_type != UNMOD)
 		_creator = chanCreator;
 	_password = pswd;
@@ -83,8 +82,8 @@ Channel &Channel::operator=(const Channel &src)
 	std::string			Channel::getTopic()			const {return (_topic);}
 	bool				Channel::getPswdStatus()	const {return (_isPswdProtected);}
 	User				Channel::getChanCreator()	const {return (_creator);}
-	std::list< User >	Channel::getUsersList()		const {return (_usersList);}
-	std::list< User >	Channel::getOpList()		const {return (_opList);}
+	std::list< User >	&Channel::getUsersList()		  {return (_usersList);}
+	std::list< User >	&Channel::getOpList()			  {return (_opList);}
 	char				Channel::getType()			const {return (_type);}
 
 /**************************************************************/

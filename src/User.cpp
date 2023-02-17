@@ -36,9 +36,7 @@ User::~User()
 
 User &User::operator=(const User &src)
 {
-    (void) src;
     this->_sockfd = src._sockfd;
-    // this->_username = src._username;
     this->_nickname = src._nickname;
     return (*this);
 }
@@ -62,4 +60,21 @@ void User::setNickname(std::string nickname)
 int                     User::getSockfd()           const {return (_sockfd);}
 std::string             User::getPassword()         const {return (_givenPassword);}
 std::string             User::getNickname()         const {return (_nickname);}
-std::list< Channel >    User::getJoinedChans()	const {return (_joinedChannels)}
+std::list< Channel >    &User::getJoinedChans()	    {return (_joinedChannels);}
+
+/**************************************************************/
+/*                                                            */
+/*                         FUNCTIONS                          */
+/*                                                            */
+/**************************************************************/
+
+bool					User::isOnChan(const std::string &cName)
+{
+    std::list< Channel >::iterator it = _joinedChannels.begin();
+    for (; it != _joinedChannels.end(); it ++)
+    {
+        if (it->getName() == cName)
+            return (true);
+    }
+    return (false);
+}

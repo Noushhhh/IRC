@@ -12,66 +12,67 @@
 
 #ifndef CHANNEL_HPP
 #define CHANNEL_HPP
-
-#include "irc.hpp"
-#include "User.hpp"
-
 #define LOCAL	'&'	//the clients connected can only see and talk to other clients on the same server.
 #define REGULAR '#' //is known to all servers that are connected to the network.
 #define UNMOD	'+' //personne peut etre op ou chancreator
 #define SAFE	'!' //se cree grace a la commande JOIN
 
+#include "irc.hpp"
+#include "User.hpp"
+
+
+// class User;
 
 class Channel
 {
-private	:
+	private	:
 
-	std::string			_name;
-	std::string			_nameErrorSrc;
-	std::string			_password; //optional
-	std::string			_topic;
-	bool				_isPswdProtected;
-	User				_creator;
-	std::list< User >	_usersList; //if empty, delete chan except if char is SAFE
-	std::list< User >	_opList;
-	char				_type; //askip useless
+		std::string			_name;
+		std::string			_nameErrorSrc;
+		std::string			_password; //optional
+		std::string			_topic;
+		bool				_isPswdProtected;
+		User				_creator;
+		std::list< User >	_usersList; //if empty, delete chan except if chan is SAFE
+		std::list< User >	_opList;
+		char				_type; //askip useless
 
-public	:
+	public	:
 
-	Channel();
-	Channel(const Channel &src);
-	Channel & operator=(const Channel &src);
-	Channel(const std::string &name, User &chanCreator);
-	Channel(const std::string &name, const std::string &pswd, std::string topic, User &chanCreator);
-	~Channel();
+		Channel();
+		Channel(const Channel &src);
+		Channel & operator=(const Channel &src);
+		Channel(const std::string &name, User &chanCreator);
+		Channel(const std::string &name, const std::string &pswd, User &chanCreator);
+		~Channel();
 
-	//getters
+		//getters
 
-	std::string			getName()			const;
-	std::string			getNameErrorSrc()	const;
-	std::string			getPswd()			const;
-	std::string			getTopic()			const;
-	bool				getPswdStatus()		const;
-	User				getChanCreator()	const;
-	std::list< User >	getUsersList()		const;
-	std::list< User >	getOpList()			const;
-	char				getType()			const;
-	
-	//functions
+		std::string			getName()			const;
+		std::string			getNameErrorSrc()	const;
+		std::string			getPswd()			const;
+		std::string			getTopic()			const;
+		bool				getPswdStatus()		const;
+		User				getChanCreator()	const;
+		std::list< User >	&getUsersList()			 ;
+		std::list< User >	&getOpList()			 ;
+		char				getType()			const;
+		
+		//functions
 
-	bool				isNameValid(std::string name);
+		bool				isNameValid(std::string name);
 
-	//exceptions
+		//exceptions
 
-	class BadNameException : public std::exception
-	{
-		private	:
-			std::string	errorSrc;
-		public	:
-			~BadNameException() throw (){}
-			BadNameException(std::string error);
-			std::string badName() const throw();
-	};
+		class BadNameException : public std::exception
+		{
+			private	:
+				std::string	errorSrc;
+			public	:
+				~BadNameException() throw (){}
+				BadNameException(std::string error);
+				std::string badName() const throw();
+		};
 };
 
 

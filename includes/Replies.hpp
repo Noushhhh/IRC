@@ -95,6 +95,7 @@
 #define ERR_NOTONCHANNEL(chan)          chan + " :You are not on that channel\n" // 442
 #define ERR_USERONCHANNEL(chan, user)   user + " :Is already on channel " + chan + "\n" // 443
 #define ERR_USERNOTINCHANNEL(nick, chan)nick + ": is not on channel " + chan + "\n" // 441
+#define ERR_BADCHANNELKEY(chan)         chan + " :Cannot join channel (+k)\n" // 475
 #define ERR_CHANOPRIVSNEEDED(chan)      chan + " :You're not channel operator\n" // 482
 
 // PING & PONG

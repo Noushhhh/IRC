@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 15:58:01 by aandric           #+#    #+#             */
-/*   Updated: 2023/01/27 17:13:31 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/02/17 16:19:53 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,7 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
-// #include <cerrno>
 #include <errno.h>
-#include <list>
 #include <list>
 #include <vector>
 #include <sstream>
@@ -34,13 +32,16 @@
 #include <cstdlib>
 #include <fcntl.h>
 #include <strings.h>
+#include <string>
 #include <limits.h>
-#include "Server.hpp"
-#include "Channel.hpp"
+#include <algorithm>
+#include <iterator>
+
 #include "User.hpp"
 #include "Message.hpp"
 #include "Replies.hpp"
 #include "Channel.hpp"
+#include "Server.hpp"
 
 #define BACKLOG         10
 #define TIMEOUTLIMIT    -1
@@ -50,6 +51,14 @@
 #define SO_EE_ORIGIN_LOCAL   1
 #define SO_EE_ORIGIN_ICMP    2
 #define SO_EE_ORIGIN_ICMP6   3
+
+std::string *cppsplit(std::string str, char sep);
+size_t      ft_arraySize(std::string *array);
+
+
+
+
+
 
 // crete a server with a socket. Listen entries in particular entry to get new msgs / clients
 // In server >> Chanel, users, state

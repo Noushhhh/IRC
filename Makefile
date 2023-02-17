@@ -6,7 +6,8 @@ SRC_FILES = main.cpp \
 			Server.cpp	\
 			Message.cpp	\
 			Channel.cpp	\
-			User.cpp	
+			User.cpp	\
+			utils.cpp	
 
 CMD_FILES = pass.cpp \
 			nick.cpp \
@@ -38,7 +39,7 @@ INCLUDES			= 	includes/irc.hpp 		\
 						includes/User.hpp
 
 CMD = 			c++
-FLAGS = 		-Wall -Werror -Wextra -std=c++98 -fsanitize=address -g3 #-MD
+FLAGS = 		-Wall -Werror -Wextra -std=c++98 -g3 -fsanitize=address #-MD
 DEP = 			${OBJS:.o=.d}
 
 all: 			library $(NAME)

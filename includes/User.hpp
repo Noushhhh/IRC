@@ -15,13 +15,13 @@
 
 #include "irc.hpp"
 
+class Channel;
 
 class User
 {
 	private	:
 		int						_sockfd;
 		sockaddr_in 			_addr;
-		//const int	_username;
 		std::string 			_nickname;
 		std::string				_givenPassword;
 		std::list < Channel >	_joinedChannels;
@@ -44,7 +44,11 @@ class User
 		std::string				getPassword()		const;
         int             		getSockfd()    		const;
         std::string     		getNickname()  		const;
-		std::list< Channel >	getJoinedChans()	const;
+		std::list< Channel >	&getJoinedChans();
+
+//members functions
+
+		bool					isOnChan(const std::string &cName);
 
 
         User &operator=(const User &src);
