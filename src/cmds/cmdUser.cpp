@@ -12,27 +12,42 @@
 
 #include "../../includes/irc.hpp"
 
-bool	cmdUser(User &user, Message &message)
+bool	Server::cmdUser(User &user, Message &message)
 {
-    if (message._argsNb < 4)
+    std::string err_msg;
+    if (message._argsNb != 6)
     {
-        std::string err_msg1 = ERR_NEEDMOREPARAMS(message._cmd);
-		send(user.getSockfd(), err_msg1.c_str(), err_msg1.length(), 0);
+        err_msg = ERR_NEEDMOREPARAMS(message._cmd);
+		send(user.getSockfd(), err_msg.c_str(), err_msg.length(), 0);
 		return false;
 	}
     if (user.getRegistered())
     {
-        std::string err_msg = ERR_ALREADYREGISTERED;
+        err_msg = ERR_ALREADYREGISTERED;
 		send(user.getSockfd(), err_msg.c_str(), err_msg.length(), 0);
 		return false;
     }
     message._it = message._splitMessage.begin() + 1;
     user.setUsername(*message._it);
     message._it++;
-    int lol = std::stoi(*message._it);
-   // user.setBitMode(stoi(*message._it));
+    if ((*message._it).length() != 1 || !((*message._it).find_first_not_of("012345678")) || (*(message._it + 1) != "*"))
+    {
+        err_msg = "wrong format for user mode: try: '0 *'\n";
+        send(user.getSockfd(), err_msg.c_str(), err_msg.length(), 0);
+        return false ;
+    }
+    user.setBitMode((uint8_t) std::stoi(*message._it));
     message._it + 2;
-    user.setRealname(*message._it);
+    user.setRealname(*message._it + " " + *(message._it + 1));
+    // split with separator ":" when merge with max spit function
+    if (user.getPassword() == this->getPassword())
+        user.setRegistered();
+    else
+    {
+        err_msg = ERR_PASSWDMISMATCH;
+        send(user.getSockfd(), err_msg.c_str(), err_msg.length(), 0);
+    }
+    std::string welcome_msg = RPL_WELCOME(user.getNickname());
+	send(user.getSockfd(), welcome_msg.c_str(), welcome_msg.length(), 0);
+    return true ;
 }
-
-#define ERR_ALREADYREGISTERED	    ":Unauthorized command (already registered)" // 462, send as a response to a second USER call trying to overide user info 

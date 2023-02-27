@@ -36,43 +36,53 @@ User::~User()
 
 User &User::operator=(const User &src)
 {
-    (void) src;
+    (void) _addr;
     this->_sockfd = src._sockfd;
-    // this->_username = src._username;
+    this->_username = src._username;
     this->_nickname = src._nickname;
     return (*this);
 }
 
 // setters
 
-void User::setPassword(std::string given_password)
+void    User::setPassword(std::string given_password)
 {
 	this->_givenPassword = given_password;
 }
 
-void User::setNickname(std::string nickname)
+void    User::setNickname(std::string nickname)
 {
 	this->_nickname = nickname;
 }
 
-void User::setRegistered(void)
+void    User::setRegistered(void)
 {
     this->_isRegistered = true;
 }
 
-void User::setUsername(std::string username)
+void    User::setUsername(std::string username)
 {
 	this->_username = username;
 }
 
-void User::setRealname(std::string username)
+void    User::setRealname(std::string username)
 {
 	this->_username = username;
 }
 
-void User::setBitMode(uint8_t bit)
+void    User::setBitMode(uint8_t bit)
 {
     this->_bitMode = bit;
+}
+
+void    User::setPing(std::string ping)
+{
+    this->_ping = ping;
+}
+
+void    User::setPong(std::string pong)
+{
+    this->_pong = pong;
 }
 
 /**************************************************************/
@@ -88,3 +98,5 @@ bool			User::getRegistered()   const { return (_isRegistered);};
 std::string     User::getUsername()   const {return (_username);}
 std::string     User::getRealname()   const {return (_realname);}
 uint8_t         User::getBitMode() const {return (_bitMode);}
+std::string		User::getPing() const {return (_ping);}
+std::string		User::getPong() const {return (_pong);}

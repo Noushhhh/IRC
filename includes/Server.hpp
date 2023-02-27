@@ -63,9 +63,9 @@ class Server
 
 // commands
 
-    bool	Pass(User &user, Message &message);
-	bool	Nick(User &user, Message &message);
-	bool	cmdUser(User &user, Message &message);
+    bool	Pass(User &user, Message &message); // ok
+	bool	Nick(User &user, Message &message); // ok
+	bool	cmdUser(User &user, Message &message); // ok
 	bool	Quit(User &user, Message &message);
 	bool	Join(User &user, Message &message);
 	bool	Part(User &user, Message &message);
