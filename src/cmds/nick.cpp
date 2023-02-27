@@ -12,13 +12,13 @@
 
 #include "../../includes/irc.hpp"
 
-bool	Server::Nick(User &user, Message &message)
+void	Server::Nick(User &user, Message &message)
 {
 	if (message._argsNb < 2)
 	{
         std::string err_msg1 = ERR_NONICKNAMEGIVEN;
 		send(user.getSockfd(), err_msg1.c_str(), err_msg1.length(), 0);
-		return false;
+		return ;
 	}
     message._it = message._splitMessage.begin() + 1;
     std::string nickname = *message._it;
@@ -30,7 +30,7 @@ bool	Server::Nick(User &user, Message &message)
         {
             std::string err_msg2 = ERR_NICKNAMEINUSE(nickname);
             send(user.getSockfd(), err_msg2.c_str(), err_msg2.length(), 0);
-            return false ;
+            return ;
         }
 	}
     for (size_t i = 0; i < nickname.length(); i++)
@@ -39,7 +39,7 @@ bool	Server::Nick(User &user, Message &message)
         {
             std::string err_msg3 = ERR_ERRONEUSNICKNAME(nickname);
             send(user.getSockfd(), err_msg3.c_str(), err_msg3.length(), 0);
-            return false ;
+            return ;
         }
     }
     if (!user.getRegistered())
@@ -54,5 +54,4 @@ bool	Server::Nick(User &user, Message &message)
         send(user.getSockfd(), nickmsg.c_str(), nickmsg.length(), 0);
         user.setNickname(nickname);
     }
-	return true ;
 }

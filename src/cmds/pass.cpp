@@ -12,23 +12,23 @@
 
 #include "../../includes/irc.hpp"
 
-bool	Server::Pass(User &user, Message &message)
+void	Server::Pass(User &user, Message &message)
 {
 	if (message._argsNb < 2)
 	{
 		send(user.getSockfd(), "ERR_NEEDMOREPARAMS", 18, 0); 
-		return false;
+		return ;
 	}
 	if (user.getPassword().empty())
 	{
 		message._it = message._splitMessage.begin() + 1;
 		user.setPassword(*message._it);
-		return true;
+		return ;
 	}
 	else
 	{
 		send(user.getSockfd(), "ERR_ALREADYREGISTRED", 20, 0); 
-		return false;
+		return ;
 	}
-	return true ;
+	return ;
 }

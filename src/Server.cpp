@@ -87,7 +87,7 @@ _channelsListIt(_channelsList.begin())
 	// this->_ptrF[12] = (&Server::Msg);
 	// this->_ptrF[13] = (&Server::Privmsg);
 	// this->_ptrF[14] = (&Server::Notice);
-	// this->_ptrF[15] = (&Server::Ping);
+	this->_ptrF[15] = (&Server::Ping);
 	// this->_ptrF[16] = (&Server::Pong);
 
 	this->_handledCommands[0] = "PASS";
@@ -340,7 +340,8 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 	{
 		message._argsNb = message._splitMessage.size();
 		std::cout << "args nb " << message._argsNb << std::endl;
-		return (bool)(this->*_ptrF[i])(user, message);
+		(void)(this->*_ptrF[i])(user, message);
+        return true;
 	}
 }
 
@@ -377,29 +378,3 @@ const std::string Server::ServerException::errorMsg() const throw()
     }
     return ("jsp frere");
 }
-
-/**************************************************************/
-/*                                                            */
-/*                      COMMANDS                              */
-/*                                                            */
-/**************************************************************/
-
-
-
-
-
-// bool	cmdUser(User &user, Message &message);
-// bool	Quit(User &user, Message &message);
-// bool	Join(User &user, Message &message);
-// bool	Part(User &user, Message &message);
-// bool	Mode(User &user, Message &message);
-// bool	Topic(User &user, Message &message);
-// bool	Names(User &user, Message &message);
-// bool	List(User &user, Message &message);
-// bool	Invite(User &user, Message &message);
-// bool	Kick(User &user, Message &message);
-// bool	Msg(User &user, Message &message);
-// bool	Privmsg(User &user, Message &message);
-// bool	Notice(User &user, Message &message);
-// bool	Ping(User &user, Message &message);
-// bool	Pong(User &user, Message &message);

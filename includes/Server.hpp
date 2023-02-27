@@ -63,23 +63,23 @@ class Server
 
 // commands
 
-    bool	Pass(User &user, Message &message); // ok
-	bool	Nick(User &user, Message &message); // ok
-	bool	cmdUser(User &user, Message &message); // ok
-	bool	Quit(User &user, Message &message);
-	bool	Join(User &user, Message &message);
-	bool	Part(User &user, Message &message);
-	bool	Mode(User &user, Message &message);
-	bool	Topic(User &user, Message &message);
-	bool	Names(User &user, Message &message);
-	bool	List(User &user, Message &message);
-	bool	Invite(User &user, Message &message);
-	bool	Kick(User &user, Message &message);
-	bool	Msg(User &user, Message &message);
-	bool	Privmsg(User &user, Message &message);
-	bool	Notice(User &user, Message &message);
-	bool	Ping(User &user, Message &message);
-	bool	Pong(User &user, Message &message);
+    void	Pass(User &user, Message &message); // ok
+	void	Nick(User &user, Message &message); // ok
+	void	cmdUser(User &user, Message &message); // ok
+	void	Quit(User &user, Message &message);
+	void	Join(User &user, Message &message);
+	void	Part(User &user, Message &message);
+	void	Mode(User &user, Message &message);
+	void	Topic(User &user, Message &message);
+	void	Names(User &user, Message &message);
+	void	List(User &user, Message &message);
+	void	Invite(User &user, Message &message);
+	void	Kick(User &user, Message &message);
+	void	Msg(User &user, Message &message);
+	void	Privmsg(User &user, Message &message);
+	void	Notice(User &user, Message &message);
+	void	Ping(User &user, Message &message);
+	void	Pong(User &user, Message &message);
 
 // USER
 
@@ -132,7 +132,7 @@ class Server
 
     //message
         std::string						        _handledCommands[HANDLEDCOMMANDSNB];
-        bool							        (Server::*_ptrF[HANDLEDCOMMANDSNB])(User &user, Message &message);
+        void							        (Server::*_ptrF[HANDLEDCOMMANDSNB])(User &user, Message &message);
 
         Server();
         Server(const Server & newServ);

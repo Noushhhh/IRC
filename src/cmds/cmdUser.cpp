@@ -12,20 +12,20 @@
 
 #include "../../includes/irc.hpp"
 
-bool	Server::cmdUser(User &user, Message &message)
+void	Server::cmdUser(User &user, Message &message)
 {
     std::string err_msg;
     if (message._argsNb != 6)
     {
         err_msg = ERR_NEEDMOREPARAMS(message._cmd);
 		send(user.getSockfd(), err_msg.c_str(), err_msg.length(), 0);
-		return false;
+        return ;
 	}
     if (user.getRegistered())
     {
         err_msg = ERR_ALREADYREGISTERED;
 		send(user.getSockfd(), err_msg.c_str(), err_msg.length(), 0);
-		return false;
+        return ;
     }
     message._it = message._splitMessage.begin() + 1;
     user.setUsername(*message._it);
@@ -34,9 +34,9 @@ bool	Server::cmdUser(User &user, Message &message)
     {
         err_msg = "wrong format for user mode: try: '0 *'\n";
         send(user.getSockfd(), err_msg.c_str(), err_msg.length(), 0);
-        return false ;
+        return ;
     }
-    user.setBitMode((uint8_t) std::stoi(*message._it));
+    //user.setBitMode((uint8_t) atoi(*message._it)); ?? not needed ??
     message._it + 2;
     user.setRealname(*message._it + " " + *(message._it + 1));
     // split with separator ":" when merge with max spit function
@@ -49,5 +49,4 @@ bool	Server::cmdUser(User &user, Message &message)
     }
     std::string welcome_msg = RPL_WELCOME(user.getNickname());
 	send(user.getSockfd(), welcome_msg.c_str(), welcome_msg.length(), 0);
-    return true ;
 }
