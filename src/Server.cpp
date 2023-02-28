@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/02/15 13:13:46 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/02/27 11:25:23 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,6 @@ void                    Server::setSock(int type, int protocol)
 	int val = 1;
 	if (setsockopt(_sock, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val)))
 		throw (Server::ServerException(SOCKET));
-    std::cout << "Server sock = " << _sock << std::endl;
 	if (fcntl(_sock, F_SETFL, O_NONBLOCK < 0))
 		throw (Server::ServerException(SOCKET));
 
@@ -213,17 +212,16 @@ bool                    Server::pollDispatch()
 
 	while (1)
     {
+		if (!_channelsList.empty())
+			closeEmptyChans();
 		if (poll (_pollFds.begin().base(), _pollFds.size(), -1) < 0)
-        {
             return (false);
-        }
 		for (it = _pollFds.begin(); it != _pollFds.end(); it ++)
 		{
             if (it->events == 0)
                 continue;
             else if ((it->revents & POLLIN) == POLLIN)
             {
-				std::cout << "TEST" << std::endl;
                 if (it->fd == _sock)
                 {
                     if (this->addUser() == false)
@@ -260,6 +258,23 @@ bool                    Server::pollDispatch()
     return (true);
 }
 
+void					Server::closeEmptyChans()
+{
+	std::list< Channel >::iterator it = _channelsList.begin();
+	std::list< Channel >::iterator buff;
+	while (it != _channelsList.end())
+	{
+		if (it->getUsersList().empty() == true)
+		{
+			buff = it;
+			it ++;
+			_channelsList.erase(buff);
+		}
+		else
+			it ++;
+	}
+}
+
 bool                    Server::addUser()
 {
     // if bad passw
@@ -288,6 +303,20 @@ bool                    Server::addUser()
 bool                    Server::closeUser(std::vector< struct pollfd >::iterator &it)
 {
     //supress from all channels he belongs to
+	std::list< User >::iterator user = getUserItWithFd(it->fd);
+
+	for (std::list < Channel >::iterator cit = _channelsList.begin(); cit != _channelsList.end(); cit ++)
+	{
+		for (std::list< User >::iterator lit = cit->getUsersList().begin(); lit != cit->getUsersList().end(); lit ++)
+		{
+			if (user->getNickname() == lit->getNickname())
+			{
+				cit->getUsersList().erase(lit);
+				break ;
+			}
+		}
+	}
+	//close user FD
     for (std::list< User >::iterator lit = _usersList.begin(); lit != _usersList.end(); lit ++)
     {
         if (lit->getSockfd() == it->fd)
@@ -347,7 +376,6 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 	else
 	{
 		message._argsNb = message._splitMessage.size();
-		std::cout << "ACAB args nb " << message._argsNb << " i = " << i << std::endl;
 		return (bool)(this->*_ptrF[i])(user, message);
 	}
 }

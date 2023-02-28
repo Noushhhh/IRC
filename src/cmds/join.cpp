@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/02/17 18:37:26 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/02/28 17:02:36 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static void remove_from_all_channels(User &user, std::list< Channel > &channelLi
     }
 }
 
-static std::string *pswd_split(std::string str)
+static std::string *split(std::string str)
 {
     int i = 0;
     int ct = 1;
@@ -79,17 +79,16 @@ static std::string *pswd_split(std::string str)
             if (str[j] == ',')
             {
                 if (strArray[i].empty())
-                    strArray[i].push_back('\n');
+                    strArray[i].push_back('\0');
                 i ++;
             }
             else if (i < ct && str[j] && str[j] != ',')
                 strArray[i].push_back(str[j]);
         }
-        strArray[i].push_back(0);
     }
-    strArray[ct].push_back('\0');
     // for (int i = 0; i < ct; i ++)
-    //     std::cout << "strArray in keysplit ["<< i << "] :" << strArray[i] << std::endl;
+    //     std::cout << "strArray ["<< i << "] :" << strArray[i] << std::endl;
+    // std::cout << std::endl;
     return (strArray);
 }
 
@@ -99,12 +98,6 @@ static bool pswdMatch(const std::string &chanPswd, std::string givenPswd)
         givenPswd = givenPswd.substr(0, givenPswd.size() - 2);
     if (chanPswd == givenPswd)
         return (true);
-    // std::cout << "'" << chanPswd << "'" << " '" << givenPswd << "'" << std::endl;
-    // std::cout << "size of chan :" << chanPswd.size() << " size of given :" << givenPswd.size() << std::endl;
-    // for (int i = 0; i < 2; i ++)
-    //     std::cout << "chan[" << i << "] = " << (int)chanPswd[i] << std::endl;
-    // for (int i = 0; givenPswd[i]; i ++)
-    //     std::cout << "given[" << i << "] = " << (int)givenPswd[i] << std::endl;
     return (false);
 }
 
@@ -113,6 +106,9 @@ bool	Server::Join(User &user, Message &message)
 	std::string err_buff;
     std::string *chansSplit = NULL;
     std::string *keysSplit = NULL;
+    std::string::iterator it;
+    bool chanExist = false;
+
     message._it = message._splitMessage.begin() + 1; // channel name
 
     if (message._splitMessage.size() == 1)
@@ -122,9 +118,9 @@ bool	Server::Join(User &user, Message &message)
         return (false);
     }
     if (message._splitMessage.size() == 2 || message._splitMessage.size() == 3)
-        chansSplit = cppsplit(std::string(*message._it), ',');
+        chansSplit = split(std::string(*message._it));
     if (message._splitMessage.size() == 3)
-        keysSplit = pswd_split(*(message._it + 1));
+        keysSplit = split(*(message._it + 1));
     if (message._splitMessage.size() > 3)
     {
         err_buff = ERR_TOOMANYTARGETS(std::string("JOIN"));
@@ -140,77 +136,80 @@ bool	Server::Join(User &user, Message &message)
         user.getJoinedChans().erase(user.getJoinedChans().begin(), user.getJoinedChans().end());
         err_buff = " :succesfully removed from all channels\n";
         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
-        return (true);
     }
-
-    // look for the channel to join
-    std::string::iterator it;
-    bool chanExist = false;
-    for (size_t i = 0; i < ft_arraySize(chansSplit); i ++)
-    {
-        for (_cIt = _channelsList.begin(); _cIt != _channelsList.end(); _cIt ++)
+    else
+    {    
+        // look for the channel to join
+        for (size_t i = 0; i < ft_arraySize(chansSplit); i ++)
         {
-            // if chan exist, user will join
-            if (_cIt->getName() == chansSplit[i])
+            chanExist = false;
+            for (_cIt = _channelsList.begin(); _cIt != _channelsList.end(); _cIt ++)
             {
-                // if allready on channel
-
-                if (user.isOnChan(_cIt->getName()))
+                // if chan exist, user will join
+                if (_cIt->getName() == chansSplit[i])
                 {
-                    err_buff = ERR_USERONCHANNEL(_cIt->getName(), user.getNickname());
+                    // if allready on channel
+
+                    if (user.isOnChan(_cIt->getName()))
+                    {
+                        err_buff = ERR_USERONCHANNEL(_cIt->getName(), user.getNickname());
+                        send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+                        chanExist = true;
+                        break ;
+                    }
+                    
+                    //if chan is key protected and a key args was given to JOIN cmd and it matchs chan key
+                    
+                    if ((_cIt->getPswdStatus() && message._splitMessage.size() > 2 &&
+                    i < ft_arraySize(keysSplit) && pswdMatch(_cIt->getPswd(), keysSplit[i]))
+                    || (!_cIt->getPswdStatus()))
+                    {
+                        _cIt->getUsersList().push_back(user);
+                        user.getJoinedChans().push_back(*_cIt);
+                        joinRPL(*_cIt, user);
+                        chanExist = true;
+                        break ;
+                    }
+                    // std::cout << "given pswd = " << keysSplit[i] << "pswd = " << _cIt->getPswd() << std::endl; 
+                    err_buff = ERR_BADCHANNELKEY(_cIt->getName());
                     send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
                     chanExist = true;
                     break ;
                 }
-                
-                //if chan is key protected and a key args was given to JOIN cmd and it matchs chan key
-                if ((_cIt->getPswdStatus() && message._splitMessage.size() > 2 &&
-                i < ft_arraySize(keysSplit) && pswdMatch(_cIt->getPswd(), keysSplit[i]))
-                || (!_cIt->getPswdStatus()))
-                {
-                    _cIt->getUsersList().push_back(user);
-                    user.getJoinedChans().push_back(*_cIt);
-                    joinRPL(*_cIt, user);
-                    chanExist = true;
-                    break ;
-                }
-                // std::cout << "given pswd = " << keysSplit[i] << "pswd = " << _cIt->getPswd() << std::endl; 
-                err_buff = ERR_BADCHANNELKEY(_cIt->getName());
-                send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
-                chanExist = true;
-                break ;
             }
-        }
 
-        // if chan doesn't already exist it is created, upon the condition his name is valid
-        
-        if (!chanExist)
-        {
-            try
+            // if chan doesn't already exist it is created, upon the condition his name is valid
+            if (!chanExist)
             {
-                // if a keyword is specified
-                if (message._splitMessage.size() > 2 && i < ft_arraySize(keysSplit) && keysSplit[i][0] != 0)
+                try
                 {
-                    // if (i > keysSplit->size())
-                    Channel newChan(chansSplit[i], keysSplit[i], user);
-                    _channelsList.push_back(newChan);
-                    user.getJoinedChans().push_back(newChan);
-                    joinRPL(newChan, user);
+                    // if a keyword is specified
+                    
+                    if (message._splitMessage.size() > 2 && i < ft_arraySize(keysSplit) && keysSplit[i][0] != 0)
+                    {
+                        // if (i > keysSplit->size())
+                        Channel newChan(chansSplit[i], keysSplit[i], user);
+                        _channelsList.push_back(newChan);
+                        user.getJoinedChans().push_back(newChan);
+                        joinRPL(newChan, user);
+                    }
+                    
+                    //if none is
+                    else
+                    {
+                        Channel newChan(chansSplit[i], user);
+                        _channelsList.push_back(newChan);
+                        user.getJoinedChans().push_back(newChan);
+                        joinRPL(newChan, user);
+                    }
+                    
                 }
-                //if none is
-                else
+                catch(const Channel::BadNameException& e)
                 {
-                    Channel newChan(chansSplit[i], user);
-                    _channelsList.push_back(newChan);
-                    user.getJoinedChans().push_back(newChan);
-                    joinRPL(newChan, user);
+                    err_buff = chansSplit[i];
+                    err_buff.append(e.badName());
+                    send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
                 }
-            }
-            catch(const Channel::BadNameException& e)
-            {
-                err_buff = chansSplit[i].append(" :Is an invalid channel's name");
-                send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
-                break ;
             }
         }
     }

@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/02/14 17:31:32 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/02/27 09:59:24 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ class Server
 
 // functions
         bool                    checkPass();
-		//void					close();
+		void                    closeEmptyChans();
+        //void					close();
 		//void					receiveData();
 		
         bool                    pollDispatch();

@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 14:27:34 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/02/17 17:47:43 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/02/28 17:18:20 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ std::string *cppsplit(std::string str, char sep)
             wordCT ++;
             i ++;
         } 
-        if (str[i] && str[i] == sep)// turn into a while and uncomment condition for real split
+        while (str[i] && str[i] == sep)// turn into a while and uncomment condition for real split
             i ++;
     }
     strArray = new std::string[wordCT + 1];
@@ -46,15 +46,15 @@ std::string *cppsplit(std::string str, char sep)
         i ++;
     }
     strArray[i].push_back('\0');
-    for (int i = 0; i < wordCT; i ++)
-        std::cout << "strArray ["<< i << "] :" << strArray[i] << std::endl;
+    // for (int i = 0; i < wordCT; i ++)
+    //     std::cout << "strArray ["<< i << "] :" << strArray[i] << std::endl;
     return (strArray);
 }
 
 size_t ft_arraySize(std::string *array)
 {
     size_t i = 0;
-    while (array[i][0] != 0)
+    while (array[i].size() != 0)
         i ++;
     return (i);
 }

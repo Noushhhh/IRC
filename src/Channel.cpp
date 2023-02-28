@@ -94,14 +94,14 @@ Channel &Channel::operator=(const Channel &src)
 
 bool				Channel::isNameValid(std::string name)
 {
-	if (name.empty())
+	if (name[0] == '\0')
 	{
-		_nameErrorSrc = "channels's names cannot be blank";
+		_nameErrorSrc = ": channels's names cannot be blank\n";
 		return (false);
 	}
 	else if (name.size() > 50)
 	{
-		_nameErrorSrc = "channels's names cannot be over 50 char";
+		_nameErrorSrc = ": channels's names cannot be over 50 char\n";
 		return (false);
 	}
 	switch (name[0])
@@ -116,22 +116,22 @@ bool				Channel::isNameValid(std::string name)
 			_type = UNMOD;
 			break ;
 		case '!' :
-			_nameErrorSrc = "safe channels must be created using JOIN cmd";
+			_nameErrorSrc = ": safe channels must be created using JOIN cmd\n";
 			return (false);
 		default :
-			_nameErrorSrc = "channels's names must start with '&' '#' '+' or '!'";
+			_nameErrorSrc = ": channels's names must start with '&' '#' '+' or '!'\n";
 			return (false);
 	}
 	if (name.size() == 1)
 	{
-		_nameErrorSrc = "channel's name cannot only contain channel type specfier";
+		_nameErrorSrc = ": channel's name cannot only contain channel type specfier\n";
 		return (false);
 	}
 	for (size_t i = 0; i < name.size(); i ++)
 	{
 		if (name[i] == ' ' || name[i] == 7 || name[i] == ',')
 		{
-			_nameErrorSrc = "channels's names cannot contain ' ', ^G or ','";
+			_nameErrorSrc = ": channels's names cannot contain ' ', ^G or ','\n";
 			return (false);
 		}
 	}
