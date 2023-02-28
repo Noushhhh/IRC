@@ -139,6 +139,14 @@ bool				Channel::isNameValid(std::string name)
 	return (true);
 }
 
+void				Channel::sendToUsers(std::string message)
+{
+	std::list < User >::iterator it = _usersList.begin();
+	while (it != _usersList.end())
+		send(it->getSockfd(), message.c_str(), message.length(), 0);
+}
+
+
 /**************************************************************/
 /*                                                            */
 /*                      EXCEPTION CLASSES                     */

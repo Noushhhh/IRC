@@ -60,6 +60,7 @@ public	:
 	//functions
 
 	bool				isNameValid(std::string name);
+	void				sendToUsers(std::string message);
 
 	//exceptions
 
