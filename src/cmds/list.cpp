@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:59 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/02/28 17:08:57 by aandric          ###   ########.fr       */
+/*   Updated: 2023/02/28 17:09:42 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	Server::List(User &user, Message &message)
         }
     }
     return ;
+    // ADD ERROR RETURN IF MORE PARAMETERS
 }
 
 // LIST message
