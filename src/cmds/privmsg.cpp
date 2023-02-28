@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/02/28 17:19:25 by aandric          ###   ########.fr       */
+/*   Updated: 2023/02/28 17:21:59 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,32 +54,35 @@ void	Server::Privmsg(User &user, Message &message)
 		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         return ;
     }
+    
     message._it = message._splitMessage.begin() + 1;
     std::string target = *message._it;
     message._it++;
     std::string priv_msg = *message._it;
+
     // _usersListIt = _usersList.begin();
     if ((target.find("%#") == 0) || (target.find("@%#") == 0))
     {
         // target = split(target, "@%#");
         if (is_channel(target, getChanList()))
         priv_msg = user.getNickname() + "@IRC_MAXANA" + " PRIVMSG #" + target + " :" + priv_msg; // split target with "@%#" to add after PRIVMSG
-          std::list <Channel>::iterator channel_it = getChanList()->begin();
+        std::list <Channel>::iterator channel_it = getChanList()->begin();
         while (channel_it != getChanList()->end())
         {
             if (channel_it->getName() == target)
                 channel_it->sendToUsers(priv_msg);
             channel_it++;
         }
-		send(user.getSockfd(), priv_msg.c_str(), priv_msg.length(), 0); // make function to send to all users of channel with name of channel
         return ;
     }
+
     else if (is_user(target, getUserList()))
     {
         priv_msg = user.getNickname() + " PRIVMSG " + target + " :" + priv_msg;
 		send(user.getSockfd(), priv_msg.c_str(), priv_msg.length(), 0);
         return ;
     }
+
     _errMsg = ERR_NOSUCHNICK(target);
 	send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
 }
