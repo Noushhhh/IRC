@@ -3,14 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   list.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:59 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/02/14 14:58:58 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/02/28 17:00:31 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
+
+void	Server::List(User &user, Message &message)
+{
+    std::string channel_name;
+    if (message._argsNb == 1)
+    {
+        _channelsListIt = _channelsList.begin();
+        while (_channelsListIt != _channelsList.end())
+        {
+            channel_name = _channelsListIt->getName();
+            send(user.getSockfd(), channel_name.c_str(), channel_name.length(), 0);
+            _channelsListIt++;
+        }
+    }
+    
+}
 
 // LIST message
 //      Command: LIST

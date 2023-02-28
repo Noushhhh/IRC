@@ -1,4 +1,4 @@
-NAME = 			irc_serv
+NAME = 			ircserv
 
 #PARSING_FILES = 	
 
