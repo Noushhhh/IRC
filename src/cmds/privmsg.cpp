@@ -3,15 +3,80 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/02/14 14:59:14 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/02/28 15:44:38 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
 
+
+bool    is_channel(std::string channel_name, std::list <Channel> *channel_list)
+{
+    if (channel_name.find("%#") == 0)
+        channel_name = channel_name.substr(2, channel_name.npos);
+    else
+        channel_name = channel_name.substr(3, channel_name.npos); // first line to this one delete when using split in funciton privmsg to get target witbhout @%#
+    std::list <Channel>::iterator channel_it = channel_list->begin();
+    while (channel_it != channel_list->end())
+    {
+        if (channel_it->getName() == channel_name)
+            return true ;
+        channel_it++;
+    }
+    return false ;
+}
+
+bool    is_user(std::string user_name, std::list <User> *user_list)
+{
+    std::list <User>::iterator user_it = user_list->begin();
+    while (user_it != user_list->end())
+    {
+        if (user_it->getNickname() == user_name)
+            return true ;
+        user_it++;
+    }
+    return false ;
+}
+
+void	Server::Privmsg(User &user, Message &message)
+{
+    if (message._argsNb < 3)
+    {
+        _errMsg = ERR_NOTEXTTOSEND;
+		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        return ;
+    }
+    if (message._argsNb > 3)
+    {
+        _errMsg = ERR_TOOMANYTARGETS;
+		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        return ;
+    }
+    message._it = message._splitMessage.begin() + 1;
+    std::string target = *message._it;
+    message._it++;
+    std::string priv_msg = *message._it;
+    // _usersListIt = _usersList.begin();
+    if ((target.find("%#") == 0) || (target.find("@%#") == 0))
+    {
+        // target = split(target, "@%#");
+        if (is_channel(target, getChanList()))
+        priv_msg = user.getNickname() + "@IRC_MAXANA" + " PRIVMSG #" + target + " :" + priv_msg; // split target with "@%#" to add after PRIVMSG
+		send(user.getSockfd(), priv_msg.c_str(), priv_msg.length(), 0); // make function to send to all users of channel with name of channel
+        return ;
+    }
+    else if (is_user(target, getUserList()))
+    {
+        priv_msg = user.getNickname() + " PRIVMSG " + target + " :" + priv_msg;
+		send(user.getSockfd(), priv_msg.c_str(), priv_msg.length(), 0);
+        return ;
+    }
+    _errMsg = ERR_NOSUCHNICK(target);
+	send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+}
 
 // PRIVMSG message
 //      Command: PRIVMSG

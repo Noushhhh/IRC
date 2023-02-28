@@ -20,10 +20,10 @@ CMD_FILES = pass.cpp \
 			list.cpp \
 			invite.cpp \
 			kick.cpp \
-			msg.cpp \
 			privmsg.cpp \
 			notice.cpp \
-			ping_pong.cpp
+			ping_pong.cpp \
+			oper.cpp
 
 SRC = 		${addprefix src/, ${SRC_FILES}}
 SRC_CMD =	${addprefix src/cmds/, ${CMD_FILES}} 

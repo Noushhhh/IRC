@@ -75,40 +75,12 @@ class Server
 	void	List(User &user, Message &message);
 	void	Invite(User &user, Message &message);
 	void	Kick(User &user, Message &message);
-	void	Msg(User &user, Message &message);
+	void	PrivMsg(User &user, Message &message);
 	void	Privmsg(User &user, Message &message);
 	void	Notice(User &user, Message &message);
 	void	Ping(User &user, Message &message);
 	void	Pong(User &user, Message &message);
-
-// USER
-
-// PASS
-// NICK
-// USER
-// QUIT
-// 
-
-// CHANNEL
-// JOIN
-// PART
-// MODE :  O - give "channel creator" status;
-        // o - give/take channel operator privilege;
-        // v - give/take the voice privilege; + si affinite mais pas oblige
-// TOPIC
-// NAMES
-// LIST
-// INVITE
-// KICK
-
-// MSG
-// PRIVMSG
-// NOTICE - same as privmsg pour les bots (a bot never receives message when calling notice)
-
-// MISCELLANEOUS
-// PING
-// PONG
-
+    void	Oper(User &user, Message &message);
 
     class ServerException : public std::exception
     {
@@ -129,6 +101,7 @@ class Server
         std::list< User >::iterator             _usersListIt;
         std::list< Channel >                    _channelsList;
         std::list< Channel >::iterator          _channelsListIt;
+        std::string                             _errMsg;
 
     //message
         std::string						        _handledCommands[HANDLEDCOMMANDSNB];

@@ -28,6 +28,7 @@ class User
 		uint8_t		_bitMode;
 		std::string	_ping;
 		std::string	_pong;
+		//	bool _banned ?
 
 	public	:
 
