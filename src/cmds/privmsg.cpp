@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/02/28 15:46:40 by aandric          ###   ########.fr       */
+/*   Updated: 2023/02/28 17:19:25 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,13 @@ void	Server::Privmsg(User &user, Message &message)
         // target = split(target, "@%#");
         if (is_channel(target, getChanList()))
         priv_msg = user.getNickname() + "@IRC_MAXANA" + " PRIVMSG #" + target + " :" + priv_msg; // split target with "@%#" to add after PRIVMSG
+          std::list <Channel>::iterator channel_it = getChanList()->begin();
+        while (channel_it != getChanList()->end())
+        {
+            if (channel_it->getName() == target)
+                channel_it->sendToUsers(priv_msg);
+            channel_it++;
+        }
 		send(user.getSockfd(), priv_msg.c_str(), priv_msg.length(), 0); // make function to send to all users of channel with name of channel
         return ;
     }
