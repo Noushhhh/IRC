@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:09 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/02/14 14:59:05 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/02/28 16:49:52 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	Server::Nick(User &user, Message &message)
 {
 	if (message._argsNb < 2)
 	{
-        std::string err_msg1 = ERR_NONICKNAMEGIVEN;
-		send(user.getSockfd(), err_msg1.c_str(), err_msg1.length(), 0);
+        _errMsg= ERR_NONICKNAMEGIVEN;
+		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
 		return ;
 	}
     message._it = message._splitMessage.begin() + 1;
@@ -28,8 +28,8 @@ void	Server::Nick(User &user, Message &message)
         std::cout << "nickname givem" << nickname << std::endl;
 		if (_usersListIt->getNickname() == nickname)
         {
-            std::string err_msg2 = ERR_NICKNAMEINUSE(nickname);
-            send(user.getSockfd(), err_msg2.c_str(), err_msg2.length(), 0);
+            _errMsg = ERR_NICKNAMEINUSE(nickname);
+            send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
             return ;
         }
 	}
@@ -37,8 +37,8 @@ void	Server::Nick(User &user, Message &message)
     {
         if (!isprint(nickname[i]))
         {
-            std::string err_msg3 = ERR_ERRONEUSNICKNAME(nickname);
-            send(user.getSockfd(), err_msg3.c_str(), err_msg3.length(), 0);
+            _errMsg = ERR_ERRONEUSNICKNAME(nickname);
+            send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
             return ;
         }
     }

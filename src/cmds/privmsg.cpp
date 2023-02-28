@@ -6,12 +6,11 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/02/28 15:44:38 by aandric          ###   ########.fr       */
+/*   Updated: 2023/02/28 15:46:40 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
-
 
 bool    is_channel(std::string channel_name, std::list <Channel> *channel_list)
 {
