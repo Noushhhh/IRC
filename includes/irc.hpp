@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 15:58:01 by aandric           #+#    #+#             */
-/*   Updated: 2023/02/17 16:19:53 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/01 14:31:50 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@
 
 std::string *cppsplit(std::string str, char sep);
 size_t      ft_arraySize(std::string *array);
+bool        isCharset(char c, std::string charset);
+
 
 
 

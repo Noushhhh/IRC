@@ -31,11 +31,14 @@ class Channel
 		std::string			_nameErrorSrc;
 		std::string			_password; //optional
 		std::string			_topic;
-		bool				_isPswdProtected;
 		User				_creator;
 		std::list< User >	_usersList; //if empty, delete chan except if chan is SAFE
+		int					_usersLimit; // set with -l flag
+		std::list< User >	_mutedUsersList; // -+v
+		std::list< User >	_banUsersList; // -+b
 		std::list< User >	_opList;
-		char				_type; //askip useless
+		char				_type;
+
 
 	public	:
 
@@ -45,6 +48,19 @@ class Channel
 		Channel(const std::string &name, User &chanCreator);
 		Channel(const std::string &name, const std::string &pswd, User &chanCreator);
 		~Channel();
+
+		/** MODES **/ 
+		// see https://www.rfc-editor.org/rfc/rfc2811#section-4
+
+		bool				_isPswdProtected;			// -+k
+		bool				_isInviteOnly	= false;	// -+i
+		bool				_isAnonymous	= false;	// -+a
+		bool				_isModerated	= true;		// -+m
+		bool				_isQuiet		= false;	// -+q
+		bool				_isNoOutsideMsg	= false;	// -+n
+		bool				_isPrivate		= false;	// -+p
+		bool				_isSecret		= false;	// -+s
+		bool				_isTopicOPOnly	= true;		// -+t
 
 		//getters
 
@@ -61,6 +77,7 @@ class Channel
 		//functions
 
 		bool				isNameValid(std::string name);
+		bool				userIsOp(std::string name);
 
 		//exceptions
 

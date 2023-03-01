@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/02/27 11:25:23 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/01 10:44:05 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -336,7 +336,9 @@ bool                    Server::closeUser(std::vector< struct pollfd >::iterator
 
 std::list< User >::iterator			Server::getUserItWithFd(int fd)
 {
-	for (std::list< User >::iterator lit = _usersList.begin(); lit != _usersList.end(); lit ++)
+	std::list< User >::iterator listEnd = _usersList.end();
+
+	for (std::list< User >::iterator lit = _usersList.begin(); lit != listEnd; lit ++)
     {
         if (lit->getSockfd() == fd)
         {
@@ -344,6 +346,20 @@ std::list< User >::iterator			Server::getUserItWithFd(int fd)
         }
     }
 	return _usersList.end();
+}
+
+std::list< Channel >::iterator		Server::getChanWithName(std::string name)
+{
+	std::list< Channel >::iterator listEnd = _channelsList.end();
+	
+	for (std::list< Channel >::iterator cit = _channelsList.begin(); cit != listEnd; cit ++)
+    {
+        if (cit->getName() == name)
+        {
+            return (cit);
+        }
+    }
+	return (listEnd);
 }
 
 bool                    Server::handleMessage(User &user, std::string raw_message)

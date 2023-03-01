@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/02/27 09:59:24 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/01 10:41:31 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ class Server
         std::list< Channel >            *getChanList();
 
         std::list< User >::iterator      getUserItWithFd(int fd);
+        std::list< Channel >::iterator   getChanWithName(std::string name);
         // std::list< Command > &getCmdList()   const;
 
 // setters

@@ -61,12 +61,25 @@ Channel &Channel::operator=(const Channel &src)
 {
 	this->_name				= src._name;
 	this->_password			= src._password;
+	this->_nameErrorSrc		= src._nameErrorSrc;
 	this->_topic			= src._password;
 	this->_isPswdProtected	= src._isPswdProtected;
 	this->_creator			= src._creator;
 	this->_usersList		= src._usersList;
 	this->_opList			= src._opList;
+	this->_mutedUsersList	= src._mutedUsersList;
+	this->_banUsersList		= src._banUsersList;
+	this->_opList			= src._opList;
 	this->_type				= src._type;
+	this->_isPswdProtected	= src._isPswdProtected;
+	this->_isInviteOnly		= src._isInviteOnly;	
+	this->_isAnonymous		= src._isAnonymous;	
+	this->_isModerated		= src._isModerated;		
+	this->_isQuiet			= src._isQuiet;	
+	this->_isNoOutsideMsg	= src._isNoOutsideMsg;	
+	this->_isPrivate		= src._isPrivate;
+	this->_isSecret			= src._isSecret;
+	this->_isTopicOPOnly	= src._isTopicOPOnly;
 	return (*this);
 }
 
@@ -136,6 +149,20 @@ bool				Channel::isNameValid(std::string name)
 		}
 	}
 	return (true);
+}
+
+bool 				Channel::userIsOp(std::string name)
+{
+	std::list< User >::iterator listEnd = _opList.end();
+
+	for (std::list< User >::iterator lit = _opList.begin(); lit != listEnd; lit ++)
+    {
+        if (lit->getNickname() == name)
+        {
+            return (true);
+        }
+    }
+	return (false);
 }
 
 /**************************************************************/
