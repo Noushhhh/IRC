@@ -6,39 +6,11 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/02/28 17:21:59 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/01 14:33:16 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
-
-bool    is_channel(std::string channel_name, std::list <Channel> *channel_list)
-{
-    if (channel_name.find("%#") == 0)
-        channel_name = channel_name.substr(2, channel_name.npos);
-    else
-        channel_name = channel_name.substr(3, channel_name.npos); // first line to this one delete when using split in funciton privmsg to get target witbhout @%#
-    std::list <Channel>::iterator channel_it = channel_list->begin();
-    while (channel_it != channel_list->end())
-    {
-        if (channel_it->getName() == channel_name)
-            return true ;
-        channel_it++;
-    }
-    return false ;
-}
-
-bool    is_user(std::string user_name, std::list <User> *user_list)
-{
-    std::list <User>::iterator user_it = user_list->begin();
-    while (user_it != user_list->end())
-    {
-        if (user_it->getNickname() == user_name)
-            return true ;
-        user_it++;
-    }
-    return false ;
-}
 
 void	Server::Privmsg(User &user, Message &message)
 {
@@ -64,7 +36,7 @@ void	Server::Privmsg(User &user, Message &message)
     if ((target.find("%#") == 0) || (target.find("@%#") == 0))
     {
         // target = split(target, "@%#");
-        if (is_channel(target, getChanList()))
+        if (isChannel(target))
         priv_msg = user.getNickname() + "@IRC_MAXANA" + " PRIVMSG #" + target + " :" + priv_msg; // split target with "@%#" to add after PRIVMSG
         std::list <Channel>::iterator channel_it = getChanList()->begin();
         while (channel_it != getChanList()->end())
@@ -76,7 +48,7 @@ void	Server::Privmsg(User &user, Message &message)
         return ;
     }
 
-    else if (is_user(target, getUserList()))
+    else if (isUser(target))
     {
         priv_msg = user.getNickname() + " PRIVMSG " + target + " :" + priv_msg;
 		send(user.getSockfd(), priv_msg.c_str(), priv_msg.length(), 0);

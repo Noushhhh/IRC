@@ -149,6 +149,18 @@ void				Channel::sendToUsers(std::string message)
 	}
 }
 
+bool				Channel::isUserInChannel(User &user)
+{
+	std::list < User >::iterator user_it = getUsersList().begin();
+	while (user_it != getUsersList().end())
+	{
+		if(user_it->getSockfd() == user.getSockfd())
+			return true;
+		user_it++;
+	}
+	return false;
+}
+
 
 /**************************************************************/
 /*                                                            */

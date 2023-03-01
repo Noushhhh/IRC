@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/01/30 11:35:41 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/01 17:04:46 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ _channelsListIt(_channelsList.begin())
 	// this->_ptrF[4] = (&Server::Join);
 	// this->_ptrF[5] = (&Server::Part);
 	// this->_ptrF[6] = (&Server::Mode);
-	// this->_ptrF[7] = (&Server::Topic);
+	this->_ptrF[7] = (&Server::Topic);
 	// this->_ptrF[8] = (&Server::Names);
-	// this->_ptrF[9] = (&Server::List);
+	this->_ptrF[9] = (&Server::List);
 	// this->_ptrF[10] = (&Server::Invite);
 	// this->_ptrF[11] = (&Server::Kick);
 	this->_ptrF[12] = (&Server::Privmsg);
@@ -79,9 +79,9 @@ _channelsListIt(_channelsList.begin())
 	// this->_ptrF[4] = (&Server::Join);
 	// this->_ptrF[5] = (&Server::Part);
 	// this->_ptrF[6] = (&Server::Mode);
-	// this->_ptrF[7] = (&Server::Topic);
+	this->_ptrF[7] = (&Server::Topic);
 	// this->_ptrF[8] = (&Server::Names);
-	// this->_ptrF[9] = (&Server::List);
+	this->_ptrF[9] = (&Server::List);
 	// this->_ptrF[10] = (&Server::Invite);
 	// this->_ptrF[11] = (&Server::Kick);
 	this->_ptrF[12] = (&Server::Privmsg);
@@ -342,6 +342,47 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 		(void)(this->*_ptrF[i])(user, message);
         return true;
 	}
+}
+
+bool        Server::isChannel(std::string channel_name)
+{
+    if (channel_name.find("%#") == 0)
+        channel_name = channel_name.substr(2, channel_name.npos);
+    else
+        channel_name = channel_name.substr(3, channel_name.npos); // first line to this one delete when using split in funciton privmsg to get target witbhout @%#
+    std::list <Channel>::iterator channel_it = getChanList()->begin();
+    while (channel_it != getChanList()->end())
+    {
+        if (channel_it->getName() == channel_name)
+            return true ;
+        channel_it++;
+    }
+    return false ;
+}
+
+bool        Server::isUser(std::string user_name)
+{
+    std::list <User>::iterator user_it = getUserList()->begin();
+    while (user_it != getUserList()->end())
+    {
+        if (user_it->getNickname() == user_name)
+            return true ;
+        user_it++;
+    }
+    return false ;
+}
+
+Channel    *Server::getChannelWithName(std::string channel_name)
+{
+    std::list <Channel>::iterator channel_it = getChanList()->begin();
+    while (channel_it != getChanList()->end())
+    {
+        if (channel_it->getName() == channel_name)
+            return &(*channel_it); // what to return if we want to send class channel ? check if pointer or not
+        channel_it++;
+    }
+    return NULL; // or replace by exception 
+    //return NULL;
 }
 
 /**************************************************************/

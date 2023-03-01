@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/01/27 17:14:08 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/01 15:57:29 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,21 +45,24 @@ class Server
         // std::list< Command > &getCmdList()   const;
 
 // setters
-        bool                    init();
-        void                    setSock(int type, int protocol);
-        void                    bindSock();
-        void                    listenTo(int backlog);
+        bool                                init();
+        void                                setSock(int type, int protocol);
+        void                                bindSock();
+        void                                listenTo(int backlog);
 
 // functions
-        bool                    checkPass();
-		//void					close();
-		//void					receiveData();
+        bool                                checkPass();
+		//void					            close();
+		//void					            receiveData();
 		
-        bool                    pollDispatch();
-        bool                    addUser();
-        bool                    closeUser(std::vector< struct pollfd >::iterator &it);
+        bool                                pollDispatch();
+        bool                                addUser();
+        bool                                closeUser(std::vector< struct pollfd >::iterator &it);
 
-        bool                    handleMessage(User &user, std::string raw_message);
+        bool                                handleMessage(User &user, std::string raw_message);
+        bool                                isChannel(std::string channel_name);
+        bool                                isUser(std::string user_name);
+        Channel                             *getChannelWithName(std::string channel_name);
 
 // commands
 
@@ -75,12 +78,12 @@ class Server
 	void	List(User &user, Message &message);
 	void	Invite(User &user, Message &message);
 	void	Kick(User &user, Message &message);
-	void	PrivMsg(User &user, Message &message);
+	void	PrivMsg(User &user, Message &message); // ok
 	void	Privmsg(User &user, Message &message);
 	void	Notice(User &user, Message &message);
-	void	Ping(User &user, Message &message);
+	void	Ping(User &user, Message &message); // ok ?
 	void	Pong(User &user, Message &message);
-    void	Oper(User &user, Message &message);
+   // void	Oper(User &user, Message &message); check if needs to be done
 
     class ServerException : public std::exception
     {

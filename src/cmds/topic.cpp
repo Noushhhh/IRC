@@ -3,14 +3,52 @@
 /*                                                        :::      ::::::::   */
 /*   topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:25 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/02/14 14:59:18 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/01 17:08:36 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
+
+void	Server::Topic(User &user, Message &message)
+{
+    if (message._argsNb < 2)
+    {
+        _errMsg = ERR_NEEDMOREPARAMS(message._cmd);
+		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+    }
+
+    message._it = message._splitMessage.begin() + 1;
+    std::string channel_name = *message._it;
+    if (isChannel(channel_name)) 
+    {
+        Channel *channel = getChannelWithName(channel_name);
+        if (channel->isUserInChannel(user))
+        {
+            std::string topic = channel->getTopic();
+            if (!topic.empty()) // if topic given and actually empty, set new topic for channel. check what rights the user needs to set a topic
+                send(user.getSockfd(), topic.c_str(), topic.length(), 0);
+            else
+            {
+                _errMsg = RPL_NOTOPIC(channel_name);
+                send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+            }
+        }
+        else
+        {
+            _errMsg = ERR_NOTONCHANNEL(channel_name);
+		    send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        }
+    }
+    else
+    {
+        _errMsg = ERR_NOSUCHCHANNEL(channel_name);
+        send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+    }
+
+}
 
 // TOPIC message
 //      Command: TOPIC

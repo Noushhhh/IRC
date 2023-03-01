@@ -61,6 +61,7 @@ public	:
 
 	bool				isNameValid(std::string name);
 	void				sendToUsers(std::string message);
+	bool				isUserInChannel(User &user);
 
 	//exceptions
 
