@@ -15,15 +15,16 @@
 
 #include "irc.hpp"
 
+class Channel;
 
 class User
 {
 	private	:
-		int	_sockfd;
-		sockaddr_in _addr;
-		//const int	_username;
-		std::string _nickname;
-		std::string	_givenPassword;
+		int						_sockfd;
+		sockaddr_in 			_addr;
+		std::string 			_nickname;
+		std::string				_givenPassword;
+		std::list < Channel >	_joinedChannels;
 
 	// PASS Check if the passwd is ok if not reject user
 	// NICK set nickename for user
@@ -40,9 +41,14 @@ class User
 		void setNickname(std::string nickname);
 
 //getter
-		std::string		getPassword()	const;
-        int             getSockfd()     const;
-        std::string     getNickname()   const;
+		std::string				getPassword()		const;
+        int             		getSockfd()    		const;
+        std::string     		getNickname()  		const;
+		std::list< Channel >	&getJoinedChans();
+
+//members functions
+
+		bool					isOnChan(const std::string &cName);
 
 
         User &operator=(const User &src);
