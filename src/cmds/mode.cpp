@@ -30,6 +30,12 @@ std::list< Channel >::iterator channel)
 {
     bool    addMode = false;
     bool    removeMode = false;
+    (void) addMode;
+    (void) removeMode;
+    (void) argsNB;
+    (void) modes;
+    (void) modesparams;
+    (void) channel;
 
     if (modes[0] == '+')
         addMode = true;
@@ -43,6 +49,8 @@ std::list< Channel >::iterator channel)
     {
         // send err msg and return
     }
+    //if ()
+    return (true);
 }
 
 bool	Server::Mode(User &user, Message &message)
@@ -116,7 +124,7 @@ bool	Server::Mode(User &user, Message &message)
         err_buff = ": Too many arguments in your MODE command call\n";
         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
     }
-    message.
+    //message.
     // else send mod info
 
     return (true);
