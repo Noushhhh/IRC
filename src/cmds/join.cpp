@@ -3,69 +3,218 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/02/14 14:58:55 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/03 13:25:47 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
+#include "../../includes/Channel.hpp"
 
-// JOIN message
-//      Command: JOIN
-//   Parameters: <channel>{,<channel>} [<key>{,<key>}]
-//   Alt Params: 0
-// The JOIN command indicates that the client wants to join the given channel(s), each channel using the given key for it. The server receiving the command checks whether or not the client can join the given channel, and processes the request. Servers MUST process the parameters of this command as lists on incoming commands from clients, with the first <key> being used for the first <channel>, the second <key> being used for the second <channel>, etc.
+static void joinRPL(Channel chan, User user)
+{
+    std::string                 rpl_buff = RPL_TOPIC(chan.getName(), chan.getTopic());;
+    std::list< User >::iterator it = chan.getUsersList().begin();
 
-// While a client is joined to a channel, they receive all relevant information about that channel including the JOIN, PART, KICK, and MODE messages affecting the channel. They receive all PRIVMSG and NOTICE messages sent to the channel, and they also receive QUIT messages from other clients joined to the same channel (to let them know those users have left the channel and the network). This allows them to keep track of other channel members and channel modes.
+    if (chan.getTopic().empty())
+        rpl_buff = RPL_NOTOPIC(chan.getName());
+    send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
 
-// If a client’s JOIN command to the server is successful, the server MUST send, in this order:
+    if (chan.getUsersList().size() == 0)
+    {
+        rpl_buff = RPL_NOUSERS;
+        send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
+        return ;
+    }
 
-// A JOIN message with the client as the message <source> and the channel they have joined as the first parameter of the message.
-// The channel’s topic (with RPL_TOPIC (332) and optionally RPL_TOPICWHOTIME (333)), and no message if the channel does not have a topic.
-// A list of users currently joined to the channel (with one or more RPL_NAMREPLY (353) numerics followed by a single RPL_ENDOFNAMES (366) numeric). These RPL_NAMREPLY messages sent by the server MUST include the requesting client that has just joined the channel.
-// The key, client limit , ban - exception, invite-only - exception, and other (depending on server software) channel modes affect whether or not a given client may join a channel. More information on each of these modes and how they affect the JOIN command is available in their respective sections.
+    rpl_buff = RPL_USERSTART;
+    send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
+    while (it != chan.getUsersList().end())
+    {
+        rpl_buff = RPL_USERS(it->getNickname(),,);
+        send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
+        it ++;
+    }
+    rpl_buff = RPL_ENDOFUSERS;
+    send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
+}
 
-// Servers MAY restrict the number of channels a client may be joined to at one time. This limit SHOULD be defined in the CHANLIMIT RPL_ISUPPORT parameter. If the client cannot join this channel because they would be over their limit, they will receive an ERR_TOOMANYCHANNELS (405) reply and the command will fail.
+static void remove_from_all_channels(User &user, std::list< Channel > &channelList)
+{
+    std::list< Channel >::iterator  cIt = channelList.begin();
+    std::list< User >::iterator     uIt;
+    while (cIt != channelList.end())
+    {
+        uIt = cIt->getUsersList().begin();
+        while (uIt != cIt->getUsersList().end())
+        {
+            if (user.getNickname() == uIt->getNickname())
+            {
+                cIt->getUsersList().erase(uIt);
+                break ;
+            }
+            uIt ++;
+        }
+        cIt ++;
+    }
+}
 
-// Note that this command also accepts the special argument of ("0", 0x30) instead of any of the usual parameters, which requests that the sending client leave all channels they are currently connected to. The server will process this command as though the client had sent a PART command for each channel they are a member of.
+static std::string *split(std::string str)
+{
+    int i = 0;
+    int ct = 1;
+    while (str[i])
+    {
+        if (str[i] == ',')
+            ct ++;
+        i ++;
+    }
+    std::string *strArray = new std::string[ct + 1];
+    for (int i = 0; i < ct; i ++)
+    {
+        for (int j = 0; str[j]; j ++)
+        {
+            if (str[j] == ',')
+            {
+                if (strArray[i].empty())
+                    strArray[i].push_back('\0');
+                i ++;
+            }
+            else if (i < ct && str[j] && str[j] != ',')
+                strArray[i].push_back(str[j]);
+        }
+    }
+    // for (int i = 0; i < ct; i ++)
+    //     std::cout << "strArray ["<< i << "] :" << strArray[i] << std::endl;
+    // std::cout << std::endl;
+    return (strArray);
+}
 
-// This message may be sent from a server to a client to notify the client that someone has joined a channel. In this case, the message <source> will be the client who is joining, and <channel> will be the channel which that client has joined. Servers SHOULD NOT send multiple channels in this message to clients, and SHOULD distribute these multiple-channel JOIN messages as a series of messages with a single channel name on each.
+static bool pswdMatch(const std::string &chanPswd, std::string givenPswd)
+{
+    if (givenPswd.find('\n') != std::string::npos)
+        givenPswd = givenPswd.substr(0, givenPswd.size() - 2);
+    if (chanPswd == givenPswd)
+        return (true);
+    return (false);
+}
 
-// Numeric Replies:
+bool	Server::Join(User &user, Message &message)
+{
+	std::string err_buff;
+    std::string *chansSplit = NULL;
+    std::string *keysSplit = NULL;
+    std::string::iterator it;
+    bool chanExist = false;
 
-// ERR_NEEDMOREPARAMS (461)
-// ERR_NOSUCHCHANNEL (403)
-// ERR_TOOMANYCHANNELS (405)
-// ERR_BADCHANNELKEY (475)
-// ERR_BANNEDFROMCHAN (474)
-// ERR_CHANNELISFULL (471)
-// ERR_INVITEONLYCHAN (473)
-// ERR_BADCHANMASK (476)
-// RPL_TOPIC (332)
-// RPL_TOPICWHOTIME (333)
-// RPL_NAMREPLY (353)
-// RPL_ENDOFNAMES (366)
-// Command Examples:
+    message._it = message._splitMessage.begin() + 1; // channel name
 
-//   JOIN #foobar                    ; join channel #foobar.
+    if (message._splitMessage.size() == 1)
+    {
+        err_buff = ERR_NEEDMOREPARAMS(std::string("JOIN"));
+        send(user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+        return (false);
+    }
+    if (message._splitMessage.size() == 2 || message._splitMessage.size() == 3)
+        chansSplit = split(std::string(*message._it));
+    if (message._splitMessage.size() == 3)
+        keysSplit = split(*(message._it + 1));
+    if (message._splitMessage.size() > 3)
+    {
+        err_buff = ERR_TOOMANYTARGETS(std::string("JOIN"));
+        send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+        return (false);
+    }
 
-//   JOIN &foo fubar                 ; join channel &foo using key "fubar".
+    // if passed arg is 0, remove user from all chans
+    
+    if (message._splitMessage.size() == 2 && *(message._it) == "0")
+    {
+        remove_from_all_channels(user, _channelsList);
+        user.getJoinedChans().erase(user.getJoinedChans().begin(), user.getJoinedChans().end());
+        err_buff = " :succesfully removed from all channels\n";
+        send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+    }
+    else
+    {    
+        // look for the channel to join
+        for (size_t i = 0; i < ft_arraySize(chansSplit); i ++)
+        {
+            chanExist = false;
+            for (_cIt = _channelsList.begin(); _cIt != _channelsList.end(); _cIt ++)
+            {
+                // if chan exist, user will join
+                if (_cIt->getName() == chansSplit[i])
+                {
+                    // if allready on channel
 
-//   JOIN #foo,&bar fubar            ; join channel #foo using key "fubar"
-//                                   and &bar using no key.
+                    if (user.isOnChan(_cIt->getName()))
+                    {
+                        err_buff = ERR_USERONCHANNEL(_cIt->getName(), user.getNickname());
+                        send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+                        chanExist = true;
+                        break ;
+                    }
+                    
+                    //if chan is key protected and a key args was given to JOIN cmd and it matchs chan key
+                    
+                    if ((_cIt->getPswdStatus() && message._splitMessage.size() > 2 &&
+                    i < ft_arraySize(keysSplit) && pswdMatch(_cIt->getPswd(), keysSplit[i]))
+                    || (!_cIt->getPswdStatus()))
+                    {
+                        _cIt->getUsersList().push_back(user);
+                        user.getJoinedChans().push_back(*_cIt);
+                        joinRPL(*_cIt, user);
+                        chanExist = true;
+                        break ;
+                    }
+                    // std::cout << "given pswd = " << keysSplit[i] << "pswd = " << _cIt->getPswd() << std::endl; 
+                    err_buff = ERR_BADCHANNELKEY(_cIt->getName());
+                    send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+                    chanExist = true;
+                    break ;
+                }
+            }
 
-//   JOIN #foo,#bar fubar,foobar     ; join channel #foo using key "fubar".
-//                                   and channel #bar using key "foobar".
+            // if chan doesn't already exist it is created, upon the condition his name is valid
+            if (!chanExist)
+            {
+                try
+                {
+                    // if a keyword is specified
+                    
+                    if (message._splitMessage.size() > 2 && i < ft_arraySize(keysSplit) && keysSplit[i][0] != 0)
+                    {
+                        // if (i > keysSplit->size())
+                        Channel newChan(chansSplit[i], keysSplit[i], user);
+                        _channelsList.push_back(newChan);
+                        user.getJoinedChans().push_back(newChan);
+                        joinRPL(newChan, user);
+                    }
+                    
+                    //if none is
+                    else
+                    {
+                        Channel newChan(chansSplit[i], user);
+                        _channelsList.push_back(newChan);
+                        user.getJoinedChans().push_back(newChan);
+                        joinRPL(newChan, user);
+                    }
+                    
+                }
+                catch(const Channel::BadNameException& e)
+                {
+                    err_buff = chansSplit[i];
+                    err_buff.append(e.badName());
+                    send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+                }
+            }
+        }
+    }
 
-//   JOIN #foo,#bar                  ; join channels #foo and #bar.
-// Message Examples:
-
-//   :WiZ JOIN #Twilight_zone        ; WiZ is joining the channel
-//                                   #Twilight_zone
-
-//   :dan-!d@localhost JOIN #test    ; dan- is joining the channel #test
-// See also:
-
-// IRCv3 extended-join Extension
+    delete[] chansSplit;
+    delete[] keysSplit;
+    return (true);
+}

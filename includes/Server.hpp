@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/01 15:57:29 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/03 13:20:59 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ class Server
         std::list< Channel >            *getChanList();
 
         std::list< User >::iterator      getUserItWithFd(int fd);
+        std::list< Channel >::iterator   getChanWithName(std::string name);
         // std::list< Command > &getCmdList()   const;
 
 // setters
@@ -51,9 +52,10 @@ class Server
         void                                listenTo(int backlog);
 
 // functions
-        bool                                checkPass();
-		//void					            close();
-		//void					            receiveData();
+        bool                    checkPass();
+		void                    closeEmptyChans();
+        //void					close();
+		//void					receiveData();
 		
         bool                                pollDispatch();
         bool                                addUser();
@@ -101,7 +103,7 @@ class Server
         struct sockaddr_in                      _addr;
         std::vector< struct pollfd >            _pollFds; //element new a delete
         std::list< User >                       _usersList; //List d'utilisateurs du serveur
-        std::list< User >::iterator             _usersListIt;
+        std::list< User >::iterator             _uIt;
         std::list< Channel >                    _channelsList;
         std::list< Channel >::iterator          _channelsListIt;
         std::string                             _errMsg;

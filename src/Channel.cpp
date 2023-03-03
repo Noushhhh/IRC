@@ -21,7 +21,6 @@ Channel::Channel()
 
 Channel::Channel(const std::string &name, User &chanCreator) :
 _nameErrorSrc(""),
-_password(""),
 _topic("")
 {
 	//must check for duplicate name in creation command
@@ -30,21 +29,35 @@ _topic("")
 	_name = name;
 	if (_type != UNMOD)
 		_creator = chanCreator;
-	_isPswdProtected = false;
+	this->_isPswdProtected = false;
+	this->_isInviteOnly		= false;	
+	this->_isModerated		= true;		
+	this->_isQuiet			= false;	
+	this->_isNoOutsideMsg	= false;	
+	this->_isPrivate		= false;
+	this->_isSecret			= false;
+	this->_isTopicOPOnly	= true;
 	_usersList.push_back(chanCreator);
 }
 
-Channel::Channel(const std::string &name, const std::string &pswd, const std::string topic, User &chanCreator) :
-_nameErrorSrc("")
+Channel::Channel(const std::string &name, const std::string &pswd, User &chanCreator) :
+_nameErrorSrc(""),
+_topic("")
 {
 	if (!isNameValid(name))
 		throw (Channel::BadNameException(_nameErrorSrc));
 	_name = name;
-	_topic = topic;
 	if (_type != UNMOD)
 		_creator = chanCreator;
 	_password = pswd;
-	_isPswdProtected = true;
+	this->_isPswdProtected = false;
+	this->_isInviteOnly		= false;	
+	this->_isModerated		= true;		
+	this->_isQuiet			= false;	
+	this->_isNoOutsideMsg	= false;	
+	this->_isPrivate		= false;
+	this->_isSecret			= false;
+	this->_isTopicOPOnly	= true;
 	_usersList.push_back(chanCreator);
 }
 
@@ -62,12 +75,24 @@ Channel &Channel::operator=(const Channel &src)
 {
 	this->_name				= src._name;
 	this->_password			= src._password;
+	this->_nameErrorSrc		= src._nameErrorSrc;
 	this->_topic			= src._password;
 	this->_isPswdProtected	= src._isPswdProtected;
 	this->_creator			= src._creator;
 	this->_usersList		= src._usersList;
 	this->_opList			= src._opList;
+	this->_mutedUsersList	= src._mutedUsersList;
+	this->_banUsersList		= src._banUsersList;
+	this->_opList			= src._opList;
 	this->_type				= src._type;
+	this->_isPswdProtected	= src._isPswdProtected;
+	this->_isInviteOnly		= src._isInviteOnly;	
+	this->_isModerated		= src._isModerated;		
+	this->_isQuiet			= src._isQuiet;	
+	this->_isNoOutsideMsg	= src._isNoOutsideMsg;	
+	this->_isPrivate		= src._isPrivate;
+	this->_isSecret			= src._isSecret;
+	this->_isTopicOPOnly	= src._isTopicOPOnly;
 	return (*this);
 }
 
@@ -83,8 +108,8 @@ Channel &Channel::operator=(const Channel &src)
 	std::string			Channel::getTopic()			const {return (_topic);}
 	bool				Channel::getPswdStatus()	const {return (_isPswdProtected);}
 	User				Channel::getChanCreator()	const {return (_creator);}
-	std::list< User >	Channel::getUsersList()		const {return (_usersList);}
-	std::list< User >	Channel::getOpList()		const {return (_opList);}
+	std::list< User >	&Channel::getUsersList()		  {return (_usersList);}
+	std::list< User >	&Channel::getOpList()			  {return (_opList);}
 	char				Channel::getType()			const {return (_type);}
 
 /**************************************************************/
@@ -95,14 +120,14 @@ Channel &Channel::operator=(const Channel &src)
 
 bool				Channel::isNameValid(std::string name)
 {
-	if (name.empty())
+	if (name[0] == '\0')
 	{
-		_nameErrorSrc = "channels's names cannot be blank";
+		_nameErrorSrc = ": channels's names cannot be blank\n";
 		return (false);
 	}
 	else if (name.size() > 50)
 	{
-		_nameErrorSrc = "channels's names cannot be over 50 char";
+		_nameErrorSrc = ": channels's names cannot be over 50 char\n";
 		return (false);
 	}
 	switch (name[0])
@@ -117,22 +142,22 @@ bool				Channel::isNameValid(std::string name)
 			_type = UNMOD;
 			break ;
 		case '!' :
-			_nameErrorSrc = "safe channels must be created using JOIN cmd";
+			_nameErrorSrc = ": safe channels must be created using JOIN cmd\n";
 			return (false);
 		default :
-			_nameErrorSrc = "channels's names must start with '&' '#' '+' or '!'";
+			_nameErrorSrc = ": channels's names must start with '&' '#' '+' or '!'\n";
 			return (false);
 	}
 	if (name.size() == 1)
 	{
-		_nameErrorSrc = "channel's name cannot only contain channel type specfier";
+		_nameErrorSrc = ": channel's name cannot only contain channel type specfier\n";
 		return (false);
 	}
 	for (size_t i = 0; i < name.size(); i ++)
 	{
 		if (name[i] == ' ' || name[i] == 7 || name[i] == ',')
 		{
-			_nameErrorSrc = "channels's names cannot contain ' ', ^G or ','";
+			_nameErrorSrc = ": channels's names cannot contain ' ', ^G or ','\n";
 			return (false);
 		}
 	}
@@ -161,6 +186,20 @@ bool				Channel::isUserInChannel(User &user)
 	return false;
 }
 
+
+bool 				Channel::userIsOp(std::string name)
+{
+	std::list< User >::iterator listEnd = _opList.end();
+
+	for (std::list< User >::iterator lit = _opList.begin(); lit != listEnd; lit ++)
+    {
+        if (lit->getNickname() == name)
+        {
+            return (true);
+        }
+    }
+	return (false);
+}
 
 /**************************************************************/
 /*                                                            */

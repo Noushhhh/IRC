@@ -15,6 +15,8 @@
 
 #include "irc.hpp"
 
+class Channel;
+
 class User
 {
 	private	:
@@ -28,6 +30,7 @@ class User
 		uint8_t		_bitMode;
 		std::string	_ping;
 		std::string	_pong;
+		std::list < Channel >	_joinedChannels;
 		//	bool _banned ?
 
 	public	:
@@ -57,6 +60,13 @@ class User
 		uint8_t         getBitMode() const;
 		std::string		getPing() const;
 		std::string		getPong() const;
+		std::list< Channel >	&getJoinedChans();
+		
+
+//members functions
+
+		bool					isOnChan(const std::string &cName);
+
 
         User &operator=(const User &src);
 };

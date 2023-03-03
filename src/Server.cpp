@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/01 17:04:46 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/03 13:24:52 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ Server::Server() :
 _sock(0),
 _port(9999),
 _password("0000"),
-_usersListIt(_usersList.begin()),
-_channelsListIt(_channelsList.begin())
+_uIt(_usersList.begin()),
+_cIt(_channelsList.begin())
 {
     _addr.sin_family = AF_INET;
     _addr.sin_port = htons(_port);
@@ -65,8 +65,8 @@ Server::Server(int port, std::string password) :
 _sock(0),
 _port(port),
 _password(password),
-_usersListIt(_usersList.begin()),
-_channelsListIt(_channelsList.begin())
+_uIt(_usersList.begin()),
+_cIt(_channelsList.begin())
 {
     _addr.sin_family = AF_INET;
     _addr.sin_port = htons(_port);
@@ -76,9 +76,9 @@ _channelsListIt(_channelsList.begin())
 	this->_ptrF[1] = (&Server::Nick);
 	this->_ptrF[2] = (&Server::cmdUser);
 	// this->_ptrF[3] = (&Server::Quit);
-	// this->_ptrF[4] = (&Server::Join);
+	this->_ptrF[4] = (&Server::Join);
 	// this->_ptrF[5] = (&Server::Part);
-	// this->_ptrF[6] = (&Server::Mode);
+	this->_ptrF[6] = (&Server::Mode);
 	this->_ptrF[7] = (&Server::Topic);
 	// this->_ptrF[8] = (&Server::Names);
 	this->_ptrF[9] = (&Server::List);
@@ -140,8 +140,8 @@ int                                 Server::getSock()           const   { return
 int                                 Server::getPort()           const   { return (_port);           }
 std::string                         Server::getPassword()       const   { return (_password);       }
 struct sockaddr_in                  Server::getAdress()         const   { return (_addr);           }
-std::list< User >::iterator         Server::getUserListIt()     const   { return (_usersListIt);    }
-std::list< Channel >::iterator      Server::getChanListIt()     const   { return (_channelsListIt); }
+std::list< User >::iterator         Server::getUserListIt()     const   { return (_uIt);    }
+std::list< Channel >::iterator      Server::getChanListIt()     const   { return (_cIt); }
 std::list< User >                   *Server::getUserList()              { return (&_usersList);      }
 std::list< Channel >                *Server::getChanList()              { return (&_channelsList);   }
 
@@ -167,7 +167,6 @@ void                    Server::setSock(int type, int protocol)
 	int val = 1;
 	if (setsockopt(_sock, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val)))
 		throw (Server::ServerException(SOCKET));
-    std::cout << "Server sock = " << _sock << std::endl;
 	if (fcntl(_sock, F_SETFL, O_NONBLOCK < 0))
 		throw (Server::ServerException(SOCKET));
 
@@ -212,10 +211,10 @@ bool                    Server::pollDispatch()
 
 	while (1)
     {
+		if (!_channelsList.empty())
+			closeEmptyChans();
 		if (poll (_pollFds.begin().base(), _pollFds.size(), -1) < 0)
-        {
             return (false);
-        }
 		for (it = _pollFds.begin(); it != _pollFds.end(); it ++)
 		{
             if (it->events == 0)
@@ -258,6 +257,23 @@ bool                    Server::pollDispatch()
     return (true);
 }
 
+void					Server::closeEmptyChans()
+{
+	std::list< Channel >::iterator it = _channelsList.begin();
+	std::list< Channel >::iterator buff;
+	while (it != _channelsList.end())
+	{
+		if (it->getUsersList().empty() == true)
+		{
+			buff = it;
+			it ++;
+			_channelsList.erase(buff);
+		}
+		else
+			it ++;
+	}
+}
+
 bool                    Server::addUser()
 {
     // if bad passw
@@ -286,6 +302,20 @@ bool                    Server::addUser()
 bool                    Server::closeUser(std::vector< struct pollfd >::iterator &it)
 {
     //supress from all channels he belongs to
+	std::list< User >::iterator user = getUserItWithFd(it->fd);
+
+	for (std::list < Channel >::iterator cit = _channelsList.begin(); cit != _channelsList.end(); cit ++)
+	{
+		for (std::list< User >::iterator lit = cit->getUsersList().begin(); lit != cit->getUsersList().end(); lit ++)
+		{
+			if (user->getNickname() == lit->getNickname())
+			{
+				cit->getUsersList().erase(lit);
+				break ;
+			}
+		}
+	}
+	//close user FD
     for (std::list< User >::iterator lit = _usersList.begin(); lit != _usersList.end(); lit ++)
     {
         if (lit->getSockfd() == it->fd)
@@ -305,7 +335,9 @@ bool                    Server::closeUser(std::vector< struct pollfd >::iterator
 
 std::list< User >::iterator			Server::getUserItWithFd(int fd)
 {
-	for (std::list< User >::iterator lit = _usersList.begin(); lit != _usersList.end(); lit ++)
+	std::list< User >::iterator listEnd = _usersList.end();
+
+	for (std::list< User >::iterator lit = _usersList.begin(); lit != listEnd; lit ++)
     {
         if (lit->getSockfd() == fd)
         {
@@ -315,8 +347,23 @@ std::list< User >::iterator			Server::getUserItWithFd(int fd)
 	return _usersList.end();
 }
 
+std::list< Channel >::iterator		Server::getChanWithName(std::string name)
+{
+	std::list< Channel >::iterator listEnd = _channelsList.end();
+	
+	for (std::list< Channel >::iterator cit = _channelsList.begin(); cit != listEnd; cit ++)
+    {
+        if (cit->getName() == name)
+        {
+            return (cit);
+        }
+    }
+	return (listEnd);
+}
+
 bool                    Server::handleMessage(User &user, std::string raw_message)
 {
+	std::string err_buff;
 	if (raw_message.empty() || raw_message == "\n" || raw_message == "\r")
 		return false ;
 	Message message(raw_message);
@@ -330,9 +377,14 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 	message._it = message._splitMessage.begin();
 	while(_handledCommands[i] != *message._it && i < HANDLEDCOMMANDSNB)
 		i++;
+	// std::cout << "YO " << std::endl;
+	// std::cout << "_handledCommands[0] = " << _handledCommands[0] << std::endl;
+	// std::cout << "*message._it = " << *message._it << std::endl;
+	// std::cout << "index handle message" << i << std::endl;
 	if (i >= HANDLEDCOMMANDSNB)
 	{
-		std::cout << std::endl << "Not a request" << std::endl;
+		err_buff = ERR_UNKNOWNNCOMMAND(*message._splitMessage.begin());
+		send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
 		return false;
 	}
 	else

@@ -100,3 +100,22 @@ std::string     User::getRealname()   const {return (_realname);}
 uint8_t         User::getBitMode() const {return (_bitMode);}
 std::string		User::getPing() const {return (_ping);}
 std::string		User::getPong() const {return (_pong);}
+std::list< Channel >    &User::getJoinedChans()	    {return (_joinedChannels);}
+
+
+/**************************************************************/
+/*                                                            */
+/*                         FUNCTIONS                          */
+/*                                                            */
+/**************************************************************/
+
+bool					User::isOnChan(const std::string &cName)
+{
+    std::list< Channel >::iterator it = _joinedChannels.begin();
+    for (; it != _joinedChannels.end(); it ++)
+    {
+        if (it->getName() == cName)
+            return (true);
+    }
+    return (false);
+}
