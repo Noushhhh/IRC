@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/01 14:33:16 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/03 15:43:26 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	Server::Privmsg(User &user, Message &message)
     }
     if (message._argsNb > 3)
     {
-        _errMsg = ERR_TOOMANYTARGETS;
+        _errMsg = ERR_TOOMANYTARGETS(message._cmd);
 		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         return ;
     }
@@ -31,23 +31,24 @@ void	Server::Privmsg(User &user, Message &message)
     std::string target = *message._it;
     message._it++;
     std::string priv_msg = *message._it;
-
     // _usersListIt = _usersList.begin();
     if ((target.find("%#") == 0) || (target.find("@%#") == 0))
     {
-        // target = split(target, "@%#");
+        if ((target.find("@%#") == 0))
+            target = target.substr(2); // 2 or 3 ?
+        if ((target.find("%#") == 0))
+            target = target.substr(1); // 1 or 2 ?
         if (isChannel(target))
         priv_msg = user.getNickname() + "@IRC_MAXANA" + " PRIVMSG #" + target + " :" + priv_msg; // split target with "@%#" to add after PRIVMSG
-        std::list <Channel>::iterator channel_it = getChanList()->begin();
-        while (channel_it != getChanList()->end())
+        _channelsListIt = getChanList()->begin();
+        while (_channelsListIt != getChanList()->end())
         {
-            if (channel_it->getName() == target)
-                channel_it->sendToUsers(priv_msg);
-            channel_it++;
+            if (_channelsListIt->getName() == target)
+                _channelsListIt->sendToUsers(priv_msg);
+            _channelsListIt++;
         }
         return ;
     }
-
     else if (isUser(target))
     {
         priv_msg = user.getNickname() + " PRIVMSG " + target + " :" + priv_msg;

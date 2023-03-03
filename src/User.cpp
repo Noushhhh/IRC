@@ -91,15 +91,15 @@ void    User::setPong(std::string pong)
 /*                                                            */
 /**************************************************************/
 
-int             User::getSockfd()       const {return (_sockfd);}
-std::string     User::getPassword()     const {return (_givenPassword);}
-std::string     User::getNickname()     const {return (_nickname);}
-bool			User::getRegistered()   const { return (_isRegistered);};
-std::string     User::getUsername()   const {return (_username);}
-std::string     User::getRealname()   const {return (_realname);}
-uint8_t         User::getBitMode() const {return (_bitMode);}
-std::string		User::getPing() const {return (_ping);}
-std::string		User::getPong() const {return (_pong);}
+int                     User::getSockfd()       const {return (_sockfd);}
+std::string             User::getPassword()     const {return (_givenPassword);}
+std::string             User::getNickname()     const {return (_nickname);}
+bool			        User::getRegistered()   const { return (_isRegistered);};
+std::string             User::getUsername()   const {return (_username);}
+std::string             User::getRealname()   const {return (_realname);}
+uint8_t                 User::getBitMode() const {return (_bitMode);}
+std::string		        User::getPing() const {return (_ping);}
+std::string		        User::getPong() const {return (_pong);}
 std::list< Channel >    &User::getJoinedChans()	    {return (_joinedChannels);}
 
 

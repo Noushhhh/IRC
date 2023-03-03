@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:16 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/01 12:04:48 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/03 15:39:07 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	Server::Pass(User &user, Message &message)
 {
 	if (message._argsNb < 2)
 	{
-		_errMsg = ERR_NEEDMOREPARAMS(); // "PASS" in params ?
+		_errMsg = ERR_NEEDMOREPARAMS(message._splitMessage[0]);
 		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
 		return ;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmdUser.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:38 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/02/14 14:58:52 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/03 15:37:22 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,12 @@ void	Server::cmdUser(User &user, Message &message)
         send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         return ;
     }
-    //user.setBitMode((uint8_t) atoi(*message._it)); ?? not needed ??
-    message._it + 2;
-    user.setRealname(*message._it + " " + *(message._it + 1));
-    // split with separator ":" when merge with max spit function
+    message._it += 2;
+    if ((*message._it).find(":") == 0)
+    {
+        std::string realname = (*message._it).substr(1) + " " + *(message._it + 1);
+        user.setRealname(realname);
+    }
     if (user.getPassword() == this->getPassword())
         user.setRegistered();
     else

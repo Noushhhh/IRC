@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:01 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/03 13:26:06 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/03 14:48:43 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ std::list< Channel >::iterator channel)
     return (true);
 }
 
-bool	Server::Mode(User &user, Message &message)
+void	Server::Mode(User &user, Message &message)
 {
     (void) user;
     (void) message;
@@ -77,7 +77,7 @@ bool	Server::Mode(User &user, Message &message)
     {
         err_buff = ERR_NEEDMOREPARAMS(std::string("MODE"));
         send(user.getSockfd(), &err_buff, err_buff.length(), 0);
-        return (false);
+        return ;
     }
     try
     {
@@ -90,19 +90,19 @@ bool	Server::Mode(User &user, Message &message)
         err_buff = (*message._it);
         err_buff.append(e.badName());
         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
-        return (false);
+        return ;
     }
     if (user.isOnChan(user.getNickname()) == false)
     {
         err_buff = ERR_USERNOTINCHANNEL(user.getNickname(), channel->getName());
         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
-        return (false);
+        return ;
     }
     if (channel->userIsOp(user.getNickname()) == false)
     {
         err_buff = ERR_CHANOPRIVSNEEDED(channel->getName());
         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
-        return (false);
+        return ;
     }
     
     if (argsNB == 2)
@@ -127,5 +127,5 @@ bool	Server::Mode(User &user, Message &message)
     //message.
     // else send mod info
 
-    return (true);
+    return ;
 }

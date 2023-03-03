@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/03 13:24:52 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/03 14:50:39 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ Server::Server() :
 _sock(0),
 _port(9999),
 _password("0000"),
-_uIt(_usersList.begin()),
-_cIt(_channelsList.begin())
+_usersListIt(_usersList.begin()),
+_channelsListIt(_channelsList.begin())
 {
     _addr.sin_family = AF_INET;
     _addr.sin_port = htons(_port);
@@ -65,8 +65,8 @@ Server::Server(int port, std::string password) :
 _sock(0),
 _port(port),
 _password(password),
-_uIt(_usersList.begin()),
-_cIt(_channelsList.begin())
+_usersListIt(_usersList.begin()),
+_channelsListIt(_channelsList.begin())
 {
     _addr.sin_family = AF_INET;
     _addr.sin_port = htons(_port);
@@ -140,8 +140,8 @@ int                                 Server::getSock()           const   { return
 int                                 Server::getPort()           const   { return (_port);           }
 std::string                         Server::getPassword()       const   { return (_password);       }
 struct sockaddr_in                  Server::getAdress()         const   { return (_addr);           }
-std::list< User >::iterator         Server::getUserListIt()     const   { return (_uIt);    }
-std::list< Channel >::iterator      Server::getChanListIt()     const   { return (_cIt); }
+std::list< User >::iterator         Server::getUserListIt()     const   { return (_usersListIt);    }
+std::list< Channel >::iterator      Server::getChanListIt()     const   { return (_channelsListIt); }
 std::list< User >                   *Server::getUserList()              { return (&_usersList);      }
 std::list< Channel >                *Server::getChanList()              { return (&_channelsList);   }
 

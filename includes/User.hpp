@@ -27,7 +27,6 @@ class User
 		bool		_isRegistered;
 		std::string	_username;
 		std::string	_realname;
-		uint8_t		_bitMode;
 		std::string	_ping;
 		std::string	_pong;
 		std::list < Channel >	_joinedChannels;
