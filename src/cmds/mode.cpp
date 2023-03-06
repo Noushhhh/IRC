@@ -6,13 +6,15 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:01 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/06 09:41:09 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/06 09:59:54 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
 
 #define MODESCHARSET "ovaimnqpsrtklb+-"
+#define ADD 1
+#define REMOVE 0
 
 bool    isValidMode(std::string modes)
 {
@@ -35,8 +37,8 @@ bool    isValidMode(std::string modes)
 bool    modesSet(ssize_t argsNB, std::string modes, std::string modesparams,
 std::list< Channel >::iterator channel)
 {
-    bool    addMode = false;
-    bool    removeMode = false;
+    int    addOrRemoveMode = REMOVE;
+
     ssize_t modes_size = modes.size();
 
 
@@ -48,36 +50,39 @@ std::list< Channel >::iterator channel)
     for (int i = 1; i < modes_size; i ++)
     {
         if (modes[i] == '+')
-        {
-            addMode = true;
-            removeMode = false;
-        }
+            addOrRemoveMode = ADD;
         else if (modes[i] == '-')
-        {
-            addMode = false;
-            removeMode = true;
-        }
+            addOrRemoveMode = REMOVE;
         switch (modes[i])
         {
-            case  'k':
+            case    'k': // change pswd
                 /* code */
                 break;
-            case :
+            case    'i': // invite mode
                 /* code */
                 break;
-            case :
+            case    'm': // moderated mode
                 /* code */
                 break;
-            case :
+            case    'q': // quiet mode
                 /* code */
                 break;
-            case :
+            case    'n': // No outside message mode
                 /* code */
                 break;
-            case :
+            case    'p': // Private mode
                 /* code */
                 break;
-            case :
+            case    's': // secret mode
+                /* code */
+                break;
+            case    't': // TOPIC can only be used by chanop
+                /* code */
+                break;
+            case    'v': // add/remove from muted user list
+                /* code */
+                break;
+            case    'b': // add/remove from banned userlist
                 /* code */
                 break;
             
@@ -85,6 +90,8 @@ std::list< Channel >::iterator channel)
                 break;
         }
     }
+    //if ()
+    return (true);
 }
 
 bool	Server::Mode(User &user, Message &message)
@@ -158,7 +165,7 @@ bool	Server::Mode(User &user, Message &message)
         err_buff = ": Too many arguments in your MODE command call\n";
         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
     }
-    message.
+    //message.
     // else send mod info
 
     return (true);

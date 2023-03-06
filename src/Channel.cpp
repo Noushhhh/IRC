@@ -29,7 +29,14 @@ _topic("")
 	_name = name;
 	if (_type != UNMOD)
 		_creator = chanCreator;
-	_isPswdProtected = false;
+	this->_isPswdProtected = false;
+	this->_isInviteOnly		= false;	
+	this->_isModerated		= true;		
+	this->_isQuiet			= false;	
+	this->_isNoOutsideMsg	= false;	
+	this->_isPrivate		= false;
+	this->_isSecret			= false;
+	this->_isTopicOPOnly	= true;
 	_usersList.push_back(chanCreator);
 }
 
@@ -43,7 +50,14 @@ _topic("")
 	if (_type != UNMOD)
 		_creator = chanCreator;
 	_password = pswd;
-	_isPswdProtected = true;
+	this->_isPswdProtected = false;
+	this->_isInviteOnly		= false;	
+	this->_isModerated		= true;		
+	this->_isQuiet			= false;	
+	this->_isNoOutsideMsg	= false;	
+	this->_isPrivate		= false;
+	this->_isSecret			= false;
+	this->_isTopicOPOnly	= true;
 	_usersList.push_back(chanCreator);
 }
 
@@ -73,7 +87,6 @@ Channel &Channel::operator=(const Channel &src)
 	this->_type				= src._type;
 	this->_isPswdProtected	= src._isPswdProtected;
 	this->_isInviteOnly		= src._isInviteOnly;	
-	this->_isAnonymous		= src._isAnonymous;	
 	this->_isModerated		= src._isModerated;		
 	this->_isQuiet			= src._isQuiet;	
 	this->_isNoOutsideMsg	= src._isNoOutsideMsg;	

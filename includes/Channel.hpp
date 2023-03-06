@@ -39,6 +39,16 @@ class Channel
 		std::list< User >	_opList;
 		char				_type;
 
+		// channel's modes
+
+		bool				_isPswdProtected;	// -+k
+		bool				_isInviteOnly	;	// -+i
+		bool				_isModerated	;	// -+m
+		bool				_isQuiet		;	// -+q
+		bool				_isNoOutsideMsg	;	// -+n
+		bool				_isPrivate		;	// -+p
+		bool				_isSecret		;	// -+s
+		bool				_isTopicOPOnly	;	// -+t
 
 	public	:
 
@@ -52,15 +62,6 @@ class Channel
 		/** MODES **/ 
 		// see https://www.rfc-editor.org/rfc/rfc2811#section-4
 
-		bool				_isPswdProtected;			// -+k
-		bool				_isInviteOnly	= false;	// -+i
-		bool				_isAnonymous	= false;	// -+a
-		bool				_isModerated	= true;		// -+m
-		bool				_isQuiet		= false;	// -+q
-		bool				_isNoOutsideMsg	= false;	// -+n
-		bool				_isPrivate		= false;	// -+p
-		bool				_isSecret		= false;	// -+s
-		bool				_isTopicOPOnly	= true;		// -+t
 
 		//getters
 
@@ -73,6 +74,19 @@ class Channel
 		std::list< User >	&getUsersList()			 ;
 		std::list< User >	&getOpList()			 ;
 		char				getType()			const;
+
+		//setters
+
+		void				setPswd(std::string &pswd, int &addOrRemove);
+		void				setInviteMode(int &addOrRemove);
+		void				setModerationMode(int &addOrRemove);
+		void				setQuietMode(int &addOrRemove);
+		void				setOutsideMsgMode(int &addOrRemove);
+		void				setPrivatrMode(int &addOrRemove);
+		void				setSecretMode(int &addOrRemove);
+		void				setTopicMode(int &addOrRemove);
+		void				setMutedList(std::string username, int &addOrRemove);
+		void				setBanList(std::string username, int &addOrRemove);
 		
 		//functions
 
