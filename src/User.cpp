@@ -119,3 +119,6 @@ bool					User::isOnChan(const std::string &cName)
     }
     return (false);
 }
+
+
+

@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/06 11:19:23 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/06 14:11:42 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,16 @@ class Server
         ~Server();
 
 // getters
-        int                             getSock()           const;
-        int                             getPort()           const;
-        std::string                     getPassword()       const;
-        struct sockaddr_in              getAdress()         const;
-        std::list< User >::iterator     getUserListIt()     const;
-        std::list< Channel >::iterator  getChanListIt()     const;
-        std::list< User >               *getUserList();
-        std::list< Channel >            *getChanList();
+        int                                 getSock()           const;
+        int                                 getPort()           const;
+        std::string                         getPassword()       const;
+        struct sockaddr_in                  getAdress()         const;
+        std::list< User >::iterator         getUserListIt()     const;
+        std::list< Channel >::iterator      getChanListIt()     const;
+        std::list< User >                   *getUserList();
+        std::list< Channel >                *getChanList();
 
-        std::list< User >::iterator      getUserItWithFd(int fd);
-        std::list< Channel >::iterator   getChanWithName(std::string name);
+
 
 // setters
         bool                                init();
@@ -51,10 +50,10 @@ class Server
         void                                listenTo(int backlog);
 
 // functions
-        bool                    checkPass();
-		void                    closeEmptyChans();
-        //void					close();
-		//void					receiveData();
+        bool                                checkPass();
+		void                                closeEmptyChans();
+        //void					            close();
+		//void					            receiveData();
 		
         bool                                pollDispatch();
         bool                                addUser();
@@ -64,6 +63,9 @@ class Server
         bool                                isChannel(std::string channel_name);
         bool                                isUser(std::string user_name);
         Channel                             *getChannelWithName(std::string channel_name);
+        User                                *getUserWithNickname(std::string nickname);
+        std::list< User >::iterator         getUserItWithFd(int fd);
+        std::list< Channel >::iterator      getChanItWithName(std::string name);
 
 // commands
 
@@ -102,6 +104,7 @@ class Server
         std::list< User >::iterator             _usersListIt;
         std::list< Channel >                    _channelsList;
         std::list< Channel >::iterator          _channelsListIt;
+        std::string                             _rplMsg;
         std::string                             _errMsg;
 
     //message

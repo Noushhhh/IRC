@@ -187,6 +187,18 @@ bool				Channel::isUserInChannel(User &user)
 }
 
 
+bool				Channel::isUserInChannelNickname(std::string nickname)
+{
+	std::list < User >::iterator user_it = getUsersList().begin();
+	while (user_it != getUsersList().end())
+	{
+		if(user_it->getNickname() == nickname)
+			return true;
+		user_it++;
+	}
+	return false;
+}
+
 bool 				Channel::userIsOp(std::string name)
 {
 	std::list< User >::iterator listEnd = _opList.end();

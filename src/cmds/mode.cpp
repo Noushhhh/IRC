@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:01 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/03 14:48:43 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/06 14:06:57 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	Server::Mode(User &user, Message &message)
     {
         message._it = message._splitMessage.begin();
         message._it ++; // 2nd arg is supposed to be chan name
-        channel = getChanWithName((*message._it));
+        channel = getChanItWithName((*message._it));
     }
     catch(const Channel::BadNameException& e)
     {

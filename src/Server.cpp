@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/06 11:30:58 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/06 14:11:33 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@ _sock(0),
 _port(9999),
 _password("0000"),
 _usersListIt(_usersList.begin()),
-_channelsListIt(_channelsList.begin())
+_channelsListIt(_channelsList.begin()),
+_rplMsg(""),
+_errMsg("")
 {
     _addr.sin_family = AF_INET;
     _addr.sin_port = htons(_port);
@@ -62,7 +64,9 @@ _sock(0),
 _port(port),
 _password(password),
 _usersListIt(_usersList.begin()),
-_channelsListIt(_channelsList.begin())
+_channelsListIt(_channelsList.begin()),
+_rplMsg(""),
+_errMsg("")
 {
     _addr.sin_family = AF_INET;
     _addr.sin_port = htons(_port);
@@ -332,14 +336,26 @@ std::list< User >::iterator			Server::getUserItWithFd(int fd)
 	for (std::list< User >::iterator lit = _usersList.begin(); lit != listEnd; lit ++)
     {
         if (lit->getSockfd() == fd)
-        {
-            return (lit);
-        }
+            return lit;
     }
 	return _usersList.end();
 }
 
-std::list< Channel >::iterator		Server::getChanWithName(std::string name)
+User                                *Server::getUserWithNickname(std::string nickname)
+{
+    std::list< User >::iterator listEnd = _usersList.end();
+
+	for (std::list< User >::iterator lit = _usersList.begin(); lit != listEnd; lit ++)
+    {
+        if (lit->getNickname() == nickname)
+        {
+            return &(*lit);
+        }
+    }
+	return NULL;
+}
+
+std::list< Channel >::iterator		Server::getChanItWithName(std::string name)
 {
 	std::list< Channel >::iterator listEnd = _channelsList.end();
 	
