@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/01 10:44:05 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/06 17:13:09 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -359,6 +359,7 @@ std::list< Channel >::iterator		Server::getChanWithName(std::string name)
             return (cit);
         }
     }
+	throw(Channel::BadNameException(": Channel doesn't exist\n"));
 	return (listEnd);
 }
 

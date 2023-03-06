@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:01 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/06 16:05:56 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/06 17:56:00 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ bool    isValidMode(std::string modes)
 }
 
 bool    modesSet(User &user, std::string modes, std::string *modesparams,
-std::list< Channel >::iterator channel)
+std::list< Channel >::iterator &channel)
 {
     std::string err_buff;
     int         addOrRemoveMode = REMOVE;
@@ -48,10 +48,12 @@ std::list< Channel >::iterator channel)
         // send err msg and return
         // wrong mode format
     }
-    for (int i = 1; i < modes_size; i ++)
+    for (int i = 0; i < modes_size; i ++)
     {
         if (modes[i] == '+')
+        {
             addOrRemoveMode = ADD;
+        }
         else if (modes[i] == '-')
             addOrRemoveMode = REMOVE;
         switch (modes[i])
@@ -159,6 +161,8 @@ bool	Server::Mode(User &user, Message &message)
         argsNB ++;
     }
 
+    modeparams = new std::string[argsNB];
+
     // if no args
 
     if (argsNB == 1)
@@ -180,7 +184,7 @@ bool	Server::Mode(User &user, Message &message)
         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
         return (false);
     }
-    if (user.isOnChan(user.getNickname()) == false)
+    if (user.isOnChan(channel->getName()) == false)
     {
         err_buff = ERR_USERNOTINCHANNEL(user.getNickname(), channel->getName());
         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
@@ -195,19 +199,25 @@ bool	Server::Mode(User &user, Message &message)
     
     if (argsNB == 2)
     {
+        std::cout << "MODE QUERY" << std::endl;
+        return (true);
         //display mode query info
     }
     else if (argsNB == 3)
     {
         message._it ++; // 3rd arg is supposed to be modes
         modes = *(message._it);
+        modesSet(user, modes, modeparams, channel);
     }
-
-    while (message._it != msgEnd)
+    else if ( argsNB > 3)
     {
-        message._it ++; // 4rd arg and so forth are supposed to be modes params
-        modeparams[i] = *(message._it);
-        i ++;
+        while (message._it != msgEnd)
+        {
+            message._it ++; // 4rd arg and so forth are supposed to be modes params
+            modeparams[i] = *(message._it);
+            i ++;
+        }
+        modesSet(user, modes, modeparams, channel);
     }
     //message.
     // else send mod info

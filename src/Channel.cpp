@@ -39,6 +39,7 @@ _topic("")
 	this->_isTopicOPOnly	= true;
 	this->_isUsersLimit		= false;
 	_usersList.push_back(chanCreator);
+	_opList.push_back(chanCreator);
 }
 
 Channel::Channel(const std::string &name, const std::string &pswd, User &chanCreator) :
@@ -61,6 +62,7 @@ _topic("")
 	this->_isTopicOPOnly	= true;
 	this->_isUsersLimit		= false;
 	_usersList.push_back(chanCreator);
+	_opList.push_back(chanCreator);
 }
 
 Channel::Channel(const Channel &src)
@@ -159,8 +161,11 @@ void				Channel::setPswd(std::string pswd, int &addOrRemove)
 }
 void				Channel::setInviteMode(int &addOrRemove)
 {
+		std::cout << "test" << std::endl;
 	if (addOrRemove == ADD)
+	{
 		_isInviteOnly = true;
+	}
 	else
 		_isInviteOnly = false;
 }
