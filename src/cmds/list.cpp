@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:59 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/02/28 17:09:42 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/06 15:15:11 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,23 @@
 
 void	Server::List(User &user, Message &message)
 {
-    std::string channel_name;
-    if (message._argsNb == 1)
+    std::string channels_name;
+    if (message._argsNb != 1)
+        return ;    
+    if (getChanList()->begin() == getChanList()->end())
+        return ;
+    else
     {
         _channelsListIt = _channelsList.begin();
+        channels_name = _channelsListIt->getName() + " ";
         while (_channelsListIt != _channelsList.end())
         {
-            channel_name = _channelsListIt->getName();
-            send(user.getSockfd(), channel_name.c_str(), channel_name.length(), 0);
+            channels_name = channels_name + _channelsListIt->getName() + " ";
             _channelsListIt++;
         }
+        send(user.getSockfd(), channels_name.c_str(), channels_name.length(), 0);
     }
     return ;
-    // ADD ERROR RETURN IF MORE PARAMETERS
 }
 
 // LIST message
