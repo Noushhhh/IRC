@@ -3,14 +3,77 @@
 /*                                                        :::      ::::::::   */
 /*   kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:55 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/02/14 14:58:56 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/06 16:27:31 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
+
+void	Server::Kick(User &user, Message &message)
+{
+    if (message._argsNb < 4)
+    {
+        _errMsg = ERR_NEEDMOREPARAMS(message._cmd);
+        send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        return ;
+    }
+    std::string channel_name = message._arguments[0];
+    if (channel_name.find("#") != 0)
+    {
+        _errMsg = ERR_NOSUCHCHANNEL(channel_name);
+        send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        return ;
+    }
+    else
+        channel_name = channel_name.substr(1);
+    if (!isChannel(channel_name))
+    {
+        _errMsg = ERR_NOSUCHCHANNEL(channel_name);
+        send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        return ;
+    }
+    if (!user.isOnChan(channel_name))
+    {
+        _errMsg = ERR_NOTONCHANNEL(channel_name);
+        send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        return ;
+    }
+    std::string nickname = message._arguments[1];
+    if (!isUserWNickname(nickname))
+    {
+        _errMsg = ERR_NOTONCHANNEL(channel_name);
+        send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        return ;
+    }
+    if (!isUserOnChan(nickname, channel_name))
+    {
+        _errMsg = ERR_NOTONCHANNEL(channel_name);
+        send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        return ;
+    }
+    if (message._argsNb == 3)
+    {
+        //kick user from chan
+        _rplMsg = user.getNickname() + " @ IRC_MAXANA KICK #" + channel_name + nickname;
+        send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        return ;
+    }
+    if (message._argsNb > 3)
+    {
+        _rplMsg = "";
+        for (int i = 3; i != message._argsNb; i++) // check if _argsNb one argument = 1 || one argument = 0
+            _rplMsg = _rplMsg + message._arguments[i]; // build reply message with users' arguments
+        _rplMsg = user.getNickname() + " @ IRC_MAXANA KICK #" + channel_name + nickname;
+        send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        return ;
+    }
+    
+    
+    
+}
 
 // KICK message
 //       Command: KICK
@@ -47,22 +110,3 @@
 //    :WiZ!jto@tolsun.oulu.fi KICK #Finnish John
 //                                    ; KICK message on channel #Finnish
 //                                    from WiZ to remove John from channel
-// Server Queries and Commands
-// MOTD message
-//      Command: MOTD
-//   Parameters: [<target>]
-// The MOTD command is used to get the “Message of the Day” of the given server. If <target> is not given, the MOTD of the server the client is connected to should be returned.
-
-// If <target> is a server, the MOTD for that server is requested. If <target> is given and a matching server cannot be found, the server will respond with the ERR_NOSUCHSERVER numeric and the command will fail.
-
-// If the MOTD can be found, one RPL_MOTDSTART numeric is returned, followed by one or more RPL_MOTD numeric, then one RPL_ENDOFMOTD numeric.
-
-// If the MOTD does not exist or could not be found, the ERR_NOMOTD numeric is returned.
-
-// Numeric Replies:
-
-// ERR_NOSUCHSERVER (402)
-// ERR_NOMOTD (422)
-// RPL_MOTDSTART (375)
-// RPL_MOTD (372)
-// RPL_ENDOFMOTD (376)

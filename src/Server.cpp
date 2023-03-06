@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/06 15:22:25 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/06 16:19:57 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -443,6 +443,22 @@ Channel    *Server::getChannelWithName(std::string channel_name)
     }
     return NULL; // or replace by exception 
     //return NULL;
+}
+
+bool					Server::isUserOnChan(const std::string nickname, const std::string channel_name)
+{
+    std::list< Channel >::iterator it = _channelsList.begin();
+    for (; it != _channelsList.end(); it ++)
+    {
+        if (it->getName() == channel_name)
+        {
+            for(_usersListIt = _usersList.begin(); _usersListIt != _usersList.end(); _usersListIt++)
+                if (_usersListIt->getNickname() == nickname)
+                    return true ;
+            return false ;
+        }
+    }
+    return (false);
 }
 
 /**************************************************************/

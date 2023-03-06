@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/06 15:21:59 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/06 16:19:38 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ class Server
         bool                                handleMessage(User &user, std::string raw_message);
         bool                                isChannel(std::string channel_name);
         bool                                isUserWNickname(std::string user_name);
+        bool                                isUserOnChan(const std::string nickname, const std::string channel_name);
         Channel                             *getChannelWithName(std::string channel_name);
         User                                *getUserWithNickname(std::string nickname);
         std::list< User >::iterator         getUserItWithFd(int fd);

@@ -45,7 +45,7 @@ class User
 		void			setRegistered(void);
 		void			setUsername(std::string username);
 		void			setRealname(std::string realname);
-		void			setBitMode(uint8_t bit);
+		// void			setBitMode(uint8_t bit);
 		void			setPing(std::string ping);
 		void			setPong(std::string pong);
 
