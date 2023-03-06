@@ -70,7 +70,6 @@ bool Message::parseMessage()
 		std::cout << "empty message." << std::endl;
 		return false;
 	}
-
 	return true ;
 }
 
