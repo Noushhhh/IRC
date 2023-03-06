@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/06 11:30:43 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/06 15:31:52 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,9 @@ void	Server::PrivMsg(User &user, Message &message)
 		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         return ;
     }
-    
-    message._it = message._splitMessage.begin() + 1;
-    std::string target = *message._it;
-    message._it++;
-    std::string priv_msg = *message._it;
-    // _usersListIt = _usersList.begin();
+
+    std::string target = message._arguments[0];
+    std::string priv_msg = message._arguments[0];
     if ((target.find("%#") == 0) || (target.find("@%#") == 0))
     {
         if ((target.find("@%#") == 0))
@@ -49,7 +46,7 @@ void	Server::PrivMsg(User &user, Message &message)
         }
         return ;
     }
-    else if (isUser(target))
+    else if (isUserWNickname(target))
     {
         priv_msg = user.getNickname() + " PRIVMSG " + target + " :" + priv_msg;
 		send(user.getSockfd(), priv_msg.c_str(), priv_msg.length(), 0);

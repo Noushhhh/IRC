@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/06 14:11:33 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/06 15:22:25 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -420,12 +420,12 @@ bool        Server::isChannel(std::string channel_name)
     return false ;
 }
 
-bool        Server::isUser(std::string user_name)
+bool        Server::isUserWNickname(std::string nickname)
 {
     std::list <User>::iterator user_it = getUserList()->begin();
     while (user_it != getUserList()->end())
     {
-        if (user_it->getNickname() == user_name)
+        if (user_it->getNickname() == nickname)
             return true ;
         user_it++;
     }
