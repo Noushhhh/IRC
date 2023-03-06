@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/03 14:52:31 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/06 17:02:10 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 static void joinRPL(Channel chan, User user)
 {
+    //TO DO : if channel mode is quiet only one username is sent (the activ user)
+
     std::string                 rpl_buff = RPL_TOPIC(chan.getName(), chan.getTopic());;
     std::list< User >::iterator it = chan.getUsersList().begin();
 
@@ -155,6 +157,26 @@ void	Server::Join(User &user, Message &message)
                         err_buff = ERR_USERONCHANNEL(_channelsListIt->getName(), user.getNickname());
                         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
                         chanExist = true;
+                        break ;
+                    }
+                    // keep from joining if is invite only or user is banned or user limit is reached
+
+                    if (_cIt->getInviteStatus() == true)
+                    {
+                        err_buff = ERR_ISINVITEONLY(_cIt->getName());
+                        send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+                        break ;
+                    }
+                    if (_cIt->userIsBanned(user.getNickname()) == true)
+                    {
+                        err_buff = ERR_ISBANNED(_cIt->getName());
+                        send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+                        break ;
+                    }
+                    if (_cIt->getUsersLimitStatus() == true  && _cIt->getUsersLimit() >= _cIt->getUsersList().size())
+                    {
+                        err_buff = ERR_USERLIMITREACHED(_cIt->getName());
+                        send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
                         break ;
                     }
                     

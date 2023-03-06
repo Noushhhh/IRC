@@ -33,12 +33,23 @@ class Channel
 		std::string			_topic;
 		User				_creator;
 		std::list< User >	_usersList; //if empty, delete chan except if chan is SAFE
-		int					_usersLimit; // set with -l flag
+		size_t				_usersLimit; // set with -+l flag
 		std::list< User >	_mutedUsersList; // -+v
 		std::list< User >	_banUsersList; // -+b
-		std::list< User >	_opList;
+		std::list< User >	_opList; // +o
 		char				_type;
 
+		// channel's modes
+
+		bool				_isPswdProtected;	// -+k
+		bool				_isInviteOnly	;	// -+i
+		bool				_isModerated	;	// -+m
+		bool				_isQuiet		;	// -+q
+		bool				_isNoOutsideMsg	;	// -+n
+		bool				_isPrivate		;	// -+p
+		bool				_isSecret		;	// -+s
+		bool				_isTopicOPOnly	;	// -+t
+		bool				_isUsersLimit	;	// +-
 
 	public	:
 
@@ -52,33 +63,56 @@ class Channel
 		/** MODES **/ 
 		// see https://www.rfc-editor.org/rfc/rfc2811#section-4
 
-		bool				_isPswdProtected;	// -+k
-		bool				_isInviteOnly	;	// -+i
-		bool				_isModerated	;	// -+m
-		bool				_isQuiet		;	// -+q
-		bool				_isNoOutsideMsg	;	// -+n
-		bool				_isPrivate		;	// -+p
-		bool				_isSecret		;	// -+s
-		bool				_isTopicOPOnly	;	// -+t
 
 		//getters
 
-		std::string			getName()			const;
-		std::string			getNameErrorSrc()	const;
-		std::string			getPswd()			const;
-		std::string			getTopic()			const;
-		bool				getPswdStatus()		const;
-		User				getChanCreator()	const;
-		std::list< User >	&getUsersList()			 ;
-		std::list< User >	&getOpList()			 ;
-		char				getType()			const;
+		std::list< User >::iterator	getUserItInList(std::list< User > list, std::string name);
+		std::string					getName()					   	  const;
+		std::string					getNameErrorSrc()				  const;
+		std::string					getPswd()						  const;
+		std::string					getTopic()						  const;
+		User						getChanCreator()				  const;
+		std::list< User >			&getUsersList()			 	 		   ;
+		std::list< User >			&getOpList()			 	 		   ;
+		std::list< User >			&getMutedList()			 	 		   ;
+		std::list< User >			&getBanList()				 		   ;
+		char						getType()						  const;
+		size_t						getUsersLimit()					  const;
+		bool						getPswdStatus()					  const;
+		bool						getInviteStatus()				  const;
+		bool						getModerationStatus()			  const;
+		bool						getQuietStatus()				  const;
+		bool						getOutsideMsgStatus()		      const;
+		bool						getPrivacyStatus()				  const;
+		bool						getSecrecyStatus()				  const;
+		bool						getTopicStatus()				  const;
+		bool						getUsersLimitStatus()		      const;
+
+		//setters
+
+		void				setPswd(std::string pswd, int &addOrRemove);
+		void				setInviteMode(int &addOrRemove);
+		void				setModerationMode(int &addOrRemove);
+		void				setQuietMode(int &addOrRemove);
+		void				setOutsideMsgMode(int &addOrRemove);
+		void				setPrivateMode(int &addOrRemove);
+		void				setSecretMode(int &addOrRemove);
+		void				setTopicMode(int &addOrRemove);
+		void				setUsersLimit(User &user, std::string userLimit, int &addOrRemove);
+		void				setMutedList(User &user, User &target, int &addOrRemove);
+		void				setBanList(User &user, User &target, int &addOrRemove);
+		void				setOpList(User &user, User &target, int &addOrRemove);
 		
 		//functions
 		void				sendToUsers(std::string message);
 		bool				isUserInChannel(User &user);
 		bool				isUserInChannelNickname(std::string nickname);
 		bool				isNameValid(std::string name);
+		bool				userIsInChan(std::string name);
 		bool				userIsOp(std::string name);
+		bool 				userIsBanned(std::string name);
+		bool 				userIsMuted(std::string name);
+
 
 		//exceptions
 

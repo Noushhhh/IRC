@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 15:58:01 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/01 14:31:50 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/06 10:20:27 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,9 @@
 #define SO_EE_ORIGIN_LOCAL   1
 #define SO_EE_ORIGIN_ICMP    2
 #define SO_EE_ORIGIN_ICMP6   3
+
+#define ADD 1
+#define REMOVE 0
 
 std::string *cppsplit(std::string str, char sep);
 size_t      ft_arraySize(std::string *array);

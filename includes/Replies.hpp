@@ -59,6 +59,8 @@
 // MODE / 221 (jcomprends pas trop auqnd elle s'envoie elle) / 501
 
 #define	RPL_UMODIS(userModeStr)     " :" + userModeStr + "\n"
+#define RPL_MUTED(channel, nick)    nick + ": Was succesfully muted in " + channel + "\n"
+#define RPL_UNMUTED(channel, nick)    nick + ": Was succesfully unmuted in " + channel + "\n"
 
 /************************************ ERRORS ************************************/
 
@@ -82,6 +84,7 @@
 
 #define ERR_UMODEUNKNOWNFLAG	    ": Unknown MODE flag\n" // 501
 #define ERR_USERSDONTMATCH		    ": Cannot change mode for other users\n" // 502
+#define ERR_ISINVITEONLY(chan)      chan + ":is invite only\n"
 
 //PRIVMSG and NOTICE
 
@@ -99,6 +102,8 @@
 #define ERR_USERNOTINCHANNEL(nick, chan)nick + ": is not on channel " + chan + "\n" // 441
 #define ERR_BADCHANNELKEY(chan)         chan + ": Cannot join channel (+k)\n" // 475
 #define ERR_CHANOPRIVSNEEDED(chan)      chan + ": You're not channel operator\n" // 482
+#define ERR_ISBANNED(chan)              ": is banned from" + chan + "\n"
+#define ERR_USERLIMITREACHED(chan)      chan + ": users limit reached\n"
 
 // PING & PONG
 
