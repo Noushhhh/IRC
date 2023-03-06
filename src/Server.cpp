@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/03 14:50:39 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/06 11:30:58 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,17 @@ _channelsListIt(_channelsList.begin())
 	this->_ptrF[1] = (&Server::Nick);
 	this->_ptrF[2] = (&Server::cmdUser);
 	// this->_ptrF[3] = (&Server::Quit);
-	// this->_ptrF[4] = (&Server::Join);
+	this->_ptrF[4] = (&Server::Join);
 	// this->_ptrF[5] = (&Server::Part);
 	// this->_ptrF[6] = (&Server::Mode);
 	this->_ptrF[7] = (&Server::Topic);
-	// this->_ptrF[8] = (&Server::Names);
 	this->_ptrF[9] = (&Server::List);
-	// this->_ptrF[10] = (&Server::Invite);
-	// this->_ptrF[11] = (&Server::Kick);
-	this->_ptrF[12] = (&Server::Privmsg);
-	// this->_ptrF[13] = (&Server::Notice);
-	this->_ptrF[14] = (&Server::Ping);
-	// this->_ptrF[15] = (&Server::Pong);
-    // this->_ptrF[16] = (&Server::Oper);
+	// this->_ptrF[9] = (&Server::Invite);
+	// this->_ptrF[10] = (&Server::Kick);
+	this->_ptrF[11] = (&Server::PrivMsg);
+	// this->_ptrF[12] = (&Server::Notice);
+	this->_ptrF[13] = (&Server::Ping);
+	// this->_ptrF[14] = (&Server::Pong);
 
 	this->_handledCommands[0] = "PASS";
 	this->_handledCommands[1] = "NICK";
@@ -49,15 +47,13 @@ _channelsListIt(_channelsList.begin())
 	this->_handledCommands[5] = "PART";
 	this->_handledCommands[6] = "MODE";
 	this->_handledCommands[7] = "TOPIC";
-	this->_handledCommands[8] = "NAMES";
-	this->_handledCommands[9] = "LIST";
-	this->_handledCommands[10] = "INVITE";
-	this->_handledCommands[11] = "KICK";
-	this->_handledCommands[12] = "PRIVMSG";
-	this->_handledCommands[13] = "NOTICE";
-	this->_handledCommands[14] = "PING";
-	this->_handledCommands[15] = "PONG";
-    this->_handledCommands[16] = "OPER";
+	this->_handledCommands[8] = "LIST";
+	this->_handledCommands[9] = "INVITE";
+	this->_handledCommands[10] = "KICK";
+	this->_handledCommands[11] = "PRIVMSG";
+	this->_handledCommands[12] = "NOTICE";
+	this->_handledCommands[13] = "PING";
+	this->_handledCommands[14] = "PONG";
     // std::cerr << "Debug message: Server Default Constructor called" << std::endl;
 }
 
@@ -78,17 +74,15 @@ _channelsListIt(_channelsList.begin())
 	// this->_ptrF[3] = (&Server::Quit);
 	this->_ptrF[4] = (&Server::Join);
 	// this->_ptrF[5] = (&Server::Part);
-	this->_ptrF[6] = (&Server::Mode);
+	// this->_ptrF[6] = (&Server::Mode);
 	this->_ptrF[7] = (&Server::Topic);
-	// this->_ptrF[8] = (&Server::Names);
 	this->_ptrF[9] = (&Server::List);
-	// this->_ptrF[10] = (&Server::Invite);
-	// this->_ptrF[11] = (&Server::Kick);
-	this->_ptrF[12] = (&Server::Privmsg);
-	// this->_ptrF[13] = (&Server::Notice);
-	this->_ptrF[14] = (&Server::Ping);
-	// this->_ptrF[15] = (&Server::Pong);
-    // this->_ptrF[16] = (&Server::Oper);
+	// this->_ptrF[9] = (&Server::Invite);
+	// this->_ptrF[10] = (&Server::Kick);
+	this->_ptrF[11] = (&Server::PrivMsg);
+	// this->_ptrF[12] = (&Server::Notice);
+	this->_ptrF[13] = (&Server::Ping);
+	// this->_ptrF[14] = (&Server::Pong);
 
 	this->_handledCommands[0] = "PASS";
 	this->_handledCommands[1] = "NICK";
@@ -98,15 +92,13 @@ _channelsListIt(_channelsList.begin())
 	this->_handledCommands[5] = "PART";
 	this->_handledCommands[6] = "MODE";
 	this->_handledCommands[7] = "TOPIC";
-	this->_handledCommands[8] = "NAMES";
-	this->_handledCommands[9] = "LIST";
-	this->_handledCommands[10] = "INVITE";
-	this->_handledCommands[11] = "KICK";
-	this->_handledCommands[12] = "PRIVMSG";
-	this->_handledCommands[13] = "NOTICE";
-	this->_handledCommands[14] = "PING";
-	this->_handledCommands[15] = "PONG";
-    this->_handledCommands[16] = "OPER";
+	this->_handledCommands[8] = "LIST";
+	this->_handledCommands[9] = "INVITE";
+	this->_handledCommands[10] = "KICK";
+	this->_handledCommands[11] = "PRIVMSG";
+	this->_handledCommands[12] = "NOTICE";
+	this->_handledCommands[13] = "PING";
+	this->_handledCommands[14] = "PONG";
     // std::cerr << "Debug message: Server Constructor called" << std::endl;
 }
 

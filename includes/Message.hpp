@@ -25,6 +25,7 @@ public	:
 	std::string							_rawMessage;
 	std::vector <std::string>			_splitMessage;
 	std::string							_cmd;
+	std::string							*_arguments;
 	std::vector <std::string>::iterator	_it;
 	size_t								_argsNb;
 

@@ -70,10 +70,10 @@ void    User::setRealname(std::string username)
 	this->_username = username;
 }
 
-void    User::setBitMode(uint8_t bit)
-{
-    this->_bitMode = bit;
-}
+// void    User::setBitMode(uint8_t bit)
+// {
+//     this->_bitMode = bit;
+// }
 
 void    User::setPing(std::string ping)
 {
@@ -97,7 +97,7 @@ std::string             User::getNickname()     const {return (_nickname);}
 bool			        User::getRegistered()   const { return (_isRegistered);};
 std::string             User::getUsername()   const {return (_username);}
 std::string             User::getRealname()   const {return (_realname);}
-uint8_t                 User::getBitMode() const {return (_bitMode);}
+// uint8_t                 User::getBitMode() const {return (_bitMode);}
 std::string		        User::getPing() const {return (_ping);}
 std::string		        User::getPong() const {return (_pong);}
 std::list< Channel >    &User::getJoinedChans()	    {return (_joinedChannels);}

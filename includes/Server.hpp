@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/03 14:46:38 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/06 11:19:23 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,17 +74,14 @@ class Server
 	void	Join(User &user, Message &message); // ok
 	void	Part(User &user, Message &message);
 	void	Mode(User &user, Message &message);
-	void	Topic(User &user, Message &message);
-	void	Names(User &user, Message &message);
+	void	Topic(User &user, Message &message); // presque ok
 	void	List(User &user, Message &message);
 	void	Invite(User &user, Message &message);
 	void	Kick(User &user, Message &message);
 	void	PrivMsg(User &user, Message &message); // ok
-	void	Privmsg(User &user, Message &message);
 	void	Notice(User &user, Message &message);
 	void	Ping(User &user, Message &message); // ok ?
 	void	Pong(User &user, Message &message);
-   // void	Oper(User &user, Message &message); check if needs to be done
 
     class ServerException : public std::exception
     {

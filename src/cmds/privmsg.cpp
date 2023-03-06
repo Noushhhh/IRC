@@ -6,13 +6,13 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/03 15:43:26 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/06 11:30:43 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
 
-void	Server::Privmsg(User &user, Message &message)
+void	Server::PrivMsg(User &user, Message &message)
 {
     if (message._argsNb < 3)
     {
@@ -55,7 +55,7 @@ void	Server::Privmsg(User &user, Message &message)
 		send(user.getSockfd(), priv_msg.c_str(), priv_msg.length(), 0);
         return ;
     }
-
+    // add channels function si banned, is muted...
     _errMsg = ERR_NOSUCHNICK(target);
 	send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
 }

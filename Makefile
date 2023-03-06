@@ -17,14 +17,13 @@ CMD_FILES = pass.cpp \
 			part.cpp \
 			mode.cpp \
 			topic.cpp \
-			names.cpp \
 			list.cpp \
 			invite.cpp \
 			kick.cpp \
 			privmsg.cpp \
 			notice.cpp \
 			ping_pong.cpp \
-			oper.cpp
+			
 
 SRC = 		${addprefix src/, ${SRC_FILES}}
 SRC_CMD =	${addprefix src/cmds/, ${CMD_FILES}} 

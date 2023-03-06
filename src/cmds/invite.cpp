@@ -3,15 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   invite.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:47 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/02/14 14:58:53 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/06 11:34:57 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
 
+void	Server::Invite(User &user, Message &message)
+{
+    // if (message._argsNb != 2)
+    // {
+    //     _errMsg = ERR_NEEDMOREPARAMS(message.splitMessage)
+    // }
+}
 // INVITE message
 //      Command: INVITE
 //   Parameters: <nickname> <channel>
