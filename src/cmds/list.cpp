@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:59 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/06 15:15:11 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/06 15:16:30 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	Server::List(User &user, Message &message)
 {
-    std::string channels_name;
     if (message._argsNb != 1)
         return ;    
     if (getChanList()->begin() == getChanList()->end())
@@ -22,7 +21,7 @@ void	Server::List(User &user, Message &message)
     else
     {
         _channelsListIt = _channelsList.begin();
-        channels_name = _channelsListIt->getName() + " ";
+        std::string channels_name = _channelsListIt->getName() + " ";
         while (_channelsListIt != _channelsList.end())
         {
             channels_name = channels_name + _channelsListIt->getName() + " ";
