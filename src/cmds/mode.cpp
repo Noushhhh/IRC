@@ -6,20 +6,27 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:01 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/01 14:38:40 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/06 09:41:09 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
 
-#define MODESCHARSET "ovaimnqpsrtklb"
+#define MODESCHARSET "ovaimnqpsrtklb+-"
 
 bool    isValidMode(std::string modes)
 {
     ssize_t modes_size = modes.size();
+    if ((modes_size >= 1)
+    && (modes[0] != '+' || modes[0] != '-'))
+        return (false);
     for (ssize_t i = 0; i < modes_size; i++)
     {
         if (isCharset(modes[i], MODESCHARSET) != true)
+            return (false);
+        if ((modes[i] == '+' || modes[i] == '-')
+        && (i + 1 < modes_size)
+        && (modes[i + 1] == '+' || modes[i + 1] == '-'))
             return (false);
     }
     return (true);
@@ -30,18 +37,53 @@ std::list< Channel >::iterator channel)
 {
     bool    addMode = false;
     bool    removeMode = false;
+    ssize_t modes_size = modes.size();
 
-    if (modes[0] == '+')
-        addMode = true;
-    else if (modes[0] == '-')
-        removeMode = true;
-    else
-    {
-        //send err msg and return
-    }
+
     if (isValidMode(modes) == false)
     {
         // send err msg and return
+        // wrong mode format
+    }
+    for (int i = 1; i < modes_size; i ++)
+    {
+        if (modes[i] == '+')
+        {
+            addMode = true;
+            removeMode = false;
+        }
+        else if (modes[i] == '-')
+        {
+            addMode = false;
+            removeMode = true;
+        }
+        switch (modes[i])
+        {
+            case  'k':
+                /* code */
+                break;
+            case :
+                /* code */
+                break;
+            case :
+                /* code */
+                break;
+            case :
+                /* code */
+                break;
+            case :
+                /* code */
+                break;
+            case :
+                /* code */
+                break;
+            case :
+                /* code */
+                break;
+            
+            default:
+                break;
+        }
     }
 }
 
