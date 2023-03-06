@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:47 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/06 11:34:57 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/06 11:36:46 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,12 @@
 
 void	Server::Invite(User &user, Message &message)
 {
-    // if (message._argsNb != 2)
-    // {
-    //     _errMsg = ERR_NEEDMOREPARAMS(message.splitMessage)
-    // }
+    if (message._argsNb != 2)
+    {
+        _errMsg = ERR_NEEDMOREPARAMS(message._cmd);
+        send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+    }
+    
 }
 // INVITE message
 //      Command: INVITE
