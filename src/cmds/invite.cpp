@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:47 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/06 14:20:02 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/06 14:20:55 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	Server::Invite(User &user, Message &message)
     std::string channel = message._arguments[1];
     if (message._arguments[1].find("#") == 0)
     {
-        std::string channel = channel.substr(1);
+        channel = channel.substr(1);
     }
     else
     {
