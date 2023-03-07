@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:25 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/06 15:27:24 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/07 15:05:08 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void	Server::Topic(User &user, Message &message)
         return ;
     }
 
-    message._it = message._splitMessage.begin() + 1;
-    std::string channel_name = *message._it;
+    std::string channel_name = message._arguments[1];
+    
     if (isChannel(channel_name)) 
     {
         Channel *channel = getChannelWithName(channel_name);
