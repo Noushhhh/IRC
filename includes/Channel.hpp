@@ -107,11 +107,11 @@ class Channel
 		void				sendToUsers(std::string message);
 		bool				isUserInChannel(User &user);
 		bool				isUserInChannelNickname(std::string nickname);
-		bool				isNameValid(std::string name);
-		bool				userIsInChan(std::string name);
-		bool				userIsOp(std::string name);
-		bool 				userIsBanned(std::string name);
-		bool 				userIsMuted(std::string name);
+		bool				isNameValid(std::string nickname);
+		bool				userIsInChan(std::string nickname);
+		bool				userIsOp(std::string nickname);
+		bool 				userIsBanned(std::string nickname);
+		bool 				userIsMuted(std::string nickname);
 
 
 		//exceptions

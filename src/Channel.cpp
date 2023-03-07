@@ -399,13 +399,13 @@ bool				Channel::isUserInChannelNickname(std::string nickname)
 	return false;
 }
 
-bool 				Channel::userIsOp(std::string name)
+bool 				Channel::userIsOp(std::string nickname)
 {
 	std::list< User >::iterator listEnd = _opList.end();
 
 	for (std::list< User >::iterator lit = _opList.begin(); lit != listEnd; lit ++)
     {
-        if (lit->getNickname() == name)
+        if (lit->getNickname() == nickname)
         {
             return (true);
         }
@@ -413,13 +413,13 @@ bool 				Channel::userIsOp(std::string name)
 	return (false);
 }
 
-bool 				Channel::userIsBanned(std::string name)
+bool 				Channel::userIsBanned(std::string nickname)
 {
 	std::list< User >::iterator listEnd = _banUsersList.end();
 
 	for (std::list< User >::iterator lit = _banUsersList.begin(); lit != listEnd; lit ++)
     {
-        if (lit->getNickname() == name)
+        if (lit->getNickname() == nickname)
         {
             return (true);
         }
@@ -427,13 +427,13 @@ bool 				Channel::userIsBanned(std::string name)
 	return (false);
 }
 
-bool 				Channel::userIsMuted(std::string name)
+bool 				Channel::userIsMuted(std::string nickname)
 {
 	std::list< User >::iterator listEnd = _mutedUsersList.end();
 
 	for (std::list< User >::iterator lit = _mutedUsersList.begin(); lit != listEnd; lit ++)
     {
-        if (lit->getNickname() == name)
+        if (lit->getNickname() == nickname)
         {
             return (true);
         }
@@ -441,13 +441,13 @@ bool 				Channel::userIsMuted(std::string name)
 	return (false);
 }
 
-bool				Channel::userIsInChan(std::string name)
+bool				Channel::userIsInChan(std::string nickname)
 {
 	std::list< User >::iterator listEnd = _usersList.end();
 
 	for (std::list< User >::iterator lit = _usersList.begin(); lit != listEnd; lit ++)
     {
-        if (lit->getNickname() == name)
+        if (lit->getNickname() == nickname)
         {
             return (true);
         }
