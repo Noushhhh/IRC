@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/06 17:02:10 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/07 10:13:36 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,21 +161,21 @@ void	Server::Join(User &user, Message &message)
                     }
                     // keep from joining if is invite only or user is banned or user limit is reached
 
-                    if (_cIt->getInviteStatus() == true)
+                    if (_channelsListIt->getInviteStatus() == true)
                     {
-                        err_buff = ERR_ISINVITEONLY(_cIt->getName());
+                        err_buff = ERR_ISINVITEONLY(_channelsListIt->getName());
                         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
                         break ;
                     }
-                    if (_cIt->userIsBanned(user.getNickname()) == true)
+                    if (_channelsListIt->userIsBanned(user.getNickname()) == true)
                     {
-                        err_buff = ERR_ISBANNED(_cIt->getName());
+                        err_buff = ERR_ISBANNED(_channelsListIt->getName());
                         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
                         break ;
                     }
-                    if (_cIt->getUsersLimitStatus() == true  && _cIt->getUsersLimit() >= _cIt->getUsersList().size())
+                    if (_channelsListIt->getUsersLimitStatus() == true  && _channelsListIt->getUsersLimit() >= _channelsListIt->getUsersList().size())
                     {
-                        err_buff = ERR_USERLIMITREACHED(_cIt->getName());
+                        err_buff = ERR_USERLIMITREACHED(_channelsListIt->getName());
                         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
                         break ;
                     }
