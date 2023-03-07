@@ -6,55 +6,81 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/06 15:31:52 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/07 11:42:49 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
 
+static std::string get_priv_msg(std::string *arguments)
+{
+    std::string priv_msg = "";
+    for (int i = 0; !(arguments[i].empty()); i++)
+        priv_msg = priv_msg + arguments[i];
+    return priv_msg;
+}
+
 void	Server::PrivMsg(User &user, Message &message)
 {
+
     if (message._argsNb < 3)
+    {
+        _errMsg = ERR_NEEDMOREPARAMS(message._cmd);
+		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        return ;
+    }
+    if (message._argsNb < 4)
     {
         _errMsg = ERR_NOTEXTTOSEND;
 		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         return ;
     }
-    if (message._argsNb > 3)
-    {
-        _errMsg = ERR_TOOMANYTARGETS(message._cmd);
-		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
-        return ;
-    }
-
     std::string target = message._arguments[0];
-    std::string priv_msg = message._arguments[0];
-    if ((target.find("%#") == 0) || (target.find("@%#") == 0))
+    std::string priv_msg = get_priv_msg(&message._arguments[1]);
+    if ((target.find("%#") == 0) || (target.find("@%#") == 0)) // check if channel name valid
     {
         if ((target.find("@%#") == 0))
             target = target.substr(2); // 2 or 3 ?
-        if ((target.find("%#") == 0))
+        else if ((target.find("%#") == 0))
             target = target.substr(1); // 1 or 2 ?
         if (isChannel(target))
-        priv_msg = user.getNickname() + "@IRC_MAXANA" + " PRIVMSG #" + target + " :" + priv_msg; // split target with "@%#" to add after PRIVMSG
-        _channelsListIt = getChanList()->begin();
-        while (_channelsListIt != getChanList()->end())
         {
-            if (_channelsListIt->getName() == target)
-                _channelsListIt->sendToUsers(priv_msg);
-            _channelsListIt++;
+            if (getChannelWithName(target)->userIsBanned(user.getNickname()))
+                return ;
+            if (getChannelWithName(target)->userIsMuted(user.getNickname()))
+                return ;
+            priv_msg = user.getNickname() + "@IRC_MAXANA" + " PRIVMSG #" + target + " :" + priv_msg; // split target with "@%#" to add after PRIVMSG
+            _channelsListIt = getChanList()->begin();
+            while (_channelsListIt != getChanList()->end()) // send to users of the channel
+            {
+                if (_channelsListIt->getName() == target)
+                    _channelsListIt->sendToUsers(priv_msg);
+                _channelsListIt++;
+            }
+        }
+        else
+        {
+            _errMsg = ERR_NOSUCHCHANNEL(target);
+            send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+            return ;
         }
         return ;
     }
+    
     else if (isUserWNickname(target))
     {
+        
         priv_msg = user.getNickname() + " PRIVMSG " + target + " :" + priv_msg;
-		send(user.getSockfd(), priv_msg.c_str(), priv_msg.length(), 0);
+		send(getUserWithNickname(target)->getSockfd(), priv_msg.c_str(), priv_msg.length(), 0); // send priv message to the target
         return ;
     }
-    // add channels function si banned, is muted...
-    _errMsg = ERR_NOSUCHNICK(target);
-	send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+
+    else
+    {
+        _errMsg = ERR_NOSUCHNICK(target);
+	    send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+    }
+    
 }
 
 // PRIVMSG message

@@ -318,7 +318,7 @@ void				Channel::setOpList(User &user, User &target, int &addOrRemove)
 /*                                                            */
 /**************************************************************/
 
-bool				Channel::isNameValid(std::string name)
+bool				Channel::isNameValid(std::string name) // can contain multiple channel characters example :@#Channelname. To updadte ? function should be in Server so it can be used only with string
 {
 	if (name[0] == '\0')
 	{
