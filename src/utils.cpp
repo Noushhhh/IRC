@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 14:27:34 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/01 14:31:44 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/08 10:23:58 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,9 @@ size_t ft_arraySize(std::string *array)
     while (array[i].size() != 0)
         i ++;
     return (i);
+}
+
+void    reply(User &user, std::string reply)
+{
+    send (user.getSockfd(), reply.c_str(), reply.length(), 0);
 }

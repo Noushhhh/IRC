@@ -58,7 +58,11 @@
 
 #define	RPL_UMODIS(userModeStr)     " :" + userModeStr + "\n"
 #define RPL_MUTED(channel, nick)    nick + ": Was succesfully muted in " + channel + "\n"
-#define RPL_UNMUTED(channel, nick)    nick + ": Was succesfully unmuted in " + channel + "\n"
+#define RPL_UNMUTED(channel, nick)  nick + ": Was succesfully unmuted in " + channel + "\n"
+#define RPL_BANNED(channel, nick)   nick + ": Was succesfully banned of " + channel + "\n"
+#define RPL_UNBANNED(channel, nick) nick + ": Was succesfully unbanned of " + channel + "\n"
+#define RPL_OPED(channel, nick)     nick + ": Was succesfully made operator in " + channel + "\n"
+#define RPL_UNOPED(channel, nick)   nick + ": Was succesfully de-oped in " + channel + "\n"
 
 /************************************ ERRORS ************************************/
 
@@ -82,7 +86,7 @@
 
 #define ERR_UMODEUNKNOWNFLAG	    ": Unknown MODE flag\n" // 501
 #define ERR_USERSDONTMATCH		    ": Cannot change mode for other users\n" // 502
-#define ERR_ISINVITEONLY(chan)      chan + ":is invite only\n"
+#define ERR_ISINVITEONLY(chan)      chan + ": is invite only\n"
 
 //PRIVMSG and NOTICE
 

@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/06 16:00:16 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/08 09:35:52 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,24 +159,28 @@ bool	Server::Join(User &user, Message &message)
                         chanExist = true;
                         break ;
                     }
+
                     // keep from joining if is invite only or user is banned or user limit is reached
 
                     if (_cIt->getInviteStatus() == true)
                     {
                         err_buff = ERR_ISINVITEONLY(_cIt->getName());
                         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+                        chanExist = true;
                         break ;
                     }
-                    if (_cIt->userIsBanned(user.getNickname()) == true)
+                    else if (_cIt->userIsBanned(user.getNickname()) == true)
                     {
                         err_buff = ERR_ISBANNED(_cIt->getName());
                         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+                        chanExist = true;
                         break ;
                     }
-                    if (_cIt->getUsersLimitStatus() == true  && _cIt->getUsersLimit() >= _cIt->getUsersList().size())
+                    else if (_cIt->getUsersLimitStatus() == true  && _cIt->getUsersLimit() >= _cIt->getUsersList().size())
                     {
                         err_buff = ERR_USERLIMITREACHED(_cIt->getName());
                         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+                        chanExist = true;
                         break ;
                     }
                     
