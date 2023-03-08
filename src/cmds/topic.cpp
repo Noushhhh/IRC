@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:25 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 10:53:25 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/08 10:54:07 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	Server::Topic(User &user, Message &message)
         {
             std::string topic = channel->getTopic();
             if (!topic.empty())
-            { // if topic given and actually empty, set new topic for channel. check what rights the user needs to set a topic
+            {
                 if (!message._arguments[2].empty())
                 {
                     if (channel->getTopicStatus() == false || channel->userIsOp(user.getNickname()) == true) // hads to be true or false ? ask Max
