@@ -6,11 +6,25 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:25 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 10:58:23 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/08 11:55:16 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
+
+static std::string get_suffix(std::string *arguments)
+{
+    int i = 0;
+    std::string full_argument = "";
+    while (!arguments[i].empty())
+    {
+        full_argument = full_argument + arguments[i];
+        if (i != arguments[i].size())
+            full_argument = full_argument + " ";
+        i++;
+    }
+    return (full_argument);
+}
 
 void	Server::Topic(User &user, Message &message)
 {
@@ -20,61 +34,67 @@ void	Server::Topic(User &user, Message &message)
 		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         return ;
     }
-    
     std::string channel_name = message._arguments[1].substr(1); // remove "#" // check if "#" at beggining to do
-    if (isChannel(channel_name)) 
-    {
-        Channel *channel = getChannelWithName(channel_name);
-        if (channel->isUserInChannel(user))
-        {
-            std::string topic = channel->getTopic();
-            if (!topic.empty())
-            {
-                if (!message._arguments[2].empty())
-                {
-                    if (channel->getTopicStatus() == false || channel->userIsOp(user.getNickname()) == true)
-                    {
-                        channel->setTopic(message._arguments[2]);
-                        _rplMsg = "New topic set on #" + channel_name + ": " + message._arguments[2];
-                        channel->sendToUsers(_rplMsg);
-                        return ;
-                    }
-                    else
-                    {
-                        _errMsg = ERR_CHANOPRIVSNEEDED(channel_name);
-                        send(user.getSockfd(),  _rplMsg.c_str(),  _rplMsg.length(), 0);
-                        return ;
-                    }
-                }
-                else
-                {
-                    _rplMsg = RPL_TOPIC(channel_name, topic);
-                    send(user.getSockfd(),  _rplMsg.c_str(),  _rplMsg.length(), 0);
-                    return ;
-                }
-            }
-            else
-            {
-                channel->setTopic("");
-                _rplMsg = RPL_NOTOPIC(channel_name);
-                send(user.getSockfd(),  _rplMsg.c_str(),  _rplMsg.length(), 0);
-                return ;
-            }
-        }
-        else
-        {
-            _errMsg = ERR_NOTONCHANNEL(channel_name);
-		    send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
-            return ;
-        }
-    }
-    else
+    if (!isChannel(channel_name))
     {
         _errMsg = ERR_NOSUCHCHANNEL(channel_name);
         send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         return ;
     }
-
+    Channel *channel = getChannelWithName(channel_name);
+    if (!channel->isUserInChannel(user))
+    {
+        _errMsg = ERR_NOTONCHANNEL(channel_name);
+        send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        return ;
+    }
+    if (message._argsNb == 2) // if user asks for topic of channel
+    {
+        std::string topic = channel->getTopic();
+        if (topic.empty())
+        {
+            _rplMsg = RPL_NOTOPIC(channel_name);
+            send(user.getSockfd(),  _rplMsg.c_str(),  _rplMsg.length(), 0);
+            return ;
+        }
+        else
+        {
+            _rplMsg = RPL_TOPIC(channel_name, topic); // give topic it to user 
+            send(user.getSockfd(),  _rplMsg.c_str(),  _rplMsg.length(), 0);
+            return ;
+        }
+    }
+    if (message._argsNb > 2)
+    {
+        std::string new_topic = get_suffix(&message._arguments[2]);
+        if (new_topic.find(":") != 0)
+            return ;
+         // rmeove ":" at start of new topic
+        if (new_topic.size() == 1) // if empty stirng for topic (after ":"")
+        {
+            channel->setTopic("");
+            _rplMsg = "Topic unset on #" + channel_name;
+            channel->sendToUsers(_rplMsg);
+            return ;
+        }
+        else
+        {
+            new_topic = new_topic.substr(1); // remove ":" at beginning of topic
+            if (channel->getTopicStatus() == false || channel->userIsOp(user.getNickname()) == true)
+            {
+                channel->setTopic(message._arguments[2]);
+                _rplMsg = "New topic set on #" + channel_name + ": " + message._arguments[2];
+                channel->sendToUsers(_rplMsg);
+                return ;
+            }
+            else
+            {
+                _errMsg = ERR_CHANOPRIVSNEEDED(channel_name);
+                send(user.getSockfd(),  _rplMsg.c_str(),  _rplMsg.length(), 0);
+                return ;
+            }
+        }
+    }
 }
 
 // TOPIC message
