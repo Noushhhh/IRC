@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:25 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 10:54:07 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/08 10:58:23 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,25 @@ void	Server::Topic(User &user, Message &message)
             {
                 if (!message._arguments[2].empty())
                 {
-                    if (channel->getTopicStatus() == false || channel->userIsOp(user.getNickname()) == true) // hads to be true or false ? ask Max
+                    if (channel->getTopicStatus() == false || channel->userIsOp(user.getNickname()) == true)
+                    {
                         channel->setTopic(message._arguments[2]);
+                        _rplMsg = "New topic set on #" + channel_name + ": " + message._arguments[2];
+                        channel->sendToUsers(_rplMsg);
+                        return ;
+                    }
+                    else
+                    {
+                        _errMsg = ERR_CHANOPRIVSNEEDED(channel_name);
+                        send(user.getSockfd(),  _rplMsg.c_str(),  _rplMsg.length(), 0);
+                        return ;
+                    }
                 }
                 else
                 {
                     _rplMsg = RPL_TOPIC(channel_name, topic);
                     send(user.getSockfd(),  _rplMsg.c_str(),  _rplMsg.length(), 0);
+                    return ;
                 }
             }
             else
