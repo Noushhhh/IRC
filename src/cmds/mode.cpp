@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:01 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 13:32:52 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/08 14:05:42 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,8 +230,8 @@ void	Server::Mode(User &user, Message &message)
         while (message._it != msgEnd)
         {
             message._it ++; // 4rd arg and so forth are supposed to be modes params
-            std::cout << "mot :" << *message._it << std::endl;
             modeparams[i] = *(message._it); // modeparams[i] = message._arguments[3]; // 4rd arg and so forth are supposed to be modes params
+            std::cout << "mot :" << modeparams[i] << std::endl;
             i ++;
         }
         modesSet(user, modes, modeparams, channel);

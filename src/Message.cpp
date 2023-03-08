@@ -21,8 +21,7 @@ Message::Message() :  _rawMessage(""), _it(_splitMessage.begin()), _argsNb(0) //
 
 Message::Message(std::string message) : _rawMessage(message), _it(_splitMessage.begin()), _argsNb(0)
 {
-	splitMessage();
-
+	;
 } // init members
 
 Message::Message(const Message &src)
@@ -55,7 +54,7 @@ bool Message::splitMessage()
 	while(token != NULL)
 	{
 		_splitMessage.push_back(token);
-		_arguments[i] = token; // test if works if no conversion from char to string. to cast ?
+		// _arguments[i] = token; // test if works if no conversion from char to string. to cast ?
 		token = strtok(NULL, "\r \n");
 		i++;
 	}
