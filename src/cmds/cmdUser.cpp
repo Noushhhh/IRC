@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:38 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 10:03:56 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/08 14:05:05 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,6 @@ void	Server::cmdUser(User &user, Message &message)
         _errMsg = ERR_PASSWDMISMATCH;
         send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
     }
-    std::string welcome_msg = RPL_WELCOME(user.getNickname());
-	send(user.getSockfd(), welcome_msg.c_str(), welcome_msg.length(), 0);
+    _rplMsg = RPL_WELCOME(user.getNickname());
+	send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
 }

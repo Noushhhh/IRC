@@ -21,7 +21,6 @@ Message::Message() :  _rawMessage(""), _it(_splitMessage.begin()), _argsNb(0) //
 
 Message::Message(std::string message) : _rawMessage(message), _it(_splitMessage.begin()), _argsNb(0)
 {
-	splitMessage();
 
 } // init members
 

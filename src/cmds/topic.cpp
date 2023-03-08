@@ -6,25 +6,11 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:25 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 13:13:34 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/08 14:08:29 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
-
-// static std::string get_suffix(std::string *arguments)
-// {
-//     int i = 0;
-//     std::string full_argument = "";
-//     while (!arguments[i].empty())
-//     {
-//         full_argument = full_argument + arguments[i];
-//         if (i != arguments[i].size())
-//             full_argument = full_argument + " ";
-//         i++;
-//     }
-//     return (full_argument);
-// }
 
 void	Server::Topic(User &user, Message &message)
 {
@@ -84,7 +70,7 @@ void	Server::Topic(User &user, Message &message)
             if (channel->getTopicStatus() == false || channel->userIsOp(user.getNickname()) == true) // check if user has the rights to set new topic
             {
                 channel->setTopic(message._arguments[2]);
-                _rplMsg = "New topic set on #" + channel_name + ": " + message._arguments[2];
+                _rplMsg = "New topic set on #" + channel_name + ": " + message._arguments[2] + "\n";
                 channel->sendToUsers(_rplMsg);
                 return ;
             }

@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:16 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 13:25:27 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/08 14:16:10 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	Server::Pass(User &user, Message &message)
 		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
 		return ;
 	}
-	if (user.getRegistered())
+	if (user.getRegistered() == true)
 	{
 		_errMsg = ERR_ALREADYREGISTERED;
 		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
