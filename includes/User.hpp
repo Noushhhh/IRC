@@ -20,15 +20,15 @@ class Channel;
 class User
 {
 	private	:
-		int			_sockfd;
-		sockaddr_in _addr;
-		std::string _nickname;
-		std::string	_givenPassword;
-		bool		_isRegistered;
-		std::string	_username;
-		std::string	_realname;
-		std::string	_ping;
-		std::string	_pong;
+		int						_sockfd;
+		sockaddr_in 			_addr;
+		std::string 			_nickname;
+		std::string				_givenPassword;
+		bool					_isRegistered;
+		std::string				_username;
+		std::string				_realname;
+		std::string				_ping;
+		std::string				_pong;
 		std::list < Channel >	_joinedChannels;
 		//	bool _banned ?
 
