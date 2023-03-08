@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/06 16:19:57 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/08 13:55:00 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -397,7 +397,7 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 	}
 	else
 	{
-		message._argsNb = message._splitMessage.size();
+		//message._argsNb = message._splitMessage.size();
 		std::cout << "args nb " << message._argsNb << std::endl;
 		(void)(this->*_ptrF[i])(user, message);
         return true;
