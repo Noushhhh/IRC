@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 15:58:01 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/08 13:10:16 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/08 13:34:16 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@
 #include "Replies.hpp"
 #include "Channel.hpp"
 #include "Server.hpp"
-#include "../src/utils.cpp"
 
 #define BACKLOG         10
 #define TIMEOUTLIMIT    -1
@@ -57,9 +56,10 @@
 #define ADD 1
 #define REMOVE 0
 
-std::string *cppsplit(std::string str, char sep);
-size_t      ft_arraySize(std::string *array);
-bool        isCharset(char c, std::string charset);
+std::string     *cppsplit(std::string str, char sep);
+size_t          ft_arraySize(std::string *array);
+bool            isCharset(char c, std::string charset);
+std::string     get_suffix(std::string *arguments);
 
 
 

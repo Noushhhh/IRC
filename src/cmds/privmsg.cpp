@@ -6,19 +6,11 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 13:11:47 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/08 13:34:29 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
-
-// static std::string get_priv_msg(std::string *arguments)
-// {
-//     std::string priv_msg = "";
-//     for (int i = 0; !(arguments[i].empty()); i++)
-//         priv_msg = priv_msg + arguments[i];
-//     return priv_msg;
-}
 
 void	Server::PrivMsg(User &user, Message &message)
 {

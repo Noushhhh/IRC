@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 14:27:34 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 13:08:45 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/08 13:30:46 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ size_t ft_arraySize(std::string *array)
 
 std::string get_suffix(std::string *arguments)
 {
-    int i = 0;
+    size_t i = 0;
     std::string full_argument = "";
     while (!arguments[i].empty())
     {
