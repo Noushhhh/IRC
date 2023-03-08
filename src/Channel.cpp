@@ -312,6 +312,11 @@ void				Channel::setOpList(User &user, User &target, int &addOrRemove)
 	}
 }
 
+void				Channel::setTopic(std::string topic)
+{
+	_topic = topic;
+}
+
 /**************************************************************/
 /*                                                            */
 /*                      MEMBER FUNCTIONS                      */

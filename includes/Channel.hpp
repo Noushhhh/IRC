@@ -90,28 +90,29 @@ class Channel
 
 		//setters
 
-		void				setPswd(std::string pswd, int &addOrRemove);
-		void				setInviteMode(int &addOrRemove);
-		void				setModerationMode(int &addOrRemove);
-		void				setQuietMode(int &addOrRemove);
-		void				setOutsideMsgMode(int &addOrRemove);
-		void				setPrivateMode(int &addOrRemove);
-		void				setSecretMode(int &addOrRemove);
-		void				setTopicMode(int &addOrRemove);
-		void				setUsersLimit(User &user, std::string userLimit, int &addOrRemove);
-		void				setMutedList(User &user, User &target, int &addOrRemove);
-		void				setBanList(User &user, User &target, int &addOrRemove);
-		void				setOpList(User &user, User &target, int &addOrRemove);
+		void						setPswd(std::string pswd, int &addOrRemove);
+		void						setInviteMode(int &addOrRemove);
+		void						setModerationMode(int &addOrRemove);
+		void						setQuietMode(int &addOrRemove);
+		void						setOutsideMsgMode(int &addOrRemove);
+		void						setPrivateMode(int &addOrRemove);
+		void						setSecretMode(int &addOrRemove);
+		void						setTopicMode(int &addOrRemove);
+		void						setUsersLimit(User &user, std::string userLimit, int &addOrRemove);
+		void						setMutedList(User &user, User &target, int &addOrRemove);
+		void						setBanList(User &user, User &target, int &addOrRemove);
+		void						setOpList(User &user, User &target, int &addOrRemove);
+		void						setTopic(std::string topic);
 		
 		//functions
-		void				sendToUsers(std::string message);
-		bool				isUserInChannel(User &user);
-		bool				isUserInChannelNickname(std::string nickname);
-		bool				isNameValid(std::string nickname);
-		bool				userIsInChan(std::string nickname);
-		bool				userIsOp(std::string nickname);
-		bool 				userIsBanned(std::string nickname);
-		bool 				userIsMuted(std::string nickname);
+		void						sendToUsers(std::string message);
+		bool						isUserInChannel(User &user);
+		bool						isUserInChannelNickname(std::string nickname);
+		bool						isNameValid(std::string nickname);
+		bool						userIsInChan(std::string nickname);
+		bool						userIsOp(std::string nickname);
+		bool 						userIsBanned(std::string nickname);
+		bool 						userIsMuted(std::string nickname);
 
 
 		//exceptions

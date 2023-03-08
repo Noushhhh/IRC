@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:25 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/07 15:05:08 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/08 10:24:36 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ void	Server::Topic(User &user, Message &message)
 		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         return ;
     }
-
-    std::string channel_name = message._arguments[1];
     
+    std::string channel_name = message._arguments[1];
+
     if (isChannel(channel_name)) 
     {
         Channel *channel = getChannelWithName(channel_name);

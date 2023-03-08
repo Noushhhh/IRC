@@ -50,15 +50,15 @@ class User
 		void			setPong(std::string pong);
 
 //getter
-        int             getSockfd()     const;
-		std::string		getPassword()	const;
-        std::string     getNickname()   const;
-		bool			getRegistered()   const;
-		std::string		getUsername()	const;
-		std::string		getRealname()	const;
-		uint8_t         getBitMode() const;
-		std::string		getPing() const;
-		std::string		getPong() const;
+        int             		getSockfd()     const;
+		std::string				getPassword()	const;
+        std::string     		getNickname()   const;
+		bool					getRegistered()   const;
+		std::string				getUsername()	const;
+		std::string				getRealname()	const;
+		uint8_t         		getBitMode() const;
+		std::string				getPing() const;
+		std::string				getPong() const;
 		std::list< Channel >	&getJoinedChans();
 		
 
