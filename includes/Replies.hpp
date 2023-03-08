@@ -15,6 +15,8 @@
 
 #include "irc.hpp"
 
+// add /n at the ned of every string 
+
 /*********************************** REPLIES ***********************************/
 
 //01 to 03, welcome rpl

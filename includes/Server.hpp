@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/06 15:20:03 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/06 17:01:48 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,56 +32,59 @@ class Server
         ~Server();
 
 // getters
-        int                             getSock()           const;
-        int                             getPort()           const;
-        std::string                     getPassword()       const;
-        struct sockaddr_in              getAdress()         const;
-        std::list< User >::iterator     getUserListIt()     const;
-        std::list< Channel >::iterator  getChanListIt()     const;
-        std::list< User >               *getUserList();
-        std::list< Channel >            *getChanList();
+        int                                 getSock()           const;
+        int                                 getPort()           const;
+        std::string                         getPassword()       const;
+        struct sockaddr_in                  getAdress()         const;
+        std::list< User >::iterator         getUserListIt()     const;
+        std::list< Channel >::iterator      getChanListIt()     const;
+        std::list< User >                   *getUserList();
+        std::list< Channel >                *getChanList();
 
-        std::list< User >::iterator      getUserItWithFd(int fd);
-        std::list< Channel >::iterator   getChanWithName(std::string name);
-        // std::list< Command > &getCmdList()   const;
+
 
 // setters
-        bool                    init();
-        void                    setSock(int type, int protocol);
-        void                    bindSock();
-        void                    listenTo(int backlog);
+        bool                                init();
+        void                                setSock(int type, int protocol);
+        void                                bindSock();
+        void                                listenTo(int backlog);
 
 // functions
-        bool                    checkPass();
-		void                    closeEmptyChans();
-        //void					close();
-		//void					receiveData();
+        bool                                checkPass();
+		void                                closeEmptyChans();
+        //void					            close();
+		//void					            receiveData();
 		
-        bool                    pollDispatch();
-        bool                    addUser();
-        bool                    closeUser(std::vector< struct pollfd >::iterator &it);
+        bool                                pollDispatch();
+        bool                                addUser();
+        bool                                closeUser(std::vector< struct pollfd >::iterator &it);
 
-        bool                    handleMessage(User &user, std::string raw_message);
+        bool                                handleMessage(User &user, std::string raw_message);
+        bool                                isChannel(std::string channel_name);
+        bool                                isUserWNickname(std::string user_name);
+        bool                                isUserOnChan(const std::string nickname, const std::string channel_name);
+        Channel                             *getChannelWithName(std::string channel_name);
+        User                                *getUserWithNickname(std::string nickname);
+        std::list< User >::iterator         getUserItWithFd(int fd);
+        std::list< Channel >::iterator      getChanItWithName(std::string name);
 
 // commands
 
-    bool	Pass(User &user, Message &message);
-	bool	Nick(User &user, Message &message);
-	bool	cmdUser(User &user, Message &message);
-	bool	Quit(User &user, Message &message);
-	bool	Join(User &user, Message &message);
-	bool	Part(User &user, Message &message);
-	bool	Mode(User &user, Message &message);
-	bool	Topic(User &user, Message &message);
-	bool	Names(User &user, Message &message);
-	bool	List(User &user, Message &message);
-	bool	Invite(User &user, Message &message);
-	bool	Kick(User &user, Message &message);
-	bool	Msg(User &user, Message &message);
-	bool	Privmsg(User &user, Message &message);
-	bool	Notice(User &user, Message &message);
-	bool	Ping(User &user, Message &message);
-	bool	Pong(User &user, Message &message);
+    void	Pass(User &user, Message &message); // ok
+	void	Nick(User &user, Message &message); // ok
+	void	cmdUser(User &user, Message &message); // ok
+	void	Quit(User &user, Message &message); 
+	void	Join(User &user, Message &message); // ok
+	void	Part(User &user, Message &message);
+	void	Mode(User &user, Message &message);
+	void	Topic(User &user, Message &message); // presque ok
+	void	List(User &user, Message &message);
+	void	Invite(User &user, Message &message);
+	void	Kick(User &user, Message &message);
+	void	PrivMsg(User &user, Message &message); // ok
+	void	Notice(User &user, Message &message);
+	void	Ping(User &user, Message &message); // ok ?
+	void	Pong(User &user, Message &message);
 
     class ServerException : public std::exception
     {
@@ -99,13 +102,15 @@ class Server
         struct sockaddr_in                      _addr;
         std::vector< struct pollfd >            _pollFds; //element new a delete
         std::list< User >                       _usersList; //List d'utilisateurs du serveur
-        std::list< User >::iterator             _uIt;
+        std::list< User >::iterator             _usersListIt;
         std::list< Channel >                    _channelsList;
-        std::list< Channel >::iterator          _cIt;
+        std::list< Channel >::iterator          _channelsListIt;
+        std::string                             _rplMsg;
+        std::string                             _errMsg;
 
     //message
         std::string						        _handledCommands[HANDLEDCOMMANDSNB];
-        bool							        (Server::*_ptrF[HANDLEDCOMMANDSNB])(User &user, Message &message);
+        void							        (Server::*_ptrF[HANDLEDCOMMANDSNB])(User &user, Message &message);
 
         Server();
         Server(const Server & newServ);

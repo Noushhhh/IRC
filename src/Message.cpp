@@ -14,13 +14,14 @@
 #include "../includes/Message.hpp"
 #include "../includes/User.hpp"
 
-Message::Message() :  _rawMessage(""), _argsNb(0) // init members
+Message::Message() :  _rawMessage(""), _it(_splitMessage.begin()), _argsNb(0) // init members
 {
 	// std::cerr << "Debug message: Message Default Constructor called" << std::endl;
 }
 
-Message::Message(std::string message) : _rawMessage(message)
+Message::Message(std::string message) : _rawMessage(message), _it(_splitMessage.begin()), _argsNb(0)
 {
+	splitMessage();
 
 } // init members
 
@@ -49,10 +50,14 @@ bool Message::splitMessage()
 	char *token = strtok(string_to_split, "\r \n");
 	if (!token)
 		return false ;
+	_cmd = token;
+	int i = 0;
 	while(token != NULL)
 	{
 		_splitMessage.push_back(token);
+		_arguments[i] = token; // test if works if no conversion from char to string. to cast ?
 		token = strtok(NULL, "\r \n");
+		i++;
 	}
 	delete[] string_to_split;
 	return true ;
@@ -65,8 +70,6 @@ bool Message::parseMessage()
 		std::cout << "empty message." << std::endl;
 		return false;
 	}
-	
-
 	return true ;
 }
 

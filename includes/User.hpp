@@ -20,14 +20,17 @@ class Channel;
 class User
 {
 	private	:
-		int						_sockfd;
-		sockaddr_in 			_addr;
-		std::string 			_nickname;
-		std::string				_givenPassword;
+		int			_sockfd;
+		sockaddr_in _addr;
+		std::string _nickname;
+		std::string	_givenPassword;
+		bool		_isRegistered;
+		std::string	_username;
+		std::string	_realname;
+		std::string	_ping;
+		std::string	_pong;
 		std::list < Channel >	_joinedChannels;
-
-	// PASS Check if the passwd is ok if not reject user
-	// NICK set nickename for user
+		//	bool _banned ?
 
 	public	:
 
@@ -37,14 +40,27 @@ class User
 		~User();
 		
 //setter
-		void setPassword(std::string given_password);
-		void setNickname(std::string nickname);
+		void			setPassword(std::string given_password);
+		void			setNickname(std::string nickname);
+		void			setRegistered(void);
+		void			setUsername(std::string username);
+		void			setRealname(std::string realname);
+		// void			setBitMode(uint8_t bit);
+		void			setPing(std::string ping);
+		void			setPong(std::string pong);
 
 //getter
-		std::string				getPassword()		const;
-        int             		getSockfd()    		const;
-        std::string     		getNickname()  		const;
+        int             		getSockfd()     const;
+		std::string				getPassword()	const;
+        std::string     		getNickname()   const;
+		bool					getRegistered()   const;
+		std::string				getUsername()	const;
+		std::string				getRealname()	const;
+		uint8_t         		getBitMode() const;
+		std::string				getPing() const;
+		std::string				getPong() const;
 		std::list< Channel >	&getJoinedChans();
+		
 
 //members functions
 

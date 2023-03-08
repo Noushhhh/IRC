@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 09:35:52 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/08 13:32:16 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ static bool pswdMatch(const std::string &chanPswd, std::string givenPswd)
     return (false);
 }
 
-bool	Server::Join(User &user, Message &message)
+void	Server::Join(User &user, Message &message)
 {
 	std::string err_buff;
     std::string *chansSplit = NULL;
@@ -117,7 +117,7 @@ bool	Server::Join(User &user, Message &message)
     {
         err_buff = ERR_NEEDMOREPARAMS(std::string("JOIN"));
         send(user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
-        return (false);
+        return ;
     }
     if (message._splitMessage.size() == 2 || message._splitMessage.size() == 3)
         chansSplit = split(std::string(*message._it));
@@ -127,7 +127,7 @@ bool	Server::Join(User &user, Message &message)
     {
         err_buff = ERR_TOOMANYTARGETS(std::string("JOIN"));
         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
-        return (false);
+        return ;
     }
 
     // if passed arg is 0, remove user from all chans
@@ -145,16 +145,16 @@ bool	Server::Join(User &user, Message &message)
         for (size_t i = 0; i < ft_arraySize(chansSplit); i ++)
         {
             chanExist = false;
-            for (_cIt = _channelsList.begin(); _cIt != _channelsList.end(); _cIt ++)
+            for (_channelsListIt = _channelsList.begin(); _channelsListIt != _channelsList.end(); _channelsListIt ++)
             {
                 // if chan exist, user will join
-                if (_cIt->getName() == chansSplit[i])
+                if (_channelsListIt->getName() == chansSplit[i])
                 {
                     // if allready on channel
 
-                    if (user.isOnChan(_cIt->getName()))
+                    if (user.isOnChan(_channelsListIt->getName()))
                     {
-                        err_buff = ERR_USERONCHANNEL(_cIt->getName(), user.getNickname());
+                        err_buff = ERR_USERONCHANNEL(_channelsListIt->getName(), user.getNickname());
                         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
                         chanExist = true;
                         break ;
@@ -162,23 +162,23 @@ bool	Server::Join(User &user, Message &message)
 
                     // keep from joining if is invite only or user is banned or user limit is reached
 
-                    if (_cIt->getInviteStatus() == true)
+                    if (_channelsListIt->getInviteStatus() == true)
                     {
-                        err_buff = ERR_ISINVITEONLY(_cIt->getName());
+                        err_buff = ERR_ISINVITEONLY(_channelsListIt->getName());
                         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
                         chanExist = true;
                         break ;
                     }
-                    else if (_cIt->userIsBanned(user.getNickname()) == true)
+                    else if (_channelsListIt->userIsBanned(user.getNickname()) == true)
                     {
-                        err_buff = ERR_ISBANNED(_cIt->getName());
+                        err_buff = ERR_ISBANNED(_channelsListIt->getName());
                         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
                         chanExist = true;
                         break ;
                     }
-                    else if (_cIt->getUsersLimitStatus() == true  && _cIt->getUsersLimit() >= _cIt->getUsersList().size())
+                    else if (_channelsListIt->getUsersLimitStatus() == true  && _channelsListIt->getUsersLimit() >= _channelsListIt->getUsersList().size())
                     {
-                        err_buff = ERR_USERLIMITREACHED(_cIt->getName());
+                        err_buff = ERR_USERLIMITREACHED(_channelsListIt->getName());
                         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
                         chanExist = true;
                         break ;
@@ -186,18 +186,18 @@ bool	Server::Join(User &user, Message &message)
                     
                     //if chan is key protected and a key args was given to JOIN cmd and it matchs chan key
                     
-                    if ((_cIt->getPswdStatus() && message._splitMessage.size() > 2 &&
-                    i < ft_arraySize(keysSplit) && pswdMatch(_cIt->getPswd(), keysSplit[i]))
-                    || (!_cIt->getPswdStatus()))
+                    if ((_channelsListIt->getPswdStatus() && message._splitMessage.size() > 2 &&
+                    i < ft_arraySize(keysSplit) && pswdMatch(_channelsListIt->getPswd(), keysSplit[i]))
+                    || (!_channelsListIt->getPswdStatus()))
                     {
-                        _cIt->getUsersList().push_back(user);
-                        user.getJoinedChans().push_back(*_cIt);
-                        joinRPL(*_cIt, user);
+                        _channelsListIt->getUsersList().push_back(user);
+                        user.getJoinedChans().push_back(*_channelsListIt);
+                        joinRPL(*_channelsListIt, user);
                         chanExist = true;
                         break ;
                     }
-                    // std::cout << "given pswd = " << keysSplit[i] << "pswd = " << _cIt->getPswd() << std::endl; 
-                    err_buff = ERR_BADCHANNELKEY(_cIt->getName());
+                    // std::cout << "given pswd = " << keysSplit[i] << "pswd = " << _channelsListIt->getPswd() << std::endl; 
+                    err_buff = ERR_BADCHANNELKEY(_channelsListIt->getName());
                     send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
                     chanExist = true;
                     break ;
@@ -242,5 +242,4 @@ bool	Server::Join(User &user, Message &message)
 
     delete[] chansSplit;
     delete[] keysSplit;
-    return (true);
 }

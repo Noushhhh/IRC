@@ -342,13 +342,18 @@ void				Channel::setOpList(User &user, User &target, int &addOrRemove)
 	}
 }
 
+void				Channel::setTopic(std::string topic)
+{
+	_topic = topic;
+}
+
 /**************************************************************/
 /*                                                            */
 /*                      MEMBER FUNCTIONS                      */
 /*                                                            */
 /**************************************************************/
 
-bool				Channel::isNameValid(std::string name)
+bool				Channel::isNameValid(std::string name) // can contain multiple channel characters example :@#Channelname. To updadte ? function should be in Server so it can be used only with string
 {
 	if (name[0] == '\0')
 	{
@@ -394,13 +399,48 @@ bool				Channel::isNameValid(std::string name)
 	return (true);
 }
 
-bool 				Channel::userIsOp(std::string name)
+void				Channel::sendToUsers(std::string message)
+{
+	std::list < User >::iterator it = _usersList.begin();
+	while (it != _usersList.end())
+	{
+		send(it->getSockfd(), message.c_str(), message.length(), 0);
+		it++;
+	}
+}
+
+bool				Channel::isUserInChannel(User &user)
+{
+	std::list < User >::iterator user_it = getUsersList().begin();
+	while (user_it != getUsersList().end())
+	{
+		if(user_it->getSockfd() == user.getSockfd())
+			return true;
+		user_it++;
+	}
+	return false;
+}
+
+
+bool				Channel::isUserInChannelNickname(std::string nickname)
+{
+	std::list < User >::iterator user_it = getUsersList().begin();
+	while (user_it != getUsersList().end())
+	{
+		if(user_it->getNickname() == nickname)
+			return true;
+		user_it++;
+	}
+	return false;
+}
+
+bool 				Channel::userIsOp(std::string nickname)
 {
 	std::list< User >::iterator listEnd = _opList.end();
 
 	for (std::list< User >::iterator lit = _opList.begin(); lit != listEnd; lit ++)
     {
-        if (lit->getNickname() == name)
+        if (lit->getNickname() == nickname)
         {
             return (true);
         }
@@ -408,13 +448,13 @@ bool 				Channel::userIsOp(std::string name)
 	return (false);
 }
 
-bool 				Channel::userIsBanned(std::string name)
+bool 				Channel::userIsBanned(std::string nickname)
 {
 	std::list< User >::iterator listEnd = _banUsersList.end();
 
 	for (std::list< User >::iterator lit = _banUsersList.begin(); lit != listEnd; lit ++)
     {
-        if (lit->getNickname() == name)
+        if (lit->getNickname() == nickname)
         {
             return (true);
         }
@@ -422,13 +462,13 @@ bool 				Channel::userIsBanned(std::string name)
 	return (false);
 }
 
-bool 				Channel::userIsMuted(std::string name)
+bool 				Channel::userIsMuted(std::string nickname)
 {
 	std::list< User >::iterator listEnd = _mutedUsersList.end();
 
 	for (std::list< User >::iterator lit = _mutedUsersList.begin(); lit != listEnd; lit ++)
     {
-        if (lit->getNickname() == name)
+        if (lit->getNickname() == nickname)
         {
             return (true);
         }
@@ -436,13 +476,13 @@ bool 				Channel::userIsMuted(std::string name)
 	return (false);
 }
 
-bool				Channel::userIsInChan(std::string name)
+bool				Channel::userIsInChan(std::string nickname)
 {
 	std::list< User >::iterator listEnd = _usersList.end();
 
 	for (std::list< User >::iterator lit = _usersList.begin(); lit != listEnd; lit ++)
     {
-        if (lit->getNickname() == name)
+        if (lit->getNickname() == nickname)
         {
             return (true);
         }

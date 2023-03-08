@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:01 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 13:20:32 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/08 13:32:52 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ std::list< Channel >::iterator &channel)
     return (true);
 }
 
-bool	Server::Mode(User &user, Message &message)
+void	Server::Mode(User &user, Message &message)
 {
     (void) user;
     (void) message;
@@ -178,42 +178,43 @@ bool	Server::Mode(User &user, Message &message)
 
     // if no args
 
-    if (argsNB == 1)
+    if (argsNB == 1) // if (argsNB < 2)
     {
         err_buff = ERR_NEEDMOREPARAMS(std::string("MODE"));
         send(user.getSockfd(), &err_buff, err_buff.length(), 0);
-        return (false);
+        return ;
     }
     try
     {
-        message._it = message._splitMessage.begin();
-        message._it ++; // 2nd arg is supposed to be chan name
-        channel = getChanWithName((*message._it));
+        message._it = message._splitMessage.begin(); // delete
+        message._it ++; // 2nd arg is supposed to be chan name // delete
+        channel = getChanItWithName((*message._it)); // delete
+        // channel = getChanItWithName(message._arguments[1]); // 2nd arg is supposed to be chan name // | and delete the 3 lines above
     }
     catch(const Channel::BadNameException& e)
     {
-        err_buff = (*message._it);
-        err_buff.append(e.badName());
+        err_buff = (*message._it); //  err_buff = message._arguments[1];
+        err_buff.append(e.badName()); // delete 
         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
-        return (false);
+        return ;
     }
     if (user.isOnChan(channel->getName()) == false)
     {
         err_buff = ERR_USERNOTINCHANNEL(user.getNickname(), channel->getName());
         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
-        return (false);
+        return ;
     }
     if (channel->userIsOp(user.getNickname()) == false)
     {
         err_buff = ERR_CHANOPRIVSNEEDED(channel->getName());
         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
-        return (false);
+        return ;
     }
     
     if (argsNB == 2)
     {
         std::cout << "MODE QUERY" << std::endl; // TO DO
-        return (true);
+        return ;
         //display mode query info
     }
     else if (argsNB == 3)
@@ -230,7 +231,7 @@ bool	Server::Mode(User &user, Message &message)
         {
             message._it ++; // 4rd arg and so forth are supposed to be modes params
             std::cout << "mot :" << *message._it << std::endl;
-            modeparams[i] = *(message._it);
+            modeparams[i] = *(message._it); // modeparams[i] = message._arguments[3]; // 4rd arg and so forth are supposed to be modes params
             i ++;
         }
         modesSet(user, modes, modeparams, channel);
@@ -238,5 +239,5 @@ bool	Server::Mode(User &user, Message &message)
     //message.
     // else send mod info
 
-    return (true);
+    return ;
 }
