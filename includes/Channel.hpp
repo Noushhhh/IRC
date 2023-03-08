@@ -49,7 +49,7 @@ class Channel
 		bool				_isPrivate		;	// -+p
 		bool				_isSecret		;	// -+s
 		bool				_isTopicOPOnly	;	// -+t
-		bool				_isUsersLimit	;	// +-
+		bool				_isUsersLimit	;	// +-l
 
 	public	:
 
@@ -90,14 +90,14 @@ class Channel
 
 		//setters
 
-		void						setPswd(std::string pswd, int &addOrRemove);
-		void						setInviteMode(int &addOrRemove);
-		void						setModerationMode(int &addOrRemove);
-		void						setQuietMode(int &addOrRemove);
-		void						setOutsideMsgMode(int &addOrRemove);
-		void						setPrivateMode(int &addOrRemove);
-		void						setSecretMode(int &addOrRemove);
-		void						setTopicMode(int &addOrRemove);
+		void						setPswd(User &user,std::string pswd, int &addOrRemove);
+		void						setInviteMode(User &user,int &addOrRemove);
+		void						setModerationMode(User &user,int &addOrRemove);
+		void						setQuietMode(User &user,int &addOrRemove);
+		void						setOutsideMsgMode(User &user,int &addOrRemove);
+		void						setPrivateMode(User &user,int &addOrRemove);
+		void						setSecretMode(User &user,int &addOrRemove);
+		void						setTopicMode(User &user,int &addOrRemove);
 		void						setUsersLimit(User &user, std::string userLimit, int &addOrRemove);
 		void						setMutedList(User &user, User &target, int &addOrRemove);
 		void						setBanList(User &user, User &target, int &addOrRemove);
