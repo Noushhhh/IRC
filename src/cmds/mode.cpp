@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:01 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 13:29:58 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/08 13:32:52 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,7 +214,7 @@ void	Server::Mode(User &user, Message &message)
     if (argsNB == 2)
     {
         std::cout << "MODE QUERY" << std::endl; // TO DO
-        return (true);
+        return ;
         //display mode query info
     }
     else if (argsNB == 3)
