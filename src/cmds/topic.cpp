@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:25 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 11:55:16 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/08 11:59:08 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,16 @@ void	Server::Topic(User &user, Message &message)
         return ;
     }
     Channel *channel = getChannelWithName(channel_name);
-    if (!channel->isUserInChannel(user))
+    if (!channel->isUserInChannel(user)) // check if user in channel
     {
         _errMsg = ERR_NOTONCHANNEL(channel_name);
         send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         return ;
     }
+
     if (message._argsNb == 2) // if user asks for topic of channel
     {
-        std::string topic = channel->getTopic();
-        if (topic.empty())
+        if (channel->getTopic().empty())
         {
             _rplMsg = RPL_NOTOPIC(channel_name);
             send(user.getSockfd(),  _rplMsg.c_str(),  _rplMsg.length(), 0);
@@ -59,28 +59,29 @@ void	Server::Topic(User &user, Message &message)
         }
         else
         {
-            _rplMsg = RPL_TOPIC(channel_name, topic); // give topic it to user 
+            _rplMsg = RPL_TOPIC(channel_name, channel->getTopic()); // give topic to user 
             send(user.getSockfd(),  _rplMsg.c_str(),  _rplMsg.length(), 0);
             return ;
         }
     }
-    if (message._argsNb > 2)
+    
+    if (message._argsNb > 2) // if user wants to set new topic 
     {
         std::string new_topic = get_suffix(&message._arguments[2]);
         if (new_topic.find(":") != 0)
             return ;
          // rmeove ":" at start of new topic
-        if (new_topic.size() == 1) // if empty stirng for topic (after ":"")
+        if (new_topic.size() == 1) // if empty stirng for topic (after ":""), topic cleared
         {
             channel->setTopic("");
             _rplMsg = "Topic unset on #" + channel_name;
-            channel->sendToUsers(_rplMsg);
+            channel->sendToUsers(_rplMsg); // all  users notified on channel that topic cleared
             return ;
         }
         else
         {
             new_topic = new_topic.substr(1); // remove ":" at beginning of topic
-            if (channel->getTopicStatus() == false || channel->userIsOp(user.getNickname()) == true)
+            if (channel->getTopicStatus() == false || channel->userIsOp(user.getNickname()) == true) // check if user has the rights to set new topic
             {
                 channel->setTopic(message._arguments[2]);
                 _rplMsg = "New topic set on #" + channel_name + ": " + message._arguments[2];
