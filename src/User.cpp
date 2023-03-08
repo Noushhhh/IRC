@@ -70,11 +70,6 @@ void    User::setRealname(std::string username)
 	this->_username = username;
 }
 
-// void    User::setBitMode(uint8_t bit)
-// {
-//     this->_bitMode = bit;
-// }
-
 void    User::setPing(std::string ping)
 {
     this->_ping = ping;
