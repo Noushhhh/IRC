@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:38 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/03 15:37:22 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/08 10:03:56 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,16 @@ void	Server::cmdUser(User &user, Message &message)
 		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         return ;
     }
-    message._it = message._splitMessage.begin() + 1;
-    user.setUsername(*message._it);
-    message._it++;
-    if ((*message._it).length() != 1 || !((*message._it).find_first_not_of("012345678")) || (*(message._it + 1) != "*"))
+    user.setUsername(message._arguments[0]);
+    if ((message._arguments[1]).length() != 1 || !((message._arguments[1]).find_first_not_of("012345678")) || message._arguments[2] != "*")
     {
         _errMsg = "wrong format for user mode: try: '0 *'\n";
         send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         return ;
     }
-    message._it += 2;
-    if ((*message._it).find(":") == 0)
+    if (message._arguments[4].find(":") == 0)
     {
-        std::string realname = (*message._it).substr(1) + " " + *(message._it + 1);
+        std::string realname = message._arguments[4].substr(1) + " " + message._arguments[5];
         user.setRealname(realname);
     }
     if (user.getPassword() == this->getPassword())
