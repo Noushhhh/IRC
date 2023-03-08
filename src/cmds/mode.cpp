@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:01 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 11:36:43 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/08 13:20:32 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ bool    isValidMode(User &user, std::string modes)
 
     if (modes[0] != '+' && modes[0] != '-')
     {
-        std::cout << "test : " << modes[0] << std::endl;
+        reply(user, ": no mode were specified\n");
         return (false);
     }
     for (ssize_t i = 0; i < modes_size; i++)
@@ -38,7 +38,7 @@ bool    isValidMode(User &user, std::string modes)
         && (i + 1 < modes_size)
         && (modes[i + 1] == '+' || modes[i + 1] == '-'))
         {
-            reply(user, " : wether you are adding or removing mode is unclear\n");
+            reply(user, " : too many subsquent '+' & '-' symbols\n");
             return (false);
         }
     }
@@ -48,17 +48,18 @@ bool    isValidMode(User &user, std::string modes)
 bool    modesSet(User &user, std::string modes, std::string *modesparams,
 std::list< Channel >::iterator &channel)
 {
-    std::string err_buff;
+    std::cout << "J'aime\n";
     int         addOrRemoveMode = REMOVE;
-    int         paramCt =  0; //3 is the start of modesparam that is given as arg to MODE cmd
+    int         paramCt = 0;
     ssize_t     modesparams_size = ft_arraySize(modesparams);
+    std::cout << "les\n";
     ssize_t     modes_size = modes.size();
+    std::cout << "pommes\n";
 
+    std::cout << "paramCT = " << paramCt << " modesparams_size : " << modesparams_size << std::endl;
     if (isValidMode(user, modes) == false)
-    {
-    std::cout << "modes : " << modes << " modesparams : " << *modesparams << " : MICHEL\n";
         return (false);
-    }
+    std::cout << "modes : " << modes << " modesparams : " << *modesparams << " : MICHEL\n";
     for (int i = 0; i < modes_size; i ++)
     {
         if (modes[i] == '+')
@@ -71,7 +72,6 @@ std::list< Channel >::iterator &channel)
         switch (modes[i])
         {
             case    'k': // change pswd
-                std::cout << "paramCT = " << paramCt << " modesparams_size : " << modesparams_size << std::endl;
                 if (addOrRemoveMode == ADD && paramCt < modesparams_size)
                 {
                     channel->setPswd(user, modesparams[paramCt], addOrRemoveMode);
@@ -146,8 +146,11 @@ std::list< Channel >::iterator &channel)
             default:
                 break;
         }
-        // while (i > 1 && i < modes_size && modes[i] == modes[i - 1])
-        //     i ++;
+        while (i > 0 && i < modes_size && modes[i] == modes[i - 1])
+        {
+            i ++;
+            std::cout << "i : " << i << std::endl; 
+        }
     }
     //if ()
     return (true);
@@ -171,7 +174,6 @@ bool	Server::Mode(User &user, Message &message)
         message._it ++;
         argsNB ++;
     }
-
     modeparams = new std::string[argsNB];
 
     // if no args
@@ -227,6 +229,7 @@ bool	Server::Mode(User &user, Message &message)
         while (message._it != msgEnd)
         {
             message._it ++; // 4rd arg and so forth are supposed to be modes params
+            std::cout << "mot :" << *message._it << std::endl;
             modeparams[i] = *(message._it);
             i ++;
         }
