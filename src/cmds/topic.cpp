@@ -6,25 +6,25 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:25 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 11:59:08 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/08 13:13:34 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
 
-static std::string get_suffix(std::string *arguments)
-{
-    int i = 0;
-    std::string full_argument = "";
-    while (!arguments[i].empty())
-    {
-        full_argument = full_argument + arguments[i];
-        if (i != arguments[i].size())
-            full_argument = full_argument + " ";
-        i++;
-    }
-    return (full_argument);
-}
+// static std::string get_suffix(std::string *arguments)
+// {
+//     int i = 0;
+//     std::string full_argument = "";
+//     while (!arguments[i].empty())
+//     {
+//         full_argument = full_argument + arguments[i];
+//         if (i != arguments[i].size())
+//             full_argument = full_argument + " ";
+//         i++;
+//     }
+//     return (full_argument);
+// }
 
 void	Server::Topic(User &user, Message &message)
 {
@@ -70,7 +70,7 @@ void	Server::Topic(User &user, Message &message)
         std::string new_topic = get_suffix(&message._arguments[2]);
         if (new_topic.find(":") != 0)
             return ;
-         // rmeove ":" at start of new topic
+         // remove ":" at start of new topic
         if (new_topic.size() == 1) // if empty stirng for topic (after ":""), topic cleared
         {
             channel->setTopic("");

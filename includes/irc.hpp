@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 15:58:01 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/06 10:20:27 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/08 13:10:16 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@
 #include "Replies.hpp"
 #include "Channel.hpp"
 #include "Server.hpp"
+#include "../src/utils.cpp"
 
 #define BACKLOG         10
 #define TIMEOUTLIMIT    -1
