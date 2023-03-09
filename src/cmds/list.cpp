@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:59 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/09 10:33:17 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/09 14:10:33 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,42 @@
 
 void	Server::List(User &user, Message &message)
 {
-    if (message._argsNb != 1)
+    if (message._argsNb < 1)
         return ;
     // if (getChanList()->begin() == getChanList()->end())
     if (getChanList()->empty())
-        return ;
-    else
     {
-        _channelsListIt = _channelsList.begin();
-        std::string channels_name = _channelsListIt->getName() + " ";
-        while (_channelsListIt != _channelsList.end())
-        {
-            channels_name = channels_name + _channelsListIt->getName() + " ";
-            _channelsListIt++;
-        }
-        send(user.getSockfd(), channels_name.c_str(), channels_name.length(), 0);
+        _rplMsg = "No channels created yet\n";
+        send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
+        _rplMsg = RPL_LISTEND;
+        send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
+        return ;
     }
+    
+    if (message._argsNb == 1)
+    {
+        for (_channelsListIt = _channelsList.begin(); _channelsListIt != _channelsList.end(); _channelsListIt++)
+        {
+            if (_channelsListIt->getSecrecyStatus() == true)
+                _channelsListIt++;
+            _rplMsg = _channelsListIt->getName() + _channelsListIt->getTopic() + "\n"; 
+            send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
+        }
+        _rplMsg = RPL_LISTEND;
+        send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
+        return ;
+    }
+
+    for (size_t i = 0; i != (message._argsNb - 1); i++)
+    {
+        _channelsListIt = getChanItWithName(message._arguments[i]);
+        if (_channelsListIt->getSecrecyStatus() == true)
+            _channelsListIt++;
+        _rplMsg = _channelsListIt->getName() + _channelsListIt->getTopic() + "\n"; 
+        send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
+    }
+    _rplMsg = RPL_LISTEND;
+    send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
     return ;
 }
 
