@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/09 10:35:02 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/09 10:43:01 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -406,6 +406,8 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 
 bool        Server::isChannel(std::string channel_name)
 {
+    if (getChanList()->empty())
+        return false;
     if (channel_name.find("%#") == 0)
         channel_name = channel_name.substr(2, channel_name.npos);
     else
