@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/09 10:35:14 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/09 11:34:55 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ class Server
         User                                *getUserWithNickname(std::string nickname);
         std::list< User >::iterator         getUserItWithFd(int fd);
         std::list< Channel >::iterator      getChanItWithName(std::string name);
+        void                                sendToChanUsers(std::string channel_name, std::string message);
 
 // commands
 
