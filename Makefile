@@ -21,7 +21,6 @@ CMD_FILES = pass.cpp \
 			invite.cpp \
 			kick.cpp \
 			privmsg.cpp \
-			notice.cpp \
 			ping_pong.cpp \
 			
 

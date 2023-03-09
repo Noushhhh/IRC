@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/09 11:34:55 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/09 14:19:01 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #define PROTOCOL 0
 #define BIND 1
 #define LISTEN 2
-#define HANDLEDCOMMANDSNB 14
+#define HANDLEDCOMMANDSNB 13
 
 #include "irc.hpp"
 #include "User.hpp"
@@ -71,20 +71,19 @@ class Server
 
 // commands
 
-    void	Pass(User &user, Message &message); // ok
-	void	Nick(User &user, Message &message); // ok
-	void	cmdUser(User &user, Message &message); // ok
+    void	Pass(User &user, Message &message);
+	void	Nick(User &user, Message &message);
+	void	cmdUser(User &user, Message &message);
 	void	Quit(User &user, Message &message); 
-	void	Join(User &user, Message &message); // ok
+	void	Join(User &user, Message &message);
 	void	Part(User &user, Message &message);
 	void	Mode(User &user, Message &message);
-	void	Topic(User &user, Message &message); // presque ok
+	void	Topic(User &user, Message &message);
 	void	List(User &user, Message &message);
 	void	Invite(User &user, Message &message);
 	void	Kick(User &user, Message &message);
-	void	PrivMsg(User &user, Message &message); // ok
-	void	Notice(User &user, Message &message);
-	void	Ping(User &user, Message &message); // ok ?
+	void	PrivMsg(User &user, Message &message);
+	void	Ping(User &user, Message &message);
 	void	Pong(User &user, Message &message);
 
     class ServerException : public std::exception

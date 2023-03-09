@@ -30,13 +30,12 @@ class User
 		std::string				_ping;
 		std::string				_pong;
 		std::list < Channel >	_joinedChannels;
-		//	bool _banned ?
 
 	public	:
-
 		User();
 		User(int sockfd, sockaddr_in addr);
 		User(const User &src);
+        User &operator=(const User &src);
 		~User();
 		
 //setter
@@ -59,14 +58,11 @@ class User
 		std::string				getPing() const;
 		std::string				getPong() const;
 		std::list< Channel >	&getJoinedChans();
-		
 
 //members functions
 
 		bool					isOnChan(const std::string &cName);
 
-
-        User &operator=(const User &src);
 };
 
 #endif
