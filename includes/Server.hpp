@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/08 13:48:46 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/09 10:35:14 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #define PROTOCOL 0
 #define BIND 1
 #define LISTEN 2
-#define HANDLEDCOMMANDSNB 17
+#define HANDLEDCOMMANDSNB 14
 
 #include "irc.hpp"
 #include "User.hpp"

@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 13:55:00 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/09 10:35:02 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ _errMsg("")
 	// this->_ptrF[5] = (&Server::Part);
 	// this->_ptrF[6] = (&Server::Mode);
 	this->_ptrF[7] = (&Server::Topic);
-	this->_ptrF[9] = (&Server::List);
+	this->_ptrF[8] = (&Server::List);
 	// this->_ptrF[9] = (&Server::Invite);
 	// this->_ptrF[10] = (&Server::Kick);
 	this->_ptrF[11] = (&Server::PrivMsg);
@@ -55,7 +55,7 @@ _errMsg("")
 	this->_handledCommands[11] = "PRIVMSG";
 	this->_handledCommands[12] = "NOTICE";
 	this->_handledCommands[13] = "PING";
-	this->_handledCommands[14] = "PONG";
+	//this->_handledCommands[14] = "PONG";
     // std::cerr << "Debug message: Server Default Constructor called" << std::endl;
 }
 
@@ -80,7 +80,7 @@ _errMsg("")
 	// this->_ptrF[5] = (&Server::Part);
 	// this->_ptrF[6] = (&Server::Mode);
 	this->_ptrF[7] = (&Server::Topic);
-	this->_ptrF[9] = (&Server::List);
+	this->_ptrF[8] = (&Server::List);
 	// this->_ptrF[9] = (&Server::Invite);
 	// this->_ptrF[10] = (&Server::Kick);
 	this->_ptrF[11] = (&Server::PrivMsg);
@@ -102,7 +102,7 @@ _errMsg("")
 	this->_handledCommands[11] = "PRIVMSG";
 	this->_handledCommands[12] = "NOTICE";
 	this->_handledCommands[13] = "PING";
-	this->_handledCommands[14] = "PONG";
+	//this->_handledCommands[14] = "PONG";
     // std::cerr << "Debug message: Server Constructor called" << std::endl;
 }
 

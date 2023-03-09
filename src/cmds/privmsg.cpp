@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 13:34:29 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/09 10:20:03 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 void	Server::PrivMsg(User &user, Message &message)
 {
 
-    if (message._argsNb < 3)
+    if (message._argsNb < 2)
     {
         _errMsg = ERR_NEEDMOREPARAMS(message._cmd);
 		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         return ;
     }
-    if (message._argsNb < 4)
+    if (message._argsNb < 3)
     {
         _errMsg = ERR_NOTEXTTOSEND;
 		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);

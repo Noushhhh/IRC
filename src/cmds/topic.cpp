@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:25 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 14:08:29 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/08 14:18:13 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	Server::Topic(User &user, Message &message)
         }
         else
         {
-            new_topic = new_topic.substr(1); // remove ":" at beginning of topic
+            //new_topic = new_topic.substr(1); // remove ":" at beginning of topic
             if (channel->getTopicStatus() == false || channel->userIsOp(user.getNickname()) == true) // check if user has the rights to set new topic
             {
                 channel->setTopic(message._arguments[2]);

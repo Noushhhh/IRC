@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:59 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/06 15:16:30 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/09 10:33:17 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 void	Server::List(User &user, Message &message)
 {
     if (message._argsNb != 1)
-        return ;    
-    if (getChanList()->begin() == getChanList()->end())
+        return ;
+    // if (getChanList()->begin() == getChanList()->end())
+    if (getChanList()->empty())
         return ;
     else
     {
