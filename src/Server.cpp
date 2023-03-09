@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 14:02:05 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/09 18:00:43 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ _errMsg("")
 	// this->_ptrF[3] = (&Server::Quit);
 	this->_ptrF[4] = (&Server::Join);
 	// this->_ptrF[5] = (&Server::Part);
-	// this->_ptrF[6] = (&Server::Mode);
+	this->_ptrF[6] = (&Server::Mode);
 	this->_ptrF[7] = (&Server::Topic);
 	this->_ptrF[9] = (&Server::List);
 	// this->_ptrF[9] = (&Server::Invite);
@@ -78,7 +78,7 @@ _errMsg("")
 	// this->_ptrF[3] = (&Server::Quit);
 	this->_ptrF[4] = (&Server::Join);
 	// this->_ptrF[5] = (&Server::Part);
-	// this->_ptrF[6] = (&Server::Mode);
+	this->_ptrF[6] = (&Server::Mode);
 	this->_ptrF[7] = (&Server::Topic);
 	this->_ptrF[9] = (&Server::List);
 	// this->_ptrF[9] = (&Server::Invite);
@@ -401,6 +401,7 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 		message._argsNb = message._splitMessage.size();
 		std::cout << "args nb " << message._argsNb << std::endl;
 		(void)(this->*_ptrF[i])(user, message);
+        std::cout << "mojojojo\n";
         return true;
 	}
 }
