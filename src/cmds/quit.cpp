@@ -6,19 +6,11 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:23 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/10 13:23:20 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/10 14:47:08 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
-
-static std::string get_msg(std::string *arguments)
-{
-    std::string priv_msg = "";
-    for (int i = 0; !(arguments[i].empty()); i++)
-        priv_msg = priv_msg + arguments[i];
-    return priv_msg;
-}
 
 void	Server::Quit(User &user, Message &message)
 {
@@ -27,24 +19,23 @@ void	Server::Quit(User &user, Message &message)
     {
         _errMsg = ERR_NEEDMOREPARAMS(message._cmd);
         send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        return ;
     }
-    if (message._argsNb == 2)
-        quit_msg = quit_msg = user.getNickname() + "@IRC_MAXANA QUIT";
-    else
-         quit_msg = get_msg(&message._arguments[1]);
+    quit_msg = quit_msg = user.getNickname() + "@IRC_NOUSHMAKS QUIT '\n'";
+    if (message._argsNb > 2)
+         quit_msg = quit_msg + get_suffix(&message._arguments[1]);
     std::list <Channel>::iterator cit = user.getJoinedChans().begin();
     while (cit != user.getJoinedChans().begin())
     {
         cit->sendToUsers(quit_msg); // send to all users of chans in which user was
         cit++;
     }
-    // fucntion to close user
-
+    // function to close user
 }
 
 // QUIT message
 //     Command: QUIT
-//  Parameters: [<reason>]
+//  Parameters: [<reason>]feat
 // The QUIT command is used to terminate a client’s connection to the server. The server acknowledges this by replying with an ERROR message and closing the connection to the client.
 
 // This message may also be sent from the server to a client to show that a client has exited from the network. This is typically only dispatched to clients that share a channel with the exiting user. When the QUIT message is sent to clients, <source> represents the client that has exited the network.

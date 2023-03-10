@@ -40,6 +40,7 @@ public	:
 
 	bool						splitMessage(); // add error pass in bool function
 	bool						parseMessage();
+	void						getArguments();
 
 };
 

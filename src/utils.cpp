@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 14:27:34 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 10:23:58 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/10 10:02:52 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,20 @@ size_t ft_arraySize(std::string *array)
     while (array[i].size() != 0)
         i ++;
     return (i);
+}
+
+std::string get_suffix(std::string *arguments)
+{
+    size_t i = 0;
+    std::string full_argument = "";
+    while (!arguments[i].empty())
+    {
+        full_argument = full_argument + arguments[i];
+        if (i != arguments[i].size())
+            full_argument = full_argument + " ";
+        i++;
+    }
+    return (full_argument);
 }
 
 void    reply(User &user, std::string reply)

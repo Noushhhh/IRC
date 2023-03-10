@@ -12,18 +12,18 @@
 
 #include "../includes/irc.hpp"
 
-User::User() : _nickname("noNick"), _isRegistered(false)
+User::User() : _nickname("no_nickname"), _isRegistered(false)
 {
     // std::cerr << "Debug message: User Default Constructor called" << std::endl;
 }
 
 User::User(int sockfd, sockaddr_in addr) : _sockfd(sockfd), _addr(addr), _isRegistered(false)
 {
-    _nickname = "jambon";
+    _nickname = "no_nickname";
     // std::cerr << "Debug message: User Default Constructor called" << std::endl;
 }
 
-User::User(const User &src) : _nickname("nonick")
+User::User(const User &src) : _nickname("no_nickname")
 {
     *this = src;
     // std::cerr << "Debug message: User Default Copy Constructor called" << std::endl;
@@ -40,6 +40,7 @@ User &User::operator=(const User &src)
     this->_sockfd = src._sockfd;
     this->_username = src._username;
     this->_nickname = src._nickname;
+    this->_realname = src._realname;
     return (*this);
 }
 
@@ -65,15 +66,10 @@ void    User::setUsername(std::string username)
 	this->_username = username;
 }
 
-void    User::setRealname(std::string username)
+void    User::setRealname(std::string realname)
 {
-	this->_username = username;
+	this->_realname = realname;
 }
-
-// void    User::setBitMode(uint8_t bit)
-// {
-//     this->_bitMode = bit;
-// }
 
 void    User::setPing(std::string ping)
 {
@@ -97,7 +93,6 @@ std::string             User::getNickname()     const {return (_nickname);}
 bool			        User::getRegistered()   const { return (_isRegistered);};
 std::string             User::getUsername()   const {return (_username);}
 std::string             User::getRealname()   const {return (_realname);}
-// uint8_t                 User::getBitMode() const {return (_bitMode);}
 std::string		        User::getPing() const {return (_ping);}
 std::string		        User::getPong() const {return (_pong);}
 std::list< Channel >    &User::getJoinedChans()	    {return (_joinedChannels);}
@@ -121,6 +116,4 @@ bool					User::isOnChan(const std::string &cName)
     }
     return (false);
 }
-
-
 

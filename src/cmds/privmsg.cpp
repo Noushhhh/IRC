@@ -6,37 +6,29 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/07 11:42:49 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/10 11:25:44 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
 
-static std::string get_priv_msg(std::string *arguments)
-{
-    std::string priv_msg = "";
-    for (int i = 0; !(arguments[i].empty()); i++)
-        priv_msg = priv_msg + arguments[i];
-    return priv_msg;
-}
-
 void	Server::PrivMsg(User &user, Message &message)
 {
 
-    if (message._argsNb < 3)
+    if (message._argsNb < 2)
     {
         _errMsg = ERR_NEEDMOREPARAMS(message._cmd);
 		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         return ;
     }
-    if (message._argsNb < 4)
+    if (message._argsNb < 3)
     {
         _errMsg = ERR_NOTEXTTOSEND;
 		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         return ;
     }
     std::string target = message._arguments[0];
-    std::string priv_msg = get_priv_msg(&message._arguments[1]);
+    std::string priv_msg = get_suffix(&message._arguments[1]);
     if ((target.find("%#") == 0) || (target.find("@%#") == 0)) // check if channel name valid
     {
         if ((target.find("@%#") == 0))
@@ -49,14 +41,15 @@ void	Server::PrivMsg(User &user, Message &message)
                 return ;
             if (getChannelWithName(target)->userIsMuted(user.getNickname()))
                 return ;
-            priv_msg = user.getNickname() + "@IRC_MAXANA" + " PRIVMSG #" + target + " :" + priv_msg; // split target with "@%#" to add after PRIVMSG
-            _channelsListIt = getChanList()->begin();
-            while (_channelsListIt != getChanList()->end()) // send to users of the channel
-            {
-                if (_channelsListIt->getName() == target)
-                    _channelsListIt->sendToUsers(priv_msg);
-                _channelsListIt++;
-            }
+            priv_msg = user.getNickname() + "@IRC_NOUSHMAKS" + " PRIVMSG #" + target + " :" + priv_msg; // split target with "@%#" to add after PRIVMSG
+            sendToChanUsers(target, priv_msg);
+            // _channelsListIt = getChanList()->begin();
+            // while (_channelsListIt != getChanList()->end()) // send to users of the channel
+            // {
+            //     if (_channelsListIt->getName() == target)
+            //         _channelsListIt->sendToUsers(priv_msg);
+            //     _channelsListIt++;
+            // }
         }
         else
         {

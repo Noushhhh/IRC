@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/10 14:41:27 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/10 14:46:41 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,16 @@ _errMsg("")
     this->_ptrF[0] = (&Server::Pass);
 	this->_ptrF[1] = (&Server::Nick);
 	this->_ptrF[2] = (&Server::cmdUser);
-	// this->_ptrF[3] = (&Server::Quit);
+	this->_ptrF[3] = (&Server::Quit);
 	this->_ptrF[4] = (&Server::Join);
-	// this->_ptrF[5] = (&Server::Part);
+	this->_ptrF[5] = (&Server::Part);
 	this->_ptrF[6] = (&Server::Mode);
 	this->_ptrF[7] = (&Server::Topic);
-	this->_ptrF[9] = (&Server::List);
-	// this->_ptrF[9] = (&Server::Invite);
-	// this->_ptrF[10] = (&Server::Kick);
+	this->_ptrF[8] = (&Server::List);
+	this->_ptrF[9] = (&Server::Invite);
+	this->_ptrF[10] = (&Server::Kick);
 	this->_ptrF[11] = (&Server::PrivMsg);
-	// this->_ptrF[12] = (&Server::Notice);
-	this->_ptrF[13] = (&Server::Ping);
-	// this->_ptrF[14] = (&Server::Pong);
+	this->_ptrF[12] = (&Server::Ping);
 
 	this->_handledCommands[0] = "PASS";
 	this->_handledCommands[1] = "NICK";
@@ -53,9 +51,8 @@ _errMsg("")
 	this->_handledCommands[9] = "INVITE";
 	this->_handledCommands[10] = "KICK";
 	this->_handledCommands[11] = "PRIVMSG";
-	this->_handledCommands[12] = "NOTICE";
-	this->_handledCommands[13] = "PING";
-	this->_handledCommands[14] = "PONG";
+	this->_handledCommands[12] = "PING";
+
     // std::cerr << "Debug message: Server Default Constructor called" << std::endl;
 }
 
@@ -75,18 +72,16 @@ _errMsg("")
     this->_ptrF[0] = (&Server::Pass);
 	this->_ptrF[1] = (&Server::Nick);
 	this->_ptrF[2] = (&Server::cmdUser);
-	// this->_ptrF[3] = (&Server::Quit);
+	this->_ptrF[3] = (&Server::Quit);
 	this->_ptrF[4] = (&Server::Join);
-	// this->_ptrF[5] = (&Server::Part);
+	this->_ptrF[5] = (&Server::Part);
 	this->_ptrF[6] = (&Server::Mode);
 	this->_ptrF[7] = (&Server::Topic);
-	this->_ptrF[9] = (&Server::List);
-	// this->_ptrF[9] = (&Server::Invite);
-	// this->_ptrF[10] = (&Server::Kick);
+	this->_ptrF[8] = (&Server::List);
+	this->_ptrF[9] = (&Server::Invite);
+	this->_ptrF[10] = (&Server::Kick);
 	this->_ptrF[11] = (&Server::PrivMsg);
-	// this->_ptrF[12] = (&Server::Notice);
-	this->_ptrF[13] = (&Server::Ping);
-	// this->_ptrF[14] = (&Server::Pong);
+	this->_ptrF[12] = (&Server::Ping);
 
 	this->_handledCommands[0] = "PASS";
 	this->_handledCommands[1] = "NICK";
@@ -100,9 +95,8 @@ _errMsg("")
 	this->_handledCommands[9] = "INVITE";
 	this->_handledCommands[10] = "KICK";
 	this->_handledCommands[11] = "PRIVMSG";
-	this->_handledCommands[12] = "NOTICE";
-	this->_handledCommands[13] = "PING";
-	this->_handledCommands[14] = "PONG";
+	this->_handledCommands[12] = "PING";
+
     // std::cerr << "Debug message: Server Constructor called" << std::endl;
 }
 
@@ -140,8 +134,6 @@ std::list< User >::iterator         Server::getUserListIt()     const   { return
 std::list< Channel >::iterator      Server::getChanListIt()     const   { return (_channelsListIt); }
 std::list< User >                   *Server::getUserList()              { return (&_usersList);      }
 std::list< Channel >                *Server::getChanList()              { return (&_channelsList);   }
-
-// std::list< Command > &Server::getCmdList()   const   { return (commandsList);    }
 
 
 /**************************************************************/
@@ -294,7 +286,6 @@ bool                    Server::addUser()
 
 
 
-
 bool                    Server::closeUser(std::vector< struct pollfd >::iterator &it)
 {
     //supress from all channels he belongs to
@@ -326,7 +317,6 @@ bool                    Server::closeUser(std::vector< struct pollfd >::iterator
     it = _pollFds.begin();
     return (true) ;
 }
-
 
 
 std::list< User >::iterator			Server::getUserItWithFd(int fd)
@@ -393,7 +383,7 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 	}
 	else
 	{
-		message._argsNb = message._splitMessage.size();
+		//message._argsNb = message._splitMessage.size();
 		std::cout << "args nb " << message._argsNb << std::endl;
 		(void)(this->*_ptrF[i])(user, message);
         return true;
@@ -402,6 +392,8 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 
 bool        Server::isChannel(std::string channel_name)
 {
+    if (getChanList()->empty())
+        return false;
     if (channel_name.find("%#") == 0)
         channel_name = channel_name.substr(2, channel_name.npos);
     else
@@ -455,6 +447,17 @@ bool					Server::isUserOnChan(const std::string nickname, const std::string chan
         }
     }
     return (false);
+}
+
+void                    Server::sendToChanUsers(std::string channel_name, std::string message)
+{
+    _channelsListIt = getChanList()->begin();
+    while (_channelsListIt != getChanList()->end()) // send to users of the channel
+    {
+        if (_channelsListIt->getName() == channel_name)
+            _channelsListIt->sendToUsers(message);
+        _channelsListIt++;
+    }
 }
 
 /**************************************************************/

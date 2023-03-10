@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 15:58:01 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/10 10:41:03 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/10 14:45:38 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,17 +58,11 @@
 #define ADD 1
 #define REMOVE 0
 
-std::string *cppsplit(std::string str, char sep);
-size_t      ft_arraySize(std::string *array);
-bool        isCharset(char c, std::string charset);
-void        reply(User &user, std::string reply);
-
-
-
-
-
-
-
+std::string     *cppsplit(std::string str, char sep);
+size_t          ft_arraySize(std::string *array);
+bool            isCharset(char c, std::string charset);
+std::string     get_suffix(std::string *arguments);
+void            reply(User &user, std::string reply);
 
 // crete a server with a socket. Listen entries in particular entry to get new msgs / clients
 // In server >> Chanel, users, state
