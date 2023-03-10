@@ -3,16 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   part.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:14 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/02/14 14:59:08 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/10 11:25:44 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
 
-
+void	Server::Part(User &user, Message &message)
+{
+    if (message._argsNb < 3)
+     {
+        _errMsg = ERR_NEEDMOREPARAMS(message._cmd);
+		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        return ;
+	}
+    std::string channel_name = message._arguments[0];
+    if (!isChannel(channel_name))
+    {
+        _errMsg = ERR_NOSUCHCHANNEL(channel_name);
+        send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        return ;
+    }
+    Channel *channel = getChannelWithName(channel_name);
+    if (!channel->isUserInChannel(user)) // check if user in channel
+    {
+        _errMsg = ERR_NOTONCHANNEL(channel_name);
+        send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        return ;
+    }
+    _rplMsg = user.getNickname() + "@IRC_NOUSHMAKS has left channel #" + channel_name + "\n";
+    sendToChanUsers(channel_name, _rplMsg);
+    // remove user from channel
+    // send message to inform user has left channel ?
+}
 // PART message
 //      Command: PART
 //   Parameters: <channel>{,<channel>} [<reason>]

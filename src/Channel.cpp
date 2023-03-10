@@ -13,7 +13,6 @@
 #include "../includes/irc.hpp"
 #include "../includes/Channel.hpp"
 
-
 Channel::Channel()
 {
 	;
@@ -489,8 +488,6 @@ bool				Channel::userIsInChan(std::string nickname)
     }
 	return (false);
 }
-
-
 
 /**************************************************************/
 /*                                                            */

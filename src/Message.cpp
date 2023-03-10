@@ -21,7 +21,6 @@ Message::Message() :  _rawMessage(""), _it(_splitMessage.begin()), _argsNb(0) //
 
 Message::Message(std::string message) : _rawMessage(message), _it(_splitMessage.begin()), _argsNb(0)
 {
-	splitMessage();
 
 } // init members
 
@@ -55,10 +54,11 @@ bool Message::splitMessage()
 	while(token != NULL)
 	{
 		_splitMessage.push_back(token);
-		_arguments[i] = token; // test if works if no conversion from char to string. to cast ?
+		//_arguments[i] = token; // test if works if no conversion from char to string. to cast ?
 		token = strtok(NULL, "\r \n");
 		i++;
 	}
+	getArguments();
 	delete[] string_to_split;
 	return true ;
 }
@@ -71,5 +71,17 @@ bool Message::parseMessage()
 		return false;
 	}
 	return true ;
+}
+
+void	Message::getArguments()
+{
+	_argsNb = _splitMessage.size();
+	_arguments = new std::string[_argsNb];
+	int i = 0;
+	for (_it = _splitMessage.begin() + 1; _it != _splitMessage.end(); _it++)
+	{
+		_arguments[i] = *_it;
+		i++;
+	}
 }
 

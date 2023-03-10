@@ -20,23 +20,22 @@ class Channel;
 class User
 {
 	private	:
-		int			_sockfd;
-		sockaddr_in _addr;
-		std::string _nickname;
-		std::string	_givenPassword;
-		bool		_isRegistered;
-		std::string	_username;
-		std::string	_realname;
-		std::string	_ping;
-		std::string	_pong;
+		int						_sockfd;
+		sockaddr_in 			_addr;
+		std::string 			_nickname;
+		std::string				_givenPassword;
+		bool					_isRegistered;
+		std::string				_username;
+		std::string				_realname;
+		std::string				_ping;
+		std::string				_pong;
 		std::list < Channel >	_joinedChannels;
-		//	bool _banned ?
 
 	public	:
-
 		User();
 		User(int sockfd, sockaddr_in addr);
 		User(const User &src);
+        User &operator=(const User &src);
 		~User();
 		
 //setter
@@ -45,7 +44,6 @@ class User
 		void			setRegistered(void);
 		void			setUsername(std::string username);
 		void			setRealname(std::string realname);
-		// void			setBitMode(uint8_t bit);
 		void			setPing(std::string ping);
 		void			setPong(std::string pong);
 
@@ -60,14 +58,11 @@ class User
 		std::string				getPing() const;
 		std::string				getPong() const;
 		std::list< Channel >	&getJoinedChans();
-		
 
 //members functions
 
 		bool					isOnChan(const std::string &cName);
 
-
-        User &operator=(const User &src);
 };
 
 #endif
