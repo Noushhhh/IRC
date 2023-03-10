@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/10 10:02:15 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/10 14:46:41 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -367,7 +367,6 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 		return false ;
 	Message message(raw_message);
 		// check if user empty 
-	//std::cout << "sock number in handle msg: " << user.getSockfd();
     if (!message.parseMessage())
         return false ;
     if (!message.splitMessage())

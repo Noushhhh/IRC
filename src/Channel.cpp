@@ -30,7 +30,7 @@ _topic("")
 		_creator = chanCreator;
 	this->_isPswdProtected = false;
 	this->_isInviteOnly		= false;	
-	this->_isModerated		= true;		
+	this->_isModerated		= false;		
 	this->_isQuiet			= false;	
 	this->_isNoOutsideMsg	= false;	
 	this->_isPrivate		= false;
@@ -53,7 +53,7 @@ _topic("")
 	_password = pswd;
 	this->_isPswdProtected = false;
 	this->_isInviteOnly		= false;	
-	this->_isModerated		= true;		
+	this->_isModerated		= false;		
 	this->_isQuiet			= false;	
 	this->_isNoOutsideMsg	= false;	
 	this->_isPrivate		= false;
@@ -114,16 +114,14 @@ Channel &Channel::operator=(const Channel &src)
 	std::list< User >			&Channel::getOpList()			  		  {return (_opList);}
 	std::list< User >			&Channel::getMutedList()			 	  {return (_mutedUsersList);}
 	std::list< User >			&Channel::getBanList()				 	  {return (_banUsersList);}
-	std::list< User >::iterator	Channel::getUserItInList(std::list< User > list, std::string name)
+	std::list< User >::iterator	Channel::getUserItInList(std::list< User > &list, std::string name)
 	{
 		std::list< User >::iterator listEnd = list.end();
 
 		for (std::list< User >::iterator lit = list.begin(); lit != listEnd; lit ++)
 		{
 			if (lit->getNickname() == name)
-			{
 				return (lit);
-			}
 		}
 		return (listEnd);
 	}
@@ -190,6 +188,7 @@ void				Channel::setModerationMode(User &user, int &addOrRemove)
 
 void				Channel::setQuietMode(User &user, int &addOrRemove)
 {
+	// mute/unmute all standard user TO DO
 	if (addOrRemove == ADD)
 	{
 		_isQuiet = true;
@@ -272,72 +271,92 @@ void				Channel::setUsersLimit(User &user, std::string userLimit, int &addOrRemo
 		}
 		if (static_cast< size_t >(std::atoi(userLimit.c_str())) < _usersList.size())
 		{
-			reply(user, this->getName().append("MODE +l: Users limit cannot be less than actual channel's population.\n"));
+			reply(user, this->getName().append(": MODE +l: Users limit cannot be less than actual channel's population.\n"));
 			return ;
 		}
 		_usersLimit = static_cast< ssize_t >(std::atoi(userLimit.c_str()));
 		_isUsersLimit = true;
 	}
 	else
+	{
 		_isUsersLimit = false;
+		reply(user, this->getName().append(": users limit successfully removed\n"));
+	}
 }
 
 void				Channel::setMutedList(User &user, User &target, int &addOrRemove)
 {
-
-	if (target.isOnChan(this->getName()) == false)
-	{
-		reply(user, ERR_USERNOTINCHANNEL(target.getNickname(), this->getName()));
-		return;
-	}
 	if (addOrRemove == ADD)
 	{
-		this->_mutedUsersList.push_back(target);
-		reply(user, RPL_MUTED(target.getNickname(), this->getName()));
+		if (this->getUserItInList(_mutedUsersList, target.getNickname()) != _mutedUsersList.end())
+			reply(user, RPL_ALLRDYMUTED(target.getNickname(), this->getName())); // reply TO DO
+		else
+		{
+			this->_mutedUsersList.push_back(target);
+			reply(user, RPL_MUTED(target.getNickname(), this->getName()));
+		}
 	}
 	else
 	{
-		this->_mutedUsersList.erase(getUserItInList(_mutedUsersList, target.getNickname()));
-		reply(user, RPL_UNMUTED(target.getNickname(), this->getName()));
+		if (this->getUserItInList(_mutedUsersList, target.getNickname()) != _mutedUsersList.end())
+		{
+			this->_mutedUsersList.erase(getUserItInList(_mutedUsersList, target.getNickname()));
+			reply(user, RPL_UNMUTED(target.getNickname(), this->getName()));
+		}
+		else
+			reply(user, RPL_NOTMUTED(target.getNickname(), this->getName()));
 	}
 }
 void				Channel::setBanList(User &user, User &target, int &addOrRemove)
 {	
-	if (target.isOnChan(this->getName()) == false)
-	{
-		reply(user, ERR_USERNOTINCHANNEL(target.getNickname(), this->getName()));
-		return;
-	}
 	if (addOrRemove == ADD)
 	{
-		this->_banUsersList.push_back(target);
-		reply(user, RPL_BANNED(target.getNickname(), this->getName()));
+		if (this->getUserItInList(_banUsersList, target.getNickname()) != _banUsersList.end())
+			reply(user, RPL_ALLRDYBANNED(target.getNickname(), this->getName()));
+		else
+		{
+			reply(user, RPL_BANNED(target.getNickname(), this->getName()));
+			if (this->getUserItInList(_opList, target.getNickname()) != _opList.end())
+				this->_opList.erase(this->getUserItInList(_opList, target.getNickname()));
+			if (this->getUserItInList(_mutedUsersList, target.getNickname()) != _mutedUsersList.end())
+				this->_mutedUsersList.erase(this->getUserItInList(_mutedUsersList, target.getNickname()));
+			this->_banUsersList.push_back(target);
+			this->_usersList.erase(this->getUserItInList(_usersList, target.getNickname()));
+		}
 	}
 	else
 	{
-		this->_banUsersList.erase(getUserItInList(_banUsersList, target.getNickname()));
-		reply(user, RPL_UNBANNED(target.getNickname(), this->getName()));
+		if (this->getUserItInList(_banUsersList, target.getNickname()) != _banUsersList.end())
+		{
+			this->_banUsersList.erase(getUserItInList(_banUsersList, target.getNickname()));
+			reply(user, RPL_UNBANNED(target.getNickname(), this->getName()));
+		}
+		else
+			reply(user, RPL_NOTBANNED(target.getNickname(), this->getName()));
 	}
 }
 
 void				Channel::setOpList(User &user, User &target, int &addOrRemove)
-{	
-	std::string err_buff;
-
-	if (target.isOnChan(this->getName()) == false)
-	{
-		reply(user, ERR_USERNOTINCHANNEL(target.getNickname(), this->getName()));
-		return;
-	}
+{
 	if (addOrRemove == ADD)
 	{
-		this->_opList.push_back(target);
-		reply (user, RPL_OPED(target.getNickname(), this->getName()));
+		if (this->getUserItInList(_opList, target.getNickname()) != _opList.end())
+			reply(user, RPL_ALLRDYOP(target.getNickname(), this->getName()));
+		else
+		{
+			this->_opList.push_back(target);
+			reply (user, RPL_OPED(target.getNickname(), this->getName()));
+		}
 	}
 	else
 	{
-		this->_opList.erase(getUserItInList(_opList, target.getNickname()));
-		reply (user, RPL_UNOPED(target.getNickname(), this->getName()));
+		if (this->getUserItInList(_opList, target.getNickname()) != _opList.end())
+		{
+			this->_opList.erase(getUserItInList(_opList, target.getNickname()));
+			reply (user, RPL_UNOPED(target.getNickname(), this->getName()));
+		}
+		else
+			reply(user, RPL_NOTOP(target.getNickname(), this->getName()));
 	}
 }
 

@@ -59,12 +59,20 @@
 // MODE / 221 (jcomprends pas trop auqnd elle s'envoie elle) / 501
 
 #define	RPL_UMODIS(userModeStr)     " :" + userModeStr + "\n"
-#define RPL_MUTED(channel, nick)    nick + ": Was succesfully muted in " + channel + "\n"
-#define RPL_UNMUTED(channel, nick)  nick + ": Was succesfully unmuted in " + channel + "\n"
-#define RPL_BANNED(channel, nick)   nick + ": Was succesfully banned of " + channel + "\n"
-#define RPL_UNBANNED(channel, nick) nick + ": Was succesfully unbanned of " + channel + "\n"
-#define RPL_OPED(channel, nick)     nick + ": Was succesfully made operator in " + channel + "\n"
-#define RPL_UNOPED(channel, nick)   nick + ": Was succesfully de-oped in " + channel + "\n"
+#define RPL_MUTED(nick, channel)    nick + ": Was succesfully muted in " + channel + "\n"
+#define RPL_ALLRDYMUTED(nick, channel)    nick + ": Was allready muted in " + channel + "\n"
+#define RPL_UNMUTED(nick, channel)  nick + ": Was succesfully unmuted in " + channel + "\n"
+#define RPL_NOTMUTED(nick, channel)  nick + ": Was not unmuted in " + channel + "\n"
+
+#define RPL_BANNED(nick, channel)   nick + ": Was succesfully banned of " + channel + "\n"
+#define RPL_ALLRDYBANNED(nick, channel)    nick + ": Was allready banned in " + channel + "\n"
+#define RPL_UNBANNED(nick, channel) nick + ": Was succesfully unbanned of " + channel + "\n"
+#define RPL_NOTBANNED(nick, channel)  nick + ": Was not banned in " + channel + "\n"
+
+#define RPL_OPED(nick, channel)     nick + ": Was succesfully made operator in " + channel + "\n"
+#define RPL_ALLRDYOP(nick, channel)    nick + ": Was allready chanop in " + channel + "\n"
+#define RPL_UNOPED(nick, channel)   nick + ": Was succesfully de-oped in " + channel + "\n"
+#define RPL_NOTOP(nick, channel)  nick + ": Was not chanop in " + channel + "\n"
 
 /************************************ ERRORS ************************************/
 

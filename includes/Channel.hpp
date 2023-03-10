@@ -66,7 +66,7 @@ class Channel
 
 		//getters
 
-		std::list< User >::iterator	getUserItInList(std::list< User > list, std::string name);
+		std::list< User >::iterator	getUserItInList(std::list< User > &list, std::string name);
 		std::string					getName()					   	  const;
 		std::string					getNameErrorSrc()				  const;
 		std::string					getPswd()						  const;
