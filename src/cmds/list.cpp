@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:59 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/09 14:14:30 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/10 14:46:17 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,14 @@ void	Server::List(User &user, Message &message)
 {
     if (message._argsNb < 1)
         return ;
-    // if (getChanList()->begin() == getChanList()->end())
     if (getChanList()->empty())
     {
-        _rplMsg = "No channels created yet\n";
-        send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
-        _rplMsg = RPL_LISTEND;
-        send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
+        // _rplMsg = "No channels created yet\n";
+        // send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
+        reply(user, "No channels created yet \n");
+        // _rplMsg = RPL_LISTEND;
+        // send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
+        reply(user, RPL_LISTEND);
         return ;
     }
 
@@ -33,10 +34,12 @@ void	Server::List(User &user, Message &message)
             if (_channelsListIt->getSecrecyStatus() == true)
                 _channelsListIt++;
             _rplMsg = _channelsListIt->getName() + _channelsListIt->getTopic() + "\n"; 
-            send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
+            // send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
+            reply(user, _rplMsg);
         }
-        _rplMsg = RPL_LISTEND;
-        send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
+        // _rplMsg = RPL_LISTEND;
+        // send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
+        reply(user, RPL_LISTEND);
         return ;
     }
 
@@ -48,8 +51,9 @@ void	Server::List(User &user, Message &message)
         _rplMsg = _channelsListIt->getName() + _channelsListIt->getTopic() + "\n"; 
         send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
     }
-    _rplMsg = RPL_LISTEND;
-    send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
+    // _rplMsg = RPL_LISTEND;
+    // send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
+    reply(user, _rplMsg);
     return ;
 }
 

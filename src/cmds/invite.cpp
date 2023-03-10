@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:47 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/06 15:27:49 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/10 14:40:45 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,9 @@ void	Server::Invite(User &user, Message &message)
 {
     if (message._argsNb != 3)
     {
-        _errMsg = ERR_NEEDMOREPARAMS(message._cmd);
-        send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        // _errMsg = ERR_NEEDMOREPARAMS(message._cmd);
+        // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        reply(user, ERR_NEEDMOREPARAMS(message._cmd));
         return ;
     }
     std::string nickname = message._arguments[0];
@@ -28,20 +29,23 @@ void	Server::Invite(User &user, Message &message)
     }
     else
     {
-        _errMsg = ERR_NOSUCHCHANNEL(channel);
-        send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        // _errMsg = ERR_NOSUCHCHANNEL(channel);
+        // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        reply(user, ERR_NOSUCHCHANNEL(channel));
         return ;
     }
     if (!isUserWNickname(nickname))
      {
-        _errMsg = ERR_NOTONCHANNEL(nickname);
-        send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        // _errMsg = ERR_NOTONCHANNEL(nickname);
+        // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        reply(user, ERR_NOTONCHANNEL(nickname));
         return ;
     }
     if (!isChannel(channel))
      {
-        _errMsg = ERR_NOSUCHCHANNEL(channel);
-        send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        // _errMsg = ERR_NOSUCHCHANNEL(channel);
+        // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        reply(user, ERR_NOSUCHCHANNEL(channel));
         return ;
     }
     _channelsListIt = getChanList()->begin();
@@ -53,32 +57,37 @@ void	Server::Invite(User &user, Message &message)
     }
     if (_channelsListIt == getChanList()->end())
     {
-        _errMsg = ERR_NOTONCHANNEL(nickname);
-        send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        // _errMsg = ERR_NOTONCHANNEL(nickname);
+        // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        reply(user, ERR_NOTONCHANNEL(nickname));
         return ;
     }
     else if (!_channelsListIt->isUserInChannel(user))
     {
-        _errMsg = ERR_NOTONCHANNEL(user.getNickname());
-        send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        // _errMsg = ERR_NOTONCHANNEL(user.getNickname());
+        // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        reply(user, ERR_NOTONCHANNEL(user.getNickname()));
         return ;
     }
     else if (_channelsListIt->isUserInChannelNickname(nickname))
     {
-        _errMsg = ERR_USERONCHANNEL(channel, nickname);
-        send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        // _errMsg = ERR_USERONCHANNEL(channel, nickname);
+        // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        reply(user, ERR_USERONCHANNEL(channel, nickname));
         return ;
     }
     // else if (_channelsListIt->isInviteOnlyModeSet())
     // {
     //     _errMsg = ERR_CHANOPRIVSNEEDED();
     //     send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+    //     reply(user, ERR_CHANOPRIVSNEEDED());
     //     return ;
     // }
     else
     {
         _rplMsg = RPL_INVITING(channel, nickname);
-        send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
+        // send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
+        reply(user, RPL_INVITING(channel, nickname));
         User *target = getUserWithNickname(nickname);
         send(target->getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
         // add target to channel 

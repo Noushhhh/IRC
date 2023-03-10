@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/10 11:25:44 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/10 14:52:39 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,16 @@ void	Server::PrivMsg(User &user, Message &message)
 
     if (message._argsNb < 2)
     {
-        _errMsg = ERR_NEEDMOREPARAMS(message._cmd);
-		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        // _errMsg = ERR_NEEDMOREPARAMS(message._cmd);
+		// send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        reply(user, ERR_NEEDMOREPARAMS(message._cmd));
         return ;
     }
     if (message._argsNb < 3)
     {
-        _errMsg = ERR_NOTEXTTOSEND;
-		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        // _errMsg = ERR_NOTEXTTOSEND;
+		// send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        reply(user, ERR_NOTEXTTOSEND);
         return ;
     }
     std::string target = message._arguments[0];
@@ -53,8 +55,9 @@ void	Server::PrivMsg(User &user, Message &message)
         }
         else
         {
-            _errMsg = ERR_NOSUCHCHANNEL(target);
-            send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+            // _errMsg = ERR_NOSUCHCHANNEL(target);
+            // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+            reply(user, ERR_NOSUCHCHANNEL(target));
             return ;
         }
         return ;
@@ -70,8 +73,9 @@ void	Server::PrivMsg(User &user, Message &message)
 
     else
     {
-        _errMsg = ERR_NOSUCHNICK(target);
-	    send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        // _errMsg = ERR_NOSUCHNICK(target);
+	    // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        reply(user, ERR_NOSUCHNICK(target));
     }
     
 }

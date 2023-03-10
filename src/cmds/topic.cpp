@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:25 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/09 11:20:34 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/10 14:57:58 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,25 @@ void	Server::Topic(User &user, Message &message)
 {
     if (message._argsNb < 2)
     {
-        _errMsg = ERR_NEEDMOREPARAMS(message._cmd);
-		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        // _errMsg = ERR_NEEDMOREPARAMS(message._cmd);
+		// send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        reply(user, ERR_NEEDMOREPARAMS(message._cmd));
         return ;
     }
     std::string channel_name = message._arguments[0];
     if (!isChannel(channel_name))
     {
-        _errMsg = ERR_NOSUCHCHANNEL(channel_name);
-        send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        // _errMsg = ERR_NOSUCHCHANNEL(channel_name);
+        // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        reply(user, ERR_NOSUCHCHANNEL(channel_name));
         return ;
     }
     Channel *channel = getChannelWithName(channel_name);
     if (!channel->isUserInChannel(user)) // check if user in channel
     {
-        _errMsg = ERR_NOTONCHANNEL(channel_name);
-        send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        // _errMsg = ERR_NOTONCHANNEL(channel_name);
+        // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        reply(user, ERR_NOTONCHANNEL(channel_name));
         return ;
     }
 
@@ -39,14 +42,16 @@ void	Server::Topic(User &user, Message &message)
     {
         if (channel->getTopic().empty())
         {
-            _rplMsg = RPL_NOTOPIC(channel_name);
-            send(user.getSockfd(),  _rplMsg.c_str(),  _rplMsg.length(), 0);
+            // _rplMsg = RPL_NOTOPIC(channel_name);
+            // send(user.getSockfd(),  _rplMsg.c_str(),  _rplMsg.length(), 0);
+            reply(user, RPL_NOTOPIC(channel_name));
             return ;
         }
         else
         {
-            _rplMsg = RPL_TOPIC(channel_name, channel->getTopic()); // give topic to user 
-            send(user.getSockfd(),  _rplMsg.c_str(),  _rplMsg.length(), 0);
+            // _rplMsg = RPL_TOPIC(channel_name, channel->getTopic()); // give topic to user 
+            // send(user.getSockfd(),  _rplMsg.c_str(),  _rplMsg.length(), 0);
+            reply(user, RPL_TOPIC(channel_name, channel->getTopic()));
             return ;
         }
     }
@@ -76,8 +81,9 @@ void	Server::Topic(User &user, Message &message)
             }
             else
             {
-                _errMsg = ERR_CHANOPRIVSNEEDED(channel_name);
-                send(user.getSockfd(),  _rplMsg.c_str(),  _rplMsg.length(), 0);
+                // _errMsg = ERR_CHANOPRIVSNEEDED(channel_name);
+                // send(user.getSockfd(),  _rplMsg.c_str(),  _rplMsg.length(), 0);
+                reply(user, ERR_CHANOPRIVSNEEDED(channel_name));
                 return ;
             }
         }
