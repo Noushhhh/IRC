@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 13:32:16 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/10 14:41:05 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,6 @@ static std::string *split(std::string str)
                 strArray[i].push_back(str[j]);
         }
     }
-    // for (int i = 0; i < ct; i ++)
-    //     std::cout << "strArray ["<< i << "] :" << strArray[i] << std::endl;
-    // std::cout << std::endl;
     return (strArray);
 }
 
@@ -152,7 +149,7 @@ void	Server::Join(User &user, Message &message)
                 {
                     // if allready on channel
 
-                    if (user.isOnChan(_channelsListIt->getName()))
+                    if (_channelsListIt->getUserItInList(_channelsListIt->getUsersList(), user.getNickname()) != _channelsListIt->getUsersList().end())
                     {
                         err_buff = ERR_USERONCHANNEL(_channelsListIt->getName(), user.getNickname());
                         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
@@ -176,7 +173,7 @@ void	Server::Join(User &user, Message &message)
                         chanExist = true;
                         break ;
                     }
-                    else if (_channelsListIt->getUsersLimitStatus() == true  && _channelsListIt->getUsersLimit() >= _channelsListIt->getUsersList().size())
+                    else if (_channelsListIt->getUsersLimitStatus() == true  && _channelsListIt->getUsersLimit() <= _channelsListIt->getUsersList().size())
                     {
                         err_buff = ERR_USERLIMITREACHED(_channelsListIt->getName());
                         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
@@ -196,7 +193,6 @@ void	Server::Join(User &user, Message &message)
                         chanExist = true;
                         break ;
                     }
-                    // std::cout << "given pswd = " << keysSplit[i] << "pswd = " << _channelsListIt->getPswd() << std::endl; 
                     err_buff = ERR_BADCHANNELKEY(_channelsListIt->getName());
                     send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
                     chanExist = true;
@@ -215,8 +211,8 @@ void	Server::Join(User &user, Message &message)
                     {
                         // if (i > keysSplit->size())
                         Channel newChan(chansSplit[i], keysSplit[i], user);
-                        _channelsList.push_back(newChan);
                         user.getJoinedChans().push_back(newChan);
+                        _channelsList.push_back(newChan);
                         joinRPL(newChan, user);
                     }
                     
@@ -224,8 +220,8 @@ void	Server::Join(User &user, Message &message)
                     else
                     {
                         Channel newChan(chansSplit[i], user);
-                        _channelsList.push_back(newChan);
                         user.getJoinedChans().push_back(newChan);
+                        _channelsList.push_back(newChan);
                         joinRPL(newChan, user);
                     }
                     

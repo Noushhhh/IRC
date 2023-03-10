@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 15:58:01 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/08 10:30:30 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/10 10:41:03 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@
 #include <limits.h>
 #include <algorithm>
 #include <iterator>
+#include <sstream>
+#include <string.h>
 
 #include "User.hpp"
 #include "Message.hpp"

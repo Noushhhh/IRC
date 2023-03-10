@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/09 18:00:43 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/10 14:41:27 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -377,7 +377,6 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 		return false ;
 	Message message(raw_message);
 		// check if user empty 
-	//std::cout << "sock number in handle msg: " << user.getSockfd();
     if (!message.parseMessage())
         return false ;
     if (!message.splitMessage())
@@ -386,10 +385,6 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 	message._it = message._splitMessage.begin();
 	while(_handledCommands[i] != *message._it && i < HANDLEDCOMMANDSNB)
 		i++;
-	// std::cout << "YO " << std::endl;
-	// std::cout << "_handledCommands[0] = " << _handledCommands[0] << std::endl;
-	// std::cout << "*message._it = " << *message._it << std::endl;
-	// std::cout << "index handle message" << i << std::endl;
 	if (i >= HANDLEDCOMMANDSNB)
 	{
 		err_buff = ERR_UNKNOWNNCOMMAND(*message._splitMessage.begin());
@@ -401,7 +396,6 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 		message._argsNb = message._splitMessage.size();
 		std::cout << "args nb " << message._argsNb << std::endl;
 		(void)(this->*_ptrF[i])(user, message);
-        std::cout << "mojojojo\n";
         return true;
 	}
 }

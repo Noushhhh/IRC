@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:01 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 14:05:42 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/10 14:41:19 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,10 @@ bool    isValidMode(User &user, std::string modes)
     ssize_t modes_size = modes.size();
     std::string err_msg;
 
-    if (modes[0] != '+' && modes[0] != '-')
+    if ((modes[0] != '+' && modes[0] != '-')
+    || (modes_size == 1))
     {
-        reply(user, ": no mode were specified\n");
+        reply(user, ": no modes were specified\n");
         return (false);
     }
     for (ssize_t i = 0; i < modes_size; i++)
@@ -48,15 +49,11 @@ bool    isValidMode(User &user, std::string modes)
 bool    modesSet(User &user, std::string modes, std::string *modesparams,
 std::list< Channel >::iterator &channel)
 {
-    std::cout << "J'aime\n";
     int         addOrRemoveMode = REMOVE;
     int         paramCt = 0;
     ssize_t     modesparams_size = ft_arraySize(modesparams);
-    std::cout << "les\n";
     ssize_t     modes_size = modes.size();
-    std::cout << "pommes\n";
 
-    std::cout << "paramCT = " << paramCt << " modesparams_size : " << modesparams_size << std::endl;
     if (isValidMode(user, modes) == false)
         return (false);
     std::cout << "modes : " << modes << " modesparams : " << *modesparams << " : MICHEL\n";
@@ -68,7 +65,8 @@ std::list< Channel >::iterator &channel)
         }
         else if (modes[i] == '-')
             addOrRemoveMode = REMOVE;
-        std::cout << (addOrRemoveMode == true ? "ADD" : "REMOVE") << std::endl;
+        while (i > 0 && i < modes_size && modes[i] == modes[i - 1])
+            i ++;
         switch (modes[i])
         {
             case    'k': // change pswd
@@ -112,17 +110,21 @@ std::list< Channel >::iterator &channel)
                 break;
 
             case    'v': // add/remove from muted user list
-                if (paramCt < modesparams_size)
+                if(channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]) == channel->getUsersList().end())
+                    reply(user, ERR_USERNOTINCHANNEL(modesparams[paramCt], channel->getName())); //TO DO
+                else if (paramCt < modesparams_size)
                     channel->setMutedList(user, *channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]), addOrRemoveMode);
                 else
-                    reply(user, "MODE +-v: needs an argument defining the user to add or remove from the muted users list\n");
+                    reply(user, ": MODE +-v: needs an argument defining the user to add or remove from the muted users list\n");
                 break;
 
             case    'b': // add/remove from banned userlist
-                if (paramCt < modesparams_size)
+                if(channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]) == channel->getUsersList().end())
+                    reply(user, ERR_USERNOTINCHANNEL(modesparams[paramCt], channel->getName())); //TO DO
+                else if (paramCt < modesparams_size)
                     channel->setBanList(user, *channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]), addOrRemoveMode);
                 else
-                    reply(user, "MODE +-b: needs an argument defining the user to add or remove from the banned users list\n");
+                    reply(user, ": MODE +-b: needs an argument defining the user to add or remove from the banned users list\n");
                 break;
 
             case    'l': // set channel's user limit
@@ -138,7 +140,9 @@ std::list< Channel >::iterator &channel)
                 break;
 
             case    'o': // add/remove from op list
-                if (paramCt < modesparams_size)
+                if(channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]) == channel->getUsersList().end())
+                    reply(user, ERR_USERNOTINCHANNEL(modesparams[paramCt], channel->getName())); //TO DO
+                else if (paramCt < modesparams_size)
                     channel->setOpList(user, *channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]), addOrRemoveMode);
                 else
                     reply(user, "MODE +-b: needs an argument defining the user to add or remove from the banned users list\n");
@@ -146,14 +150,26 @@ std::list< Channel >::iterator &channel)
             default:
                 break;
         }
-        while (i > 0 && i < modes_size && modes[i] == modes[i - 1])
-        {
-            i ++;
-            std::cout << "i : " << i << std::endl; 
-        }
+       
     }
     //if ()
     return (true);
+}
+
+void    modeQueryReply(Channel &channel, User &user)
+{
+    std::stringstream strs;
+    strs << channel.getUsersLimit();
+
+    (channel.getPswdStatus() == true ? reply(user, channel.getName().append(": is password protected\n")) : reply(user, channel.getName().append(": is not password protected\n")));
+    (channel.getInviteStatus() == true ? reply(user, channel.getName().append(": is invite only\n")) : reply(user, channel.getName().append(": is not invite only\n")));
+    (channel.getModerationStatus() == true ? reply(user, channel.getName().append(": is moderated\n")) : reply(user, channel.getName().append(": is not moderated\n")));
+    (channel.getQuietStatus() == true ? reply(user, channel.getName().append(": is quiet\n")) : reply(user, channel.getName().append(": is not quiet\n")));
+    (channel.getOutsideMsgStatus() == true ? reply(user, channel.getName().append(": cannot receive outside messages\n")) : reply(user, channel.getName().append(": can receive outside messages\n")));
+    (channel.getPrivacyStatus() == true ? reply(user, channel.getName().append(": is private\n")) : reply(user, channel.getName().append(": is not private\n")));
+    (channel.getSecrecyStatus() == true ? reply(user, channel.getName().append(": is secret\n")) : reply(user, channel.getName().append(": is not secret\n")));
+    (channel.getTopicStatus() == true ? reply(user, channel.getName().append(": topic's can only be set by ChanOp\n")) : reply(user, channel.getName().append(": topic's can be set by everyone\n")));
+    (channel.getUsersLimitStatus() == true ? reply(user, channel.getName().append(": has a max amount of connected user of : ").append(strs.str()).append("\n")) : reply(user, channel.getName().append(": has no user limit\n")));
 }
 
 void	Server::Mode(User &user, Message &message)
@@ -213,7 +229,7 @@ void	Server::Mode(User &user, Message &message)
     
     if (argsNB == 2)
     {
-        std::cout << "MODE QUERY" << std::endl; // TO DO
+        modeQueryReply(*channel, user);
         return ;
         //display mode query info
     }
@@ -227,11 +243,9 @@ void	Server::Mode(User &user, Message &message)
     {
         message._it ++; // 3rd arg is supposed to be modes
         modes = *(message._it);
-        while (message._it != msgEnd)
+        while (++message._it != msgEnd)
         {
-            message._it ++; // 4rd arg and so forth are supposed to be modes params
             modeparams[i] = *(message._it); // modeparams[i] = message._arguments[3]; // 4rd arg and so forth are supposed to be modes params
-            std::cout << "mot :" << modeparams[i] << std::endl;
             i ++;
         }
         modesSet(user, modes, modeparams, channel);

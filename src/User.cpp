@@ -112,10 +112,12 @@ std::list< Channel >    &User::getJoinedChans()	    {return (_joinedChannels);}
 bool					User::isOnChan(const std::string &cName)
 {
     std::list< Channel >::iterator it = _joinedChannels.begin();
-    for (; it != _joinedChannels.end(); it ++)
+    std::list< Channel >::iterator end = _joinedChannels.end();
+    while (it != end)
     {
         if (it->getName() == cName)
             return (true);
+        it ++;
     }
     return (false);
 }
