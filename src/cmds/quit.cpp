@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:23 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/10 14:47:08 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/10 16:37:40 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ void	Server::Quit(User &user, Message &message)
     quit_msg = quit_msg = user.getNickname() + "@IRC_NOUSHMAKS QUIT '\n'";
     if (message._argsNb > 2)
          quit_msg = quit_msg + get_suffix(&message._arguments[1]);
-    std::list <Channel>::iterator cit = user.getJoinedChans().begin();
+    std::list <Channel *>::iterator cit = user.getJoinedChans().begin();
     while (cit != user.getJoinedChans().begin())
     {
-        cit->sendToUsers(quit_msg); // send to all users of chans in which user was
+        (*cit)->sendToUsers(quit_msg); // send to all users of chans in which user was
         cit++;
     }
     // function to close user

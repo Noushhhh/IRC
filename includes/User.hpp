@@ -29,7 +29,7 @@ class User
 		std::string				_realname;
 		std::string				_ping;
 		std::string				_pong;
-		std::list < Channel >	_joinedChannels;
+		std::list < Channel *>	_joinedChannels;
 
 	public	:
 		User();
@@ -57,7 +57,7 @@ class User
 		uint8_t         		getBitMode() const;
 		std::string				getPing() const;
 		std::string				getPong() const;
-		std::list< Channel >	&getJoinedChans();
+		std::list< Channel *>	&getJoinedChans();
 
 //members functions
 

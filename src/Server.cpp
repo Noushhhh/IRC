@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/10 14:46:41 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/10 17:10:03 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,20 +289,23 @@ bool                    Server::addUser()
 bool                    Server::closeUser(std::vector< struct pollfd >::iterator &it)
 {
     //supress from all channels he belongs to
-	std::list< User >::iterator user = getUserItWithFd(it->fd);
+	// std::list< User >::iterator user = getUserItWithFd(it->fd);
 
-	for (std::list < Channel >::iterator cit = _channelsList.begin(); cit != _channelsList.end(); cit ++)
-	{
-		for (std::list< User >::iterator lit = cit->getUsersList().begin(); lit != cit->getUsersList().end(); lit ++)
-		{
-			if (user->getNickname() == lit->getNickname())
-			{
-				cit->getUsersList().erase(lit);
-				break ;
-			}
-		}
-	}
+	// for (std::list < Channel >::iterator cit = _channelsList.begin(); cit != _channelsList.end(); cit ++)
+	// {
+	// 	for (std::list< User >::iterator lit = cit->getUsersList().begin(); lit != cit->getUsersList().end(); lit ++)
+	// 	{
+	// 		if (user->getNickname() == lit->getNickname())
+	// 		{
+	// 			cit->getUsersList().erase(lit);
+	// 			break ;
+	// 		}
+	// 	}
+	// }
 	//close user FD
+
+    // std::list< Channel *>::iterator it = 
+    remove_from_all_channels(*getUserItWithFd(it->fd), _channelsList);
     for (std::list< User >::iterator lit = _usersList.begin(); lit != _usersList.end(); lit ++)
     {
         if (lit->getSockfd() == it->fd)
@@ -353,6 +356,7 @@ std::list< Channel >::iterator		Server::getChanItWithName(std::string name)
     {
         if (cit->getName() == name)
         {
+            std::cout << "MERDE" << std::endl;
             return (cit);
         }
     }
