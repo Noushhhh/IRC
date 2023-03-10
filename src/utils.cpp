@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 14:27:34 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 13:30:46 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/10 10:02:52 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,9 @@ std::string get_suffix(std::string *arguments)
         i++;
     }
     return (full_argument);
+}
+
+void    reply(User &user, std::string reply)
+{
+    send (user.getSockfd(), reply.c_str(), reply.length(), 0);
 }

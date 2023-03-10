@@ -38,6 +38,7 @@ _topic("")
 	this->_isTopicOPOnly	= true;
 	this->_isUsersLimit		= false;
 	_usersList.push_back(chanCreator);
+	_opList.push_back(chanCreator);
 }
 
 Channel::Channel(const std::string &name, const std::string &pswd, User &chanCreator) :
@@ -60,6 +61,7 @@ _topic("")
 	this->_isTopicOPOnly	= true;
 	this->_isUsersLimit		= false;
 	_usersList.push_back(chanCreator);
+	_opList.push_back(chanCreator);
 }
 
 Channel::Channel(const Channel &src)
@@ -143,94 +145,134 @@ Channel &Channel::operator=(const Channel &src)
 /*                                                            */
 /**************************************************************/
 
-void				Channel::setPswd(std::string pswd, int &addOrRemove)
+void				Channel::setPswd(User &user, std::string pswd, int &addOrRemove)
 {
 	if (addOrRemove == ADD)
 	{
 		_password = pswd;
 		_isPswdProtected = true;
+		reply(user, this->getName().append(": Password protection successfully set\n"));
 	}
 	else
 	{
 		_password = "";
 		_isPswdProtected = false;
+		reply(user, this->getName().append(": Password protection successfully removed\n"));
 	}
 }
-void				Channel::setInviteMode(int &addOrRemove)
-{
+void				Channel::setInviteMode(User &user, int &addOrRemove)
+{	
 	if (addOrRemove == ADD)
+	{
 		_isInviteOnly = true;
+		reply(user, this->getName().append(": Invite only mode successfully set\n"));
+	}
 	else
+	{
 		_isInviteOnly = false;
+		reply(user, this->getName().append(": Invite only mode successfully removed\n"));
+	}
 }
 
-void				Channel::setModerationMode(int &addOrRemove)
+void				Channel::setModerationMode(User &user, int &addOrRemove)
 {
 	if (addOrRemove == ADD)
+	{
 		_isModerated = true;
+		reply(user, this->getName().append(": Moderation mode successfully set\n"));
+	}
 	else
+	{
 		_isModerated = false;
+		reply(user, this->getName().append(": Moderation mode successfully removed\n"));
+	}
 }
 
-void				Channel::setQuietMode(int &addOrRemove)
+void				Channel::setQuietMode(User &user, int &addOrRemove)
 {
 	if (addOrRemove == ADD)
+	{
 		_isQuiet = true;
+		reply(user, this->getName().append(": Quiet mode successfully set\n"));
+	}
 	else
+	{
 		_isQuiet = false;
+		reply(user, this->getName().append(": Quiet mode successfully removed\n"));
+	}
 }
 
-void				Channel::setOutsideMsgMode(int &addOrRemove)
+void				Channel::setOutsideMsgMode(User &user, int &addOrRemove)
 {
 	if (addOrRemove == ADD)
+	{
 		_isNoOutsideMsg = true;
+		reply(user, this->getName().append(": No Outside message mode successfully set\n"));
+	}
 	else
+	{
 		_isNoOutsideMsg = false;
+		reply(user, this->getName().append(": No Outside message mode successfully removed\n"));
+	}
 }
 
-void				Channel::setPrivateMode(int &addOrRemove)
+void				Channel::setPrivateMode(User &user, int &addOrRemove)
 {
 	if (addOrRemove == ADD)
+	{
 		_isPrivate = true;
+		reply(user, this->getName().append(": Private mode successfully set\n"));
+	}
 	else
+	{
 		_isPrivate = false;
+		reply(user, this->getName().append(": Private mode successfully removed\n"));
+	}
 }
 
-void				Channel::setSecretMode(int &addOrRemove)
+void				Channel::setSecretMode(User &user, int &addOrRemove)
 {
 	if (addOrRemove == ADD)
+	{
 		_isSecret = true;
+		reply(user, this->getName().append(": Secret mode successfuly set\n"));
+	}
 	else
+	{
 		_isSecret = false;
+		reply(user, this->getName().append(": Secret mode successfuly removed\n"));
+	}
 }
 
-void				Channel::setTopicMode(int &addOrRemove)
+void				Channel::setTopicMode(User &user, int &addOrRemove)
 {
 	if (addOrRemove == ADD)
+	{
 		_isTopicOPOnly = true;
+		reply(user, this->getName().append(": Topic set OP only mode successfuly set\n"));
+	}
 	else
+	{
 		_isTopicOPOnly = false;
+		reply(user, this->getName().append(": Topic set OP only mode successfuly removed\n"));
+	}
 }
 
 void				Channel::setUsersLimit(User &user, std::string userLimit, int &addOrRemove)
 {
-	std::string err_buff;
-
 	if (addOrRemove == ADD)
 	{
 		for (size_t i = 0; i < userLimit.size(); i ++)
 		{
 			if (std::isdigit(userLimit[i]) == false)
 			{
-				err_buff = ": MODE +l: Users limit can only be an unsigned integer\n";
-        		send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+				reply(user, this->getName().append(": MODE +l: Users limit can only be an unsigned integer\n"));
 				return ;
 			}
 		}
 		if (static_cast< size_t >(std::atoi(userLimit.c_str())) < _usersList.size())
 		{
-			err_buff = "MODE +l: Users limit cannot be less than actual channel's population.\n";
-        	send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+			reply(user, this->getName().append("MODE +l: Users limit cannot be less than actual channel's population.\n"));
 			return ;
 		}
 		_usersLimit = static_cast< ssize_t >(std::atoi(userLimit.c_str()));
@@ -242,48 +284,39 @@ void				Channel::setUsersLimit(User &user, std::string userLimit, int &addOrRemo
 
 void				Channel::setMutedList(User &user, User &target, int &addOrRemove)
 {
-	std::string err_buff;
 
 	if (target.isOnChan(this->getName()) == false)
 	{
-		err_buff = ERR_USERNOTINCHANNEL(target.getNickname(), this->getName());
-		send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+		reply(user, ERR_USERNOTINCHANNEL(target.getNickname(), this->getName()));
 		return;
 	}
 	if (addOrRemove == ADD)
 	{
 		this->_mutedUsersList.push_back(target);
-		err_buff = RPL_MUTED(target.getNickname(), this->getName());
-		send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+		reply(user, RPL_MUTED(target.getNickname(), this->getName()));
 	}
 	else
 	{
 		this->_mutedUsersList.erase(getUserItInList(_mutedUsersList, target.getNickname()));
-		err_buff = RPL_UNMUTED(target.getNickname(), this->getName());
-		send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+		reply(user, RPL_UNMUTED(target.getNickname(), this->getName()));
 	}
 }
 void				Channel::setBanList(User &user, User &target, int &addOrRemove)
 {	
-	std::string err_buff;
-
 	if (target.isOnChan(this->getName()) == false)
 	{
-		err_buff = ERR_USERNOTINCHANNEL(target.getNickname(), this->getName());
-		send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+		reply(user, ERR_USERNOTINCHANNEL(target.getNickname(), this->getName()));
 		return;
 	}
 	if (addOrRemove == ADD)
 	{
 		this->_banUsersList.push_back(target);
-		err_buff = RPL_MUTED(target.getNickname(), this->getName());
-		send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+		reply(user, RPL_BANNED(target.getNickname(), this->getName()));
 	}
 	else
 	{
 		this->_banUsersList.erase(getUserItInList(_banUsersList, target.getNickname()));
-		err_buff = RPL_UNMUTED(target.getNickname(), this->getName());
-		send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+		reply(user, RPL_UNBANNED(target.getNickname(), this->getName()));
 	}
 }
 
@@ -293,21 +326,18 @@ void				Channel::setOpList(User &user, User &target, int &addOrRemove)
 
 	if (target.isOnChan(this->getName()) == false)
 	{
-		err_buff = ERR_USERNOTINCHANNEL(target.getNickname(), this->getName());
-		send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+		reply(user, ERR_USERNOTINCHANNEL(target.getNickname(), this->getName()));
 		return;
 	}
 	if (addOrRemove == ADD)
 	{
 		this->_opList.push_back(target);
-		err_buff = RPL_MUTED(target.getNickname(), this->getName());
-		send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+		reply (user, RPL_OPED(target.getNickname(), this->getName()));
 	}
 	else
 	{
 		this->_opList.erase(getUserItInList(_opList, target.getNickname()));
-		err_buff = RPL_UNMUTED(target.getNickname(), this->getName());
-		send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+		reply (user, RPL_UNOPED(target.getNickname(), this->getName()));
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/09 14:19:24 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/10 10:02:15 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -356,6 +356,7 @@ std::list< Channel >::iterator		Server::getChanItWithName(std::string name)
             return (cit);
         }
     }
+	throw(Channel::BadNameException(": Channel doesn't exist\n"));
 	return (listEnd);
 }
 
