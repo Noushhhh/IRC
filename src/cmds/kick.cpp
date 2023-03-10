@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:55 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 14:08:53 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/10 11:25:44 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	Server::Kick(User &user, Message &message)
     if (message._argsNb == 3)
     {
         //kick user from chan
-        _rplMsg = user.getNickname() + " @ IRC_MAXANA KICK #" + channel_name + nickname + "\n";
+        _rplMsg = user.getNickname() + " @ IRC_NOUSHMAKS KICK #" + channel_name + nickname + "\n";
         send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         return ;
     }
@@ -66,7 +66,7 @@ void	Server::Kick(User &user, Message &message)
         _rplMsg = "";
         for (size_t i = 3; i != message._argsNb; i++) // check if _argsNb one argument = 1 || one argument = 0
             _rplMsg = _rplMsg + message._arguments[i]; // build reply message with users' arguments
-        _rplMsg = user.getNickname() + " @ IRC_MAXANA KICK #" + channel_name + nickname + "\n";
+        _rplMsg = user.getNickname() + " @ IRC_NOUSHMAKS KICK #" + channel_name + nickname + "\n";
         send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         return ;
     }

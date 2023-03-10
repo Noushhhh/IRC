@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:23 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/09 10:37:56 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/10 11:25:44 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	Server::Quit(User &user, Message &message)
         send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         return ;
     }
-    quit_msg = quit_msg = user.getNickname() + "@IRC_MAXANA QUIT '\n'";
+    quit_msg = quit_msg = user.getNickname() + "@IRC_NOUSHMAKS QUIT '\n'";
     if (message._argsNb > 2)
          quit_msg = quit_msg + get_suffix(&message._arguments[1]);
     std::list <Channel>::iterator cit = user.getJoinedChans().begin();

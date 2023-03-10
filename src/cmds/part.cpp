@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:14 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/09 11:40:40 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/10 11:25:44 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	Server::Part(User &user, Message &message)
         send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         return ;
     }
-    _rplMsg = user.getNickname() + "@IRC_MAXANA has left channel #" + channel_name + "\n";
+    _rplMsg = user.getNickname() + "@IRC_NOUSHMAKS has left channel #" + channel_name + "\n";
     sendToChanUsers(channel_name, _rplMsg);
     // remove user from channel
     // send message to inform user has left channel ?
