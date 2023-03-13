@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:25 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/10 14:57:58 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/13 14:16:29 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	Server::Topic(User &user, Message &message)
         return ;
     }
     std::string channel_name = message._arguments[0];
+    std::cout << channel_name << std::endl;
     if (!isChannel(channel_name))
     {
         // _errMsg = ERR_NOSUCHCHANNEL(channel_name);

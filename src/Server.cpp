@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/13 14:07:29 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/13 15:08:14 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -397,14 +397,15 @@ bool        Server::isChannel(std::string channel_name)
 {
     if (getChanList()->empty())
         return false;
-    if (channel_name.find("#") == 0)
-        channel_name = channel_name.substr(1);
-    std::list <Channel>::iterator channel_it = getChanList()->begin();
-    while (channel_it != getChanList()->end())
+    if (channel_name.find("#") != 0)
+        return false ;
+    std::cout << channel_name << std::endl;
+    _channelsListIt = _channelsList.begin();
+    while (_channelsListIt != _channelsList.end())
     {
-        if (channel_it->getName() == channel_name)
+        if (_channelsListIt->getName() == channel_name)
             return true ;
-        channel_it++;
+        _channelsListIt++;
     }
     return false ;
 }
