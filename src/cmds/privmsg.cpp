@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/13 15:27:02 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/13 15:37:58 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	Server::PrivMsg(User &user, Message &message)
                 return ;
             if (getChannelWithName(target)->userIsMuted(user.getNickname()))
                 return ;
-            priv_msg = user.getNickname() + "@IRC_NOUSHMAKS" + " PRIVMSG " + target + " :" + priv_msg; // split target with "@%#" to add after PRIVMSG
+            priv_msg = user.getNickname() + "@IRC_NOUSHMAKS" + " PRIVMSG " + target + priv_msg + "\n"; // split target with "@%#" to add after PRIVMSG
             sendToChanUsers(target, priv_msg);
             // _channelsListIt = getChanList()->begin();
             // while (_channelsListIt != getChanList()->end()) // send to users of the channel
