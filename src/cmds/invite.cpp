@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:47 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/13 10:36:08 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/13 15:30:28 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	Server::Invite(User &user, Message &message)
         _rplMsg = RPL_INVITING(channel, nickname);
         // send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
         reply(user, RPL_INVITING(channel, nickname));
-        User *target = getUserWithNickname(nickname);
+        User *target = getUserWithNickname(nickname); // update when merge with max function list user
         send(target->getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
         // add target to channel 
         return ;

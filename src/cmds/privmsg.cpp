@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/13 14:10:48 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/13 15:27:02 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	Server::PrivMsg(User &user, Message &message)
 {
-
     if (message._argsNb < 2)
     {
         // _errMsg = ERR_NEEDMOREPARAMS(message._cmd);
@@ -31,17 +30,15 @@ void	Server::PrivMsg(User &user, Message &message)
     }
     std::string target = message._arguments[0];
     std::string priv_msg = get_suffix(&message._arguments[1]);
-    if ((target.find("#") == 0)) // check if channel name valid
+    if ((target.find("#") == 0)) // supposed to be channel
     {
-        
-        target = target.substr(1); // 1 or 2 ?
-        if (isChannel(target))
+        if (isChannel(target)) // check that channel name valid
         {
             if (getChannelWithName(target)->userIsBanned(user.getNickname()))
                 return ;
             if (getChannelWithName(target)->userIsMuted(user.getNickname()))
                 return ;
-            priv_msg = user.getNickname() + "@IRC_NOUSHMAKS" + " PRIVMSG #" + target + " :" + priv_msg; // split target with "@%#" to add after PRIVMSG
+            priv_msg = user.getNickname() + "@IRC_NOUSHMAKS" + " PRIVMSG " + target + " :" + priv_msg; // split target with "@%#" to add after PRIVMSG
             sendToChanUsers(target, priv_msg);
             // _channelsListIt = getChanList()->begin();
             // while (_channelsListIt != getChanList()->end()) // send to users of the channel
@@ -60,11 +57,11 @@ void	Server::PrivMsg(User &user, Message &message)
         }
         return ;
     }
-    
-    else if (isUserWNickname(target))
+
+    else if (isUserWNickname(target)) // else check if message to user
     {
         
-        priv_msg = user.getNickname() + " PRIVMSG " + target + " :" + priv_msg;
+        priv_msg = user.getNickname() + " PRIVMSG " + target + priv_msg + "\n";
 		send(getUserWithNickname(target)->getSockfd(), priv_msg.c_str(), priv_msg.length(), 0); // send priv message to the target
         return ;
     }
