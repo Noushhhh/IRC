@@ -36,14 +36,14 @@ User::~User()
 
 User &User::operator=(const User &src)
 {
-    this->_addr = src._addr; // new
-    this->_givenPassword = src._givenPassword;
-    this->_isRegistered = src._isRegistered;
+  //  this->_addr = src._addr; // new
+    //this->_givenPassword = src._givenPassword;
+    //this->_isRegistered = src._isRegistered;
     this->_sockfd = src._sockfd;
     this->_username = src._username;
     this->_nickname = src._nickname;
     this->_realname = src._realname;
-    this->_joinedChannels = src._joinedChannels;
+    //this->_joinedChannels = src._joinedChannels;
     return (*this);
 }
 

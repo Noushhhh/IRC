@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:09 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/13 13:42:59 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/13 13:59:07 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	Server::Nick(User &user, Message &message)
     }
     else
     {
-        _rplMsg = user.getNickname() + "changed his nickname to: " + nickname + "\n";
+        _rplMsg = user.getNickname() + " changed nickname to: " + nickname + "\n";
         user.setNickname(nickname);
         // send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
         reply(user, _rplMsg);

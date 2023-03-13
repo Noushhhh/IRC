@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/09 14:19:01 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/13 13:57:30 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #define PROTOCOL 0
 #define BIND 1
 #define LISTEN 2
-#define HANDLEDCOMMANDSNB 13
+#define HANDLEDCOMMANDSNB 14
 
 #include "irc.hpp"
 #include "User.hpp"
@@ -84,7 +84,8 @@ class Server
 	void	Kick(User &user, Message &message);
 	void	PrivMsg(User &user, Message &message);
 	void	Ping(User &user, Message &message);
-	void	Pong(User &user, Message &message);
+    void	Cap(User &user, Message &message);
+	//void	Pong(User &user, Message &message);
 
     class ServerException : public std::exception
     {

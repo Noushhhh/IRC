@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/10 14:52:39 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/13 14:10:48 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,10 @@ void	Server::PrivMsg(User &user, Message &message)
     }
     std::string target = message._arguments[0];
     std::string priv_msg = get_suffix(&message._arguments[1]);
-    if ((target.find("%#") == 0) || (target.find("@%#") == 0)) // check if channel name valid
+    if ((target.find("#") == 0)) // check if channel name valid
     {
-        if ((target.find("@%#") == 0))
-            target = target.substr(2); // 2 or 3 ?
-        else if ((target.find("%#") == 0))
-            target = target.substr(1); // 1 or 2 ?
+        
+        target = target.substr(1); // 1 or 2 ?
         if (isChannel(target))
         {
             if (getChannelWithName(target)->userIsBanned(user.getNickname()))
