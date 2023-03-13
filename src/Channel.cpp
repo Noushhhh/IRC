@@ -390,21 +390,18 @@ bool				Channel::isNameValid(std::string name) // can contain multiple channel c
 	}
 	switch (name[0])
 	{
-		case '&' :
-			_type = LOCAL;
-			break ;
 		case '#' :
 			_type = REGULAR;
 			break ;
-		case '+' :
-			_type = UNMOD;
-			break ;
-		case '!' :
-			_nameErrorSrc = ": safe channels must be created using JOIN cmd\n";
-			return (false);
 		default :
-			_nameErrorSrc = ": channels's names must start with '&' '#' '+' or '!'\n";
+			_nameErrorSrc = ": channels's names must start with '#'\n";
 			return (false);
+	}
+	std::cout << "size : " << name.size() << "name[0] " << name[0] << " name[1] " << name[1] << std::endl;
+	if (name.size() >= 2 && name[0] == '#' && name[1] == '#')
+	{
+		_nameErrorSrc = ": channel's name cannot contain '#' appart from their first charachter\n";
+		return (false);
 	}
 	if (name.size() == 1)
 	{
