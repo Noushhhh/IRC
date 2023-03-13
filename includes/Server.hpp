@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/10 16:47:08 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/13 12:56:11 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ class Server
 	void	Join(User &user, Message &message);
 	void	Part(User &user, Message &message);
 	void	Mode(User &user, Message &message);
+    bool    modesSet(User &user, std::string modes, std::string *modesparams, std::list< Channel >::iterator &channel);
 	void	Topic(User &user, Message &message);
 	void	List(User &user, Message &message);
 	void	Invite(User &user, Message &message);

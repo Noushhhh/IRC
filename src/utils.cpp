@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 14:27:34 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/10 10:02:52 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/13 15:12:57 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,6 @@ std::string *cppsplit(std::string str, char sep)
         i ++;
     }
     strArray[i].push_back('\0');
-    // for (int i = 0; i < wordCT; i ++)
-    //     std::cout << "strArray ["<< i << "] :" << strArray[i] << std::endl;
     return (strArray);
 }
 

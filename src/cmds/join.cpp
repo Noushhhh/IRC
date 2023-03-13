@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/13 10:29:40 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/13 14:32:31 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void joinRPL(Channel chan, User user)
     std::string                 rpl_buff = RPL_TOPIC(chan.getName(), chan.getTopic());;
     std::list< User *>::iterator it = chan.getUsersList().begin();
 
-    if (chan.getTopic().empty())
+    if (chan.getTopic() == "")
         rpl_buff = RPL_NOTOPIC(chan.getName());
     send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
 
@@ -188,7 +188,6 @@ void	Server::Join(User &user, Message &message)
                     {
                         _channelsListIt->getUsersList().push_back(&user);
                         user.getJoinedChans().push_back(&(*_channelsListIt));
-                        std::cout << "user joined : " << user.getJoinedChans().size() << std::endl;
                         joinRPL(*_channelsListIt, user);
                         chanExist = true;
                         break ;

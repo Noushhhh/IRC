@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:01 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/10 14:46:58 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/13 15:12:09 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ bool    isValidMode(User &user, std::string modes)
     return (true);
 }
 
-bool    modesSet(User &user, std::string modes, std::string *modesparams,
+bool    Server::modesSet(User &user, std::string modes, std::string *modesparams,
 std::list< Channel >::iterator &channel)
 {
     int         addOrRemoveMode = REMOVE;
@@ -56,7 +56,6 @@ std::list< Channel >::iterator &channel)
 
     if (isValidMode(user, modes) == false)
         return (false);
-    std::cout << "modes : " << modes << " modesparams : " << *modesparams << " : MICHEL\n";
     for (int i = 0; i < modes_size; i ++)
     {
         if (modes[i] == '+')
@@ -86,7 +85,7 @@ std::list< Channel >::iterator &channel)
                 break;
 
             case    'm': // moderated mode
-                channel->setModerationMode(user, addOrRemoveMode);
+                channel->setModerationMode(*this, user, addOrRemoveMode);
                 break;
 
             case    'q': // quiet mode
@@ -109,24 +108,6 @@ std::list< Channel >::iterator &channel)
                 channel->setTopicMode(user, addOrRemoveMode);
                 break;
 
-            case    'v': // add/remove from muted user list
-                if(channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]) == channel->getUsersList().end())
-                    reply(user, ERR_USERNOTINCHANNEL(modesparams[paramCt], channel->getName())); //TO DO
-                else if (paramCt < modesparams_size)
-                    channel->setMutedList(user, *channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]), addOrRemoveMode);
-                else
-                    reply(user, ": MODE +-v: needs an argument defining the user to add or remove from the muted users list\n");
-                break;
-
-            case    'b': // add/remove from banned userlist
-                if(channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]) == channel->getUsersList().end())
-                    reply(user, ERR_USERNOTINCHANNEL(modesparams[paramCt], channel->getName())); //TO DO
-                else if (paramCt < modesparams_size)
-                    channel->setBanList(user, *channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]), addOrRemoveMode);
-                else
-                    reply(user, ": MODE +-b: needs an argument defining the user to add or remove from the banned users list\n");
-                break;
-
             case    'l': // set channel's user limit
                 if (addOrRemoveMode == ADD && paramCt < modesparams_size)
                 {
@@ -139,11 +120,48 @@ std::list< Channel >::iterator &channel)
                     reply (user, "MODE +l: needs an argument defining the maximum number of user that can simultaneously be on a channel\n");
                 break;
 
+            case    'v': // add/remove from muted user list
+                if(channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]) == channel->getUsersList().end())
+                    reply(user, ERR_USERNOTINCHANNEL(modesparams[paramCt], channel->getName())); //TO DO
+                else if (paramCt < modesparams_size)
+                {
+                    channel->setMutedList(user, *channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]), addOrRemoveMode);
+                    paramCt ++;
+                }
+                else
+                    reply(user, ": MODE +-v: needs an argument defining the user to add or remove from the muted users list\n");
+                break;
+
+            case    'b': // add/remove from banned userlist
+                if(addOrRemoveMode == ADD && channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]) == channel->getUsersList().end())
+                    reply(user, ERR_USERNOTINCHANNEL(modesparams[paramCt], channel->getName()));
+                else if(addOrRemoveMode == REMOVE && channel->getUserItInList(channel->getBanList(), modesparams[paramCt]) == channel->getBanList().end())
+                    reply(user, RPL_NOTBANNED(modesparams[paramCt], channel->getName())); //TO DO
+                else
+                {
+                    if (paramCt < modesparams_size && addOrRemoveMode == REMOVE)
+                    {
+                        channel->setBanList(*this, user, *channel->getUserItInList(channel->getBanList(), modesparams[paramCt]), addOrRemoveMode);
+                        paramCt ++;
+                    }
+                    else if (paramCt < modesparams_size && addOrRemoveMode == ADD)
+                    {
+                        channel->setBanList(*this, user, *channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]), addOrRemoveMode);
+                        paramCt ++;
+                    }
+                    else
+                        reply(user, ": MODE +-b: needs an argument defining the user to add or remove from the banned users list\n");
+                }
+                break;
+
             case    'o': // add/remove from op list
                 if(channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]) == channel->getUsersList().end())
                     reply(user, ERR_USERNOTINCHANNEL(modesparams[paramCt], channel->getName())); //TO DO
                 else if (paramCt < modesparams_size)
+                {
                     channel->setOpList(user, *channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]), addOrRemoveMode);
+                    paramCt ++;
+                }
                 else
                     reply(user, "MODE +-b: needs an argument defining the user to add or remove from the banned users list\n");
                 break;          

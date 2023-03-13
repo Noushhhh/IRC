@@ -177,11 +177,21 @@ void				Channel::setInviteMode(User &user, int &addOrRemove)
 	}
 }
 
-void				Channel::setModerationMode(User &user, int &addOrRemove)
+void				Channel::setModerationMode(Server &serv, User &user, int &addOrRemove)
 {
+	std::list<User *>::iterator it;
+	std::list<User *>::iterator end = _usersList.end();
+
 	if (addOrRemove == ADD)
 	{
 		_isModerated = true;
+		for (it = _usersList.begin(); it != end; it ++)
+		{
+			if (!userIsOp((*it)->getNickname()))
+			{
+				setMutedList(user, serv.getUserWithNickname((*it)->getNickname()), addOrRemove);
+			}
+		}
 		reply(user, this->getName().append(": Moderation mode successfully set\n"));
 	}
 	else
@@ -281,6 +291,7 @@ void				Channel::setUsersLimit(User &user, std::string userLimit, int &addOrRemo
 		}
 		_usersLimit = static_cast< ssize_t >(std::atoi(userLimit.c_str()));
 		_isUsersLimit = true;
+		reply(user,  RPL_USERLIMITSET(_name, userLimit));
 	}
 	else
 	{
@@ -291,7 +302,9 @@ void				Channel::setUsersLimit(User &user, std::string userLimit, int &addOrRemo
 
 void				Channel::setMutedList(User &user, User *target, int &addOrRemove)
 {
-	if (addOrRemove == ADD)
+	if (target->getNickname() == _creator->getNickname())
+		reply(user, ERR_ISCHANOP(target->getNickname()));
+	else if (addOrRemove == REMOVE) // here remove = remove voice privilege, so -v is muting, +v is giving voice priv
 	{
 		if (this->getUserItInList(_mutedUsersList, target->getNickname()) != _mutedUsersList.end())
 			reply(user, RPL_ALLRDYMUTED(target->getNickname(), this->getName())); // reply TO DO
@@ -312,9 +325,11 @@ void				Channel::setMutedList(User &user, User *target, int &addOrRemove)
 			reply(user, RPL_NOTMUTED(target->getNickname(), this->getName()));
 	}
 }
-void				Channel::setBanList(User &user, User *target, int &addOrRemove)
+void				Channel::setBanList(Server &serv, User &user, User *target, int &addOrRemove)
 {	
-	if (addOrRemove == ADD)
+	if (target->getNickname() == _creator->getNickname())
+		reply(user, ERR_ISCHANOP(target->getNickname()));
+	else if (addOrRemove == ADD)
 	{
 		if (this->getUserItInList(_banUsersList, target->getNickname()) != _banUsersList.end())
 			reply(user, RPL_ALLRDYBANNED(target->getNickname(), this->getName()));
@@ -325,7 +340,8 @@ void				Channel::setBanList(User &user, User *target, int &addOrRemove)
 				this->_opList.erase(this->getUserItInList(_opList, target->getNickname()));
 			if (this->getUserItInList(_mutedUsersList, target->getNickname()) != _mutedUsersList.end())
 				this->_mutedUsersList.erase(this->getUserItInList(_mutedUsersList, target->getNickname()));
-			this->_banUsersList.push_back(target);
+			
+			this->_banUsersList.push_back(serv.getUserWithNickname(target->getNickname()));
 			this->_usersList.erase(this->getUserItInList(_usersList, target->getNickname()));
 		}
 	}
@@ -343,7 +359,9 @@ void				Channel::setBanList(User &user, User *target, int &addOrRemove)
 
 void				Channel::setOpList(User &user, User *target, int &addOrRemove)
 {
-	if (addOrRemove == ADD)
+	if (target->getNickname() == _creator->getNickname())
+		reply(user, ERR_ISCHANOP(target->getNickname()));
+	else if (addOrRemove == ADD)
 	{
 		if (this->getUserItInList(_opList, target->getNickname()) != _opList.end())
 			reply(user, RPL_ALLRDYOP(target->getNickname(), this->getName()));
@@ -397,7 +415,6 @@ bool				Channel::isNameValid(std::string name) // can contain multiple channel c
 			_nameErrorSrc = ": channels's names must start with '#'\n";
 			return (false);
 	}
-	std::cout << "size : " << name.size() << "name[0] " << name[0] << " name[1] " << name[1] << std::endl;
 	if (name.size() >= 2 && name[0] == '#' && name[1] == '#')
 	{
 		_nameErrorSrc = ": channel's name cannot contain '#' appart from their first charachter\n";
@@ -462,7 +479,6 @@ bool 				Channel::userIsOp(std::string nickname)
 
 	for (std::list< User *>::iterator lit = _opList.begin(); lit != listEnd; lit ++)
     {
-		// std::cout << (lit*)->getNickname() << "size : " << lit->getNickname().size() << " " << nickname << " size : " << nickname.size() << std::endl;
         if ((*lit)->getNickname() == nickname)
         {
             return (true);

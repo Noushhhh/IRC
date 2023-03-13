@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/10 17:10:03 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/13 15:12:51 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -355,10 +355,7 @@ std::list< Channel >::iterator		Server::getChanItWithName(std::string name)
 	for (std::list< Channel >::iterator cit = _channelsList.begin(); cit != listEnd; cit ++)
     {
         if (cit->getName() == name)
-        {
-            std::cout << "MERDE" << std::endl;
             return (cit);
-        }
     }
 	throw(Channel::BadNameException(": Channel doesn't exist\n"));
 	return (listEnd);
@@ -388,7 +385,6 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 	else
 	{
 		//message._argsNb = message._splitMessage.size();
-		std::cout << "args nb " << message._argsNb << std::endl;
 		(void)(this->*_ptrF[i])(user, message);
         return true;
 	}

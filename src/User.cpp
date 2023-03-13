@@ -106,15 +106,11 @@ std::list< Channel *>   &User::getJoinedChans()	    {return (_joinedChannels);}
 
 bool					User::isOnChan(const std::string &cName)
 {
-        std::cout << "QUOI" << std::endl;
     std::list< Channel *>::iterator it = _joinedChannels.begin();
     std::list< Channel *>::iterator end = _joinedChannels.end();
 
-    std::cout << "user name : " << this->_nickname << " is ont : " << _joinedChannels.size() << " chans" << std::endl; 
     while (it != end)
     {
-        std::cout << "FEUR" << std::endl;
-        std::cout << (*it)->getPswdStatus() << "chan :" << cName << std::endl;
         if ((*it)->getName() == cName)
             return (true);
         it ++;

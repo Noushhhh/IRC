@@ -19,6 +19,7 @@
 
 #include "irc.hpp"
 #include "User.hpp"
+#include "Server.hpp"
 
 
 // class User;
@@ -92,7 +93,7 @@ class Channel
 
 		void						setPswd(User &user,std::string pswd, int &addOrRemove);
 		void						setInviteMode(User &user,int &addOrRemove);
-		void						setModerationMode(User &user,int &addOrRemove);
+		void						setModerationMode(Server &serv, User &user,int &addOrRemove);
 		void						setQuietMode(User &user,int &addOrRemove);
 		void						setOutsideMsgMode(User &user,int &addOrRemove);
 		void						setPrivateMode(User &user,int &addOrRemove);
@@ -100,7 +101,7 @@ class Channel
 		void						setTopicMode(User &user,int &addOrRemove);
 		void						setUsersLimit(User &user, std::string userLimit, int &addOrRemove);
 		void						setMutedList(User &user, User *target, int &addOrRemove);
-		void						setBanList(User &user, User *target, int &addOrRemove);
+		void						setBanList(Server &serv, User &user, User *target, int &addOrRemove);
 		void						setOpList(User &user, User *target, int &addOrRemove);
 		void						setTopic(std::string topic);
 		
