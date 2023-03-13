@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:38 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/10 14:35:29 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/13 11:58:02 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	Server::cmdUser(User &user, Message &message)
 {
-    if (message._argsNb != 6)
+    if (message._argsNb < 6)
     {
         // _errMsg = ERR_NEEDMOREPARAMS(message._cmd);
 		// send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
@@ -23,6 +23,7 @@ void	Server::cmdUser(User &user, Message &message)
 	}
     if (user.getRegistered())
     {
+        std::cout << "registerstatus " <<user.getRegistered() << std::endl;
         // _errMsg = ERR_ALREADYREGISTERED;
 		// send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         reply(user, ERR_ALREADYREGISTERED);
@@ -38,7 +39,8 @@ void	Server::cmdUser(User &user, Message &message)
     }
     if (message._arguments[4].find(":") == 0)
     {
-        std::string realname = message._arguments[4].substr(1) + " " + message._arguments[5];
+        std::string realname = get_suffix(&message._arguments[4]);
+        realname = message._arguments[4].substr(1);
         user.setRealname(realname);
     }
     if (user.getPassword() == this->getPassword())
@@ -48,6 +50,7 @@ void	Server::cmdUser(User &user, Message &message)
         // _errMsg = ERR_PASSWDMISMATCH;
         // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         reply(user, ERR_PASSWDMISMATCH);
+        return ;
     }
     // _rplMsg = RPL_WELCOME(user.getNickname());
 	// send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);

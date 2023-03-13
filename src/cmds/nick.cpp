@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:09 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/10 14:47:38 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/13 13:42:59 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,20 +34,22 @@ void	Server::Nick(User &user, Message &message)
 	}
     for (size_t i = 0; i < nickname.length(); i++)
     {
-        if (!isprint(nickname[i]))
+        if (!std::isprint(static_cast <unsigned char> (nickname[i])))
         {
+            std::cout << nickname[i] << std::endl;
             // _errMsg = ERR_ERRONEUSNICKNAME(nickname);
             // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
             reply(user, ERR_ERRONEUSNICKNAME(nickname));
             return ;
         }
     }
-    if (!user.getRegistered())
+    if (user.getRegistered() == false)
     {
         user.setNickname(nickname);
         _rplMsg = "New nick in use: " + nickname + "\n";
         // send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
-        reply(user, ERR_ERRONEUSNICKNAME(nickname));
+        reply(user, _rplMsg);
+        return ;
     }
     else
     {
@@ -55,6 +57,7 @@ void	Server::Nick(User &user, Message &message)
         user.setNickname(nickname);
         // send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
         reply(user, _rplMsg);
+        return ;
     }
 }
 

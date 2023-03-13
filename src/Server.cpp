@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/10 10:02:15 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/13 13:25:30 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,7 +264,6 @@ void					Server::closeEmptyChans()
 
 bool                    Server::addUser()
 {
-    // if bad passw
     int                 newFd;
     struct sockaddr_in  newAddr;
     socklen_t           nSize = 0;
@@ -280,7 +279,6 @@ bool                    Server::addUser()
 
     User newUser(newFd, newAddr);
     this->_usersList.push_back(newUser);
-    //commande NICK et PASS
     return (true);
 }
 
@@ -395,10 +393,10 @@ bool        Server::isChannel(std::string channel_name)
 {
     if (getChanList()->empty())
         return false;
-    if (channel_name.find("%#") == 0)
-        channel_name = channel_name.substr(2, channel_name.npos);
-    else
-        channel_name = channel_name.substr(3, channel_name.npos); // first line to this one delete when using split in funciton privmsg to get target witbhout @%#
+    if (channel_name.find("#") == 0)
+        channel_name = channel_name.substr(1);
+    // else
+    //     channel_name = channel_name.substr(3, channel_name.npos); // first line to this one delete when using split in funciton privmsg to get target witbhout @%#
     std::list <Channel>::iterator channel_it = getChanList()->begin();
     while (channel_it != getChanList()->end())
     {
