@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/10 14:41:05 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/13 14:32:31 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ static void joinRPL(Channel chan, User user)
     //TO DO : if channel mode is quiet only one username is sent (the activ user)
 
     std::string                 rpl_buff = RPL_TOPIC(chan.getName(), chan.getTopic());;
-    std::list< User >::iterator it = chan.getUsersList().begin();
+    std::list< User *>::iterator it = chan.getUsersList().begin();
 
-    if (chan.getTopic().empty())
+    if (chan.getTopic() == "")
         rpl_buff = RPL_NOTOPIC(chan.getName());
     send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
 
@@ -35,7 +35,7 @@ static void joinRPL(Channel chan, User user)
     send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
     while (it != chan.getUsersList().end())
     {
-        rpl_buff = RPL_USERS(it->getNickname(),,);
+        rpl_buff = RPL_USERS((*it)->getNickname(),,);
         send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
         it ++;
     }
@@ -43,16 +43,16 @@ static void joinRPL(Channel chan, User user)
     send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
 }
 
-static void remove_from_all_channels(User &user, std::list< Channel > &channelList)
+void remove_from_all_channels(User &user, std::list< Channel > &channelList)
 {
     std::list< Channel >::iterator  cIt = channelList.begin();
-    std::list< User >::iterator     uIt;
+    std::list< User *>::iterator     uIt;
     while (cIt != channelList.end())
     {
         uIt = cIt->getUsersList().begin();
         while (uIt != cIt->getUsersList().end())
         {
-            if (user.getNickname() == uIt->getNickname())
+            if (user.getNickname() == (*uIt)->getNickname())
             {
                 cIt->getUsersList().erase(uIt);
                 break ;
@@ -132,7 +132,6 @@ void	Server::Join(User &user, Message &message)
     if (message._splitMessage.size() == 2 && *(message._it) == "0")
     {
         remove_from_all_channels(user, _channelsList);
-        user.getJoinedChans().erase(user.getJoinedChans().begin(), user.getJoinedChans().end());
         err_buff = " :succesfully removed from all channels\n";
         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
     }
@@ -187,8 +186,8 @@ void	Server::Join(User &user, Message &message)
                     i < ft_arraySize(keysSplit) && pswdMatch(_channelsListIt->getPswd(), keysSplit[i]))
                     || (!_channelsListIt->getPswdStatus()))
                     {
-                        _channelsListIt->getUsersList().push_back(user);
-                        user.getJoinedChans().push_back(*_channelsListIt);
+                        _channelsListIt->getUsersList().push_back(&user);
+                        user.getJoinedChans().push_back(&(*_channelsListIt));
                         joinRPL(*_channelsListIt, user);
                         chanExist = true;
                         break ;
@@ -210,19 +209,19 @@ void	Server::Join(User &user, Message &message)
                     if (message._splitMessage.size() > 2 && i < ft_arraySize(keysSplit) && keysSplit[i][0] != 0)
                     {
                         // if (i > keysSplit->size())
-                        Channel newChan(chansSplit[i], keysSplit[i], user);
+                        Channel *newChan = new Channel(chansSplit[i], keysSplit[i], user);
                         user.getJoinedChans().push_back(newChan);
-                        _channelsList.push_back(newChan);
-                        joinRPL(newChan, user);
+                        _channelsList.push_back(*newChan);
+                        joinRPL(*newChan, user);
                     }
                     
                     //if none is
                     else
                     {
-                        Channel newChan(chansSplit[i], user);
+                        Channel *newChan = new Channel(chansSplit[i], user);
                         user.getJoinedChans().push_back(newChan);
-                        _channelsList.push_back(newChan);
-                        joinRPL(newChan, user);
+                        _channelsList.push_back(*newChan);
+                        joinRPL(*newChan, user);
                     }
                     
                 }

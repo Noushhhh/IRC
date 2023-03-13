@@ -64,15 +64,17 @@
 #define RPL_UNMUTED(nick, channel)  nick + ": Was succesfully unmuted in " + channel + "\n"
 #define RPL_NOTMUTED(nick, channel)  nick + ": Was not unmuted in " + channel + "\n"
 
-#define RPL_BANNED(nick, channel)   nick + ": Was succesfully banned of " + channel + "\n"
+#define RPL_BANNED(nick, channel)   nick + ": Was succesfully banned from " + channel + "\n"
 #define RPL_ALLRDYBANNED(nick, channel)    nick + ": Was allready banned in " + channel + "\n"
-#define RPL_UNBANNED(nick, channel) nick + ": Was succesfully unbanned of " + channel + "\n"
+#define RPL_UNBANNED(nick, channel) nick + ": Was succesfully unbanned from " + channel + "\n"
 #define RPL_NOTBANNED(nick, channel)  nick + ": Was not banned in " + channel + "\n"
 
 #define RPL_OPED(nick, channel)     nick + ": Was succesfully made operator in " + channel + "\n"
 #define RPL_ALLRDYOP(nick, channel)    nick + ": Was allready chanop in " + channel + "\n"
 #define RPL_UNOPED(nick, channel)   nick + ": Was succesfully de-oped in " + channel + "\n"
 #define RPL_NOTOP(nick, channel)  nick + ": Was not chanop in " + channel + "\n"
+
+#define RPL_USERLIMITSET(channel, nbr) " " + channel + ": Users limit was set to : " + nbr + "\n"
 
 /************************************ ERRORS ************************************/
 
@@ -112,9 +114,10 @@
 #define ERR_NOTONCHANNEL(chan)          chan + ": You are not on that channel\n" // 442
 #define ERR_USERONCHANNEL(chan, user)   user + ": Is already on channel " + chan + "\n" // 443
 #define ERR_USERNOTINCHANNEL(nick, chan)nick + ": is not on channel " + chan + "\n" // 441
+#define ERR_ISCHANOP(nick)              nick + ": is chanop and cannot be muted, banned or unoped\n"
 #define ERR_BADCHANNELKEY(chan)         chan + ": Cannot join channel (+k)\n" // 475
 #define ERR_CHANOPRIVSNEEDED(chan)      chan + ": You're not channel operator\n" // 482
-#define ERR_ISBANNED(chan)              ": is banned from" + chan + "\n"
+#define ERR_ISBANNED(chan)              ": is banned from " + chan + "\n"
 #define ERR_USERLIMITREACHED(chan)      chan + ": users limit reached\n"
 
 // PING & PONG
