@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:25 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/13 14:16:29 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/14 09:14:00 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,14 @@ void	Server::Topic(User &user, Message &message)
     
     if (message._argsNb > 2) // if user wants to set new topic 
     {
-        std::string new_topic = get_suffix(&message._arguments[2]);
+        std::string new_topic = get_suffix(&message._arguments[1]);
         if (new_topic.find(":") != 0)
             return ;
          // remove ":" at start of new topic
         if (new_topic.size() == 1) // if empty stirng for topic (after ":""), topic cleared
         {
             channel->setTopic("");
-            _rplMsg = "Topic unset on #" + channel_name;
+            _rplMsg = "Topic unset on " + channel_name;
             channel->sendToUsers(_rplMsg); // all  users notified on channel that topic cleared
             return ;
         }
@@ -75,8 +75,8 @@ void	Server::Topic(User &user, Message &message)
             //new_topic = new_topic.substr(1); // remove ":" at beginning of topic
             if (channel->getTopicStatus() == false || channel->userIsOp(user.getNickname()) == true) // check if user has the rights to set new topic
             {
-                channel->setTopic(message._arguments[2]);
-                _rplMsg = "New topic set on #" + channel_name + ": " + message._arguments[2] + "\n";
+                channel->setTopic(new_topic);
+                _rplMsg = "New topic set on " + channel_name + ": " + new_topic + "\n";
                 channel->sendToUsers(_rplMsg);
                 return ;
             }
