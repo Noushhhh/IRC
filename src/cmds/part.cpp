@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:14 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/10 14:48:59 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/14 09:26:17 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,18 @@ void	Server::Part(User &user, Message &message)
 {
     if (message._argsNb < 3)
      {
-        // _errMsg = ERR_NEEDMOREPARAMS(message._cmd);
-		// send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         reply(user, ERR_NEEDMOREPARAMS(message._cmd));
         return ;
 	}
     std::string channel_name = message._arguments[0];
     if (!isChannel(channel_name))
     {
-        // _errMsg = ERR_NOSUCHCHANNEL(channel_name);
-        // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         reply(user, ERR_NOSUCHCHANNEL(channel_name));
         return ;
     }
     Channel *channel = getChannelWithName(channel_name);
     if (!channel->isUserInChannel(user)) // check if user in channel
     {
-        // _errMsg = ERR_NOTONCHANNEL(channel_name);
-        // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         reply(user, ERR_NOTONCHANNEL(channel_name));
         return ;
     }
