@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cmdUser.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:38 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/13 11:58:02 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/14 09:28:08 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
+
+static 
 
 void	Server::cmdUser(User &user, Message &message)
 {
@@ -49,6 +51,7 @@ void	Server::cmdUser(User &user, Message &message)
     {
         // _errMsg = ERR_PASSWDMISMATCH;
         // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+
         reply(user, ERR_PASSWDMISMATCH);
         return ;
     }

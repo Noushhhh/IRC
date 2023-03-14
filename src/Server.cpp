@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/14 08:59:06 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/14 09:28:36 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,22 +291,7 @@ bool                    Server::addUser()
 bool                    Server::closeUser(std::vector< struct pollfd >::iterator &it)
 {
     //supress from all channels he belongs to
-	// std::list< User >::iterator user = getUserItWithFd(it->fd);
-
-	// for (std::list < Channel >::iterator cit = _channelsList.begin(); cit != _channelsList.end(); cit ++)
-	// {
-	// 	for (std::list< User >::iterator lit = cit->getUsersList().begin(); lit != cit->getUsersList().end(); lit ++)
-	// 	{
-	// 		if (user->getNickname() == lit->getNickname())
-	// 		{
-	// 			cit->getUsersList().erase(lit);
-	// 			break ;
-	// 		}
-	// 	}
-	// }
-	//close user FD
-
-    // std::list< Channel *>::iterator it = 
+	
     remove_from_all_channels(*getUserItWithFd(it->fd), _channelsList);
     for (std::list< User >::iterator lit = _usersList.begin(); lit != _usersList.end(); lit ++)
     {
