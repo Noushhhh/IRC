@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:09 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/08 14:06:15 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/13 13:59:07 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,9 @@ void	Server::Nick(User &user, Message &message)
 {
 	if (message._argsNb < 2)
 	{
-        _errMsg= ERR_NONICKNAMEGIVEN;
-		send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+    //     _errMsg= ERR_NONICKNAMEGIVEN;
+	// 	send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        reply(user, ERR_NONICKNAMEGIVEN);
 		return ;
 	}
     std::string nickname = message._arguments[0];
@@ -25,31 +26,38 @@ void	Server::Nick(User &user, Message &message)
 	{
 		if (isUserWNickname(nickname))
         {
-            _errMsg = ERR_NICKNAMEINUSE(nickname);
-            send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+            // _errMsg = ERR_NICKNAMEINUSE(nickname);
+            // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+            reply(user, ERR_NICKNAMEINUSE(nickname));
             return ;
         }
 	}
     for (size_t i = 0; i < nickname.length(); i++)
     {
-        if (!isprint(nickname[i]))
+        if (!std::isprint(static_cast <unsigned char> (nickname[i])))
         {
-            _errMsg = ERR_ERRONEUSNICKNAME(nickname);
-            send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+            std::cout << nickname[i] << std::endl;
+            // _errMsg = ERR_ERRONEUSNICKNAME(nickname);
+            // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+            reply(user, ERR_ERRONEUSNICKNAME(nickname));
             return ;
         }
     }
-    if (!user.getRegistered())
+    if (user.getRegistered() == false)
     {
         user.setNickname(nickname);
         _rplMsg = "New nick in use: " + nickname + "\n";
-        send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
+        // send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
+        reply(user, _rplMsg);
+        return ;
     }
     else
     {
-        _rplMsg = user.getNickname() + "changed his nickname to: " + nickname + "\n";
+        _rplMsg = user.getNickname() + " changed nickname to: " + nickname + "\n";
         user.setNickname(nickname);
-        send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
+        // send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
+        reply(user, _rplMsg);
+        return ;
     }
 }
 

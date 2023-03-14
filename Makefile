@@ -22,7 +22,7 @@ CMD_FILES = pass.cpp \
 			kick.cpp \
 			privmsg.cpp \
 			ping_pong.cpp \
-			
+			cap.cpp \
 
 SRC = 		${addprefix src/, ${SRC_FILES}}
 SRC_CMD =	${addprefix src/cmds/, ${CMD_FILES}} 

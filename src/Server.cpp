@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/13 15:12:51 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/14 08:59:06 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ _errMsg("")
 	this->_ptrF[10] = (&Server::Kick);
 	this->_ptrF[11] = (&Server::PrivMsg);
 	this->_ptrF[12] = (&Server::Ping);
+    this->_ptrF[12] = (&Server::Cap);
 
 	this->_handledCommands[0] = "PASS";
 	this->_handledCommands[1] = "NICK";
@@ -52,6 +53,7 @@ _errMsg("")
 	this->_handledCommands[10] = "KICK";
 	this->_handledCommands[11] = "PRIVMSG";
 	this->_handledCommands[12] = "PING";
+    this->_handledCommands[13] = "CAP";
 
     // std::cerr << "Debug message: Server Default Constructor called" << std::endl;
 }
@@ -82,6 +84,7 @@ _errMsg("")
 	this->_ptrF[10] = (&Server::Kick);
 	this->_ptrF[11] = (&Server::PrivMsg);
 	this->_ptrF[12] = (&Server::Ping);
+    this->_ptrF[13] = (&Server::Cap);
 
 	this->_handledCommands[0] = "PASS";
 	this->_handledCommands[1] = "NICK";
@@ -96,6 +99,7 @@ _errMsg("")
 	this->_handledCommands[10] = "KICK";
 	this->_handledCommands[11] = "PRIVMSG";
 	this->_handledCommands[12] = "PING";
+    this->_handledCommands[13] = "CAP";
 
     // std::cerr << "Debug message: Server Constructor called" << std::endl;
 }
@@ -264,7 +268,6 @@ void					Server::closeEmptyChans()
 
 bool                    Server::addUser()
 {
-    // if bad passw
     int                 newFd;
     struct sockaddr_in  newAddr;
     socklen_t           nSize = 0;
@@ -280,7 +283,6 @@ bool                    Server::addUser()
 
     User newUser(newFd, newAddr);
     this->_usersList.push_back(newUser);
-    //commande NICK et PASS
     return (true);
 }
 
@@ -394,16 +396,14 @@ bool        Server::isChannel(std::string channel_name)
 {
     if (getChanList()->empty())
         return false;
-    if (channel_name.find("%#") == 0)
-        channel_name = channel_name.substr(2, channel_name.npos);
-    else
-        channel_name = channel_name.substr(3, channel_name.npos); // first line to this one delete when using split in funciton privmsg to get target witbhout @%#
-    std::list <Channel>::iterator channel_it = getChanList()->begin();
-    while (channel_it != getChanList()->end())
+    if (channel_name.find("#") != 0)
+        return false ;
+    _channelsListIt = _channelsList.begin();
+    while (_channelsListIt != _channelsList.end())
     {
-        if (channel_it->getName() == channel_name)
+        if (_channelsListIt->getName() == channel_name)
             return true ;
-        channel_it++;
+        _channelsListIt++;
     }
     return false ;
 }

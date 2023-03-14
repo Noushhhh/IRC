@@ -39,13 +39,13 @@ class User
 		~User();
 		
 //setter
-		void			setPassword(std::string given_password);
-		void			setNickname(std::string nickname);
-		void			setRegistered(void);
-		void			setUsername(std::string username);
-		void			setRealname(std::string realname);
-		void			setPing(std::string ping);
-		void			setPong(std::string pong);
+		void					setPassword(std::string given_password);
+		void					setNickname(std::string nickname);
+		void					setRegistered(void);
+		void					setUsername(std::string username);
+		void					setRealname(std::string realname);
+		void					setPing(std::string ping);
+		void					setPong(std::string pong);
 
 //getter
         int             		getSockfd()     const;

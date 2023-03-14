@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quit.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:23 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/10 16:37:40 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/14 08:59:50 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@ void	Server::Quit(User &user, Message &message)
     std::string quit_msg;
     if (message._argsNb < 2)
     {
-        _errMsg = ERR_NEEDMOREPARAMS(message._cmd);
-        send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        // _errMsg = ERR_NEEDMOREPARAMS(message._cmd);
+        // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
+        reply(user, ERR_NEEDMOREPARAMS(message._cmd));
         return ;
     }
     quit_msg = quit_msg = user.getNickname() + "@IRC_NOUSHMAKS QUIT '\n'";
