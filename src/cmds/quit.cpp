@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:23 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/14 08:59:50 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/14 09:26:48 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ void	Server::Quit(User &user, Message &message)
     std::string quit_msg;
     if (message._argsNb < 2)
     {
-        // _errMsg = ERR_NEEDMOREPARAMS(message._cmd);
-        // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         reply(user, ERR_NEEDMOREPARAMS(message._cmd));
         return ;
     }

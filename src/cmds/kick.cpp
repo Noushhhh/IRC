@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:55 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/10 14:44:15 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/14 09:25:22 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,12 @@ void	Server::Kick(User &user, Message &message)
 {
     if (message._argsNb < 4)
     {
-        // _errMsg = ERR_NEEDMOREPARAMS(message._cmd);
-        // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         reply(user, ERR_NEEDMOREPARAMS(message._cmd));
         return ;
     }
     std::string channel_name = message._arguments[0];
     if (channel_name.find("#") != 0)
     {
-        // _errMsg = ERR_NOSUCHCHANNEL(channel_name);
-        // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
          reply(user, ERR_NOSUCHCHANNEL(channel_name));
         return ;
     }
@@ -33,30 +29,22 @@ void	Server::Kick(User &user, Message &message)
         channel_name = channel_name.substr(1);
     if (!isChannel(channel_name))
     {
-        // _errMsg = ERR_NOSUCHCHANNEL(channel_name);
-        // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         reply(user, ERR_NOSUCHCHANNEL(channel_name));
         return ;
     }
     if (!user.isOnChan(channel_name))
     {
-        // _errMsg = ERR_NOTONCHANNEL(channel_name);
-        // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         reply(user, ERR_NOTONCHANNEL(channel_name));
         return ;
     }
     std::string nickname = message._arguments[1];
     if (!isUserWNickname(nickname))
     {
-    //     _errMsg = ERR_NOTONCHANNEL(channel_name);
-    //     send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         reply(user, ERR_NOTONCHANNEL(channel_name));
         return ;
     }
     if (!isUserOnChan(nickname, channel_name))
     {
-        // _errMsg = ERR_NOTONCHANNEL(channel_name);
-        // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
         reply(user, ERR_NOTONCHANNEL(channel_name));
         return ;
     }
