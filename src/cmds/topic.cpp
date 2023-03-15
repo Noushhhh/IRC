@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:25 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/14 09:27:17 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/15 10:51:49 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	Server::Topic(User &user, Message &message)
             if (channel->getTopicStatus() == false || channel->userIsOp(user.getNickname()) == true) // check if user has the rights to set new topic
             {
                 channel->setTopic(new_topic);
-                _rplMsg = "New topic set on " + channel_name + ": " + new_topic + "\n";
+                _rplMsg = "New topic set on " + channel_name + new_topic + "\n";
                 channel->sendToUsers(_rplMsg);
                 return ;
             }

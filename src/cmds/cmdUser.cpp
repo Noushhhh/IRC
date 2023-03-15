@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:38 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/15 10:48:21 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/15 10:49:45 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	Server::cmdUser(User &user, Message &message)
 {
-    std::cout << "YO" << std::endl;
     if (message._argsNb < 5)
     {
         reply(user, ERR_NEEDMOREPARAMS(message._cmd));
