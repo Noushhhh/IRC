@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:38 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/14 09:23:50 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/15 10:48:21 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,13 @@
 
 void	Server::cmdUser(User &user, Message &message)
 {
-    if (message._argsNb < 6)
+    std::cout << "YO" << std::endl;
+    if (message._argsNb < 5)
     {
         reply(user, ERR_NEEDMOREPARAMS(message._cmd));
         return ;
 	}
-    if (user.getRegistered())
+    if (user.getRegistered() == true)
     {
         reply(user, ERR_ALREADYREGISTERED);
         return ;
@@ -37,12 +38,15 @@ void	Server::cmdUser(User &user, Message &message)
         user.setRealname(realname);
     }
     if (user.getPassword() == this->getPassword())
+    {
         user.setRegistered();
+        reply(user, RPL_WELCOME(user.getNickname()));
+    }
     else
     {
         reply(user, ERR_PASSWDMISMATCH);
         //close user
         return ;
     }
-    reply(user, RPL_WELCOME(user.getNickname()));
+    return ; 
 }

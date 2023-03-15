@@ -50,13 +50,11 @@ bool Message::splitMessage()
 	if (!token)
 		return false ;
 	_cmd = token;
-	int i = 0;
 	while(token != NULL)
 	{
 		_splitMessage.push_back(token);
 		//_arguments[i] = token; // test if works if no conversion from char to string. to cast ?
 		token = strtok(NULL, "\r \n");
-		i++;
 	}
 	getArguments();
 	delete[] string_to_split;

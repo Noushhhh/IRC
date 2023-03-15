@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/14 08:59:06 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/15 10:42:13 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,7 +239,11 @@ bool                    Server::pollDispatch()
                     }
                 }
                 std::cerr << msg;
-				handleMessage(*(getUserItWithFd(it->fd)), msg); // check if reference of uesr good
+                std::vector <std::string> cmd_array = split_cmd(msg);
+                for (std::vector<std::string>::iterator cmd_it = cmd_array.begin(); cmd_it != cmd_array.end(); cmd_it++)
+                {
+                    handleMessage(*(getUserItWithFd(it->fd)), *cmd_it); // check if reference of uesr good
+                }
                 msg = "";
                 errno = 0;
             }
@@ -459,6 +463,9 @@ void                    Server::sendToChanUsers(std::string channel_name, std::s
         _channelsListIt++;
     }
 }
+
+
+
 
 /**************************************************************/
 /*                                                            */

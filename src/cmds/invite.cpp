@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:47 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/14 09:24:40 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/14 09:59:41 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,57 +20,41 @@ void	Server::Invite(User &user, Message &message)
         return ;
     }
     std::string nickname = message._arguments[0];
-    std::string channel = message._arguments[1];
-    if (message._arguments[1].find("#") != 0)
+    std::string channel = message._arguments[1]; // check if possible tomake a function that does 3 checks below code cleaner
+    if (message._arguments[1].find("#") != 0) // check if right channel format
     {
         reply(user, ERR_NOSUCHCHANNEL(channel));
         return ;
     }
-    if (!isUserWNickname(nickname))
+    if (!isUserWNickname(nickname)) // check if nickname exists
     {
         reply(user, ERR_NOTONCHANNEL(nickname));
         return ;
     }
-    if (!isChannel(channel))
+    if (!isChannel(channel)) // check if channel exists
      {
         reply(user, ERR_NOSUCHCHANNEL(channel));
         return ;
     }
-    _channelsListIt = getChanList()->begin();
-    while (_channelsListIt != getChanList()->end())
-    {
-        if (_channelsListIt->getName() == channel)
-            break ;
-        _channelsListIt++;
-    }
-    if (_channelsListIt == getChanList()->end())
-    {
-        reply(user, ERR_NOTONCHANNEL(nickname));
-        return ;
-    }
-    else if (!_channelsListIt->isUserInChannel(user))
+    else if (!_channelsListIt->isUserInChannel(user))  // check if user is on channel 
     {
         reply(user, ERR_NOTONCHANNEL(user.getNickname()));
         return ;
     }
-    else if (_channelsListIt->isUserInChannelNickname(nickname))
+    else if (_channelsListIt->isUserInChannelNickname(nickname)) // check if user already on channel 
     {
         reply(user, ERR_USERONCHANNEL(channel, nickname));
         return ;
     }
-    // else if (_channelsListIt->isInviteOnlyModeSet())
-    // {
-    //     _errMsg = ERR_CHANOPRIVSNEEDED();
-    //     send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
-    //     reply(user, ERR_CHANOPRIVSNEEDED());
-    //     return ;
-    // }
     else
     {
         _rplMsg = RPL_INVITING(channel, nickname);
-        // send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
         reply(user, RPL_INVITING(channel, nickname));
+        Channel *chan = getChannelWithName(channel);
         User *target = getUserWithNickname(nickname); // update when merge with max function list user
+
+        chan->getUsersList().push_back(target);
+
         send(target->getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
         // add target to channel 
         return ;
