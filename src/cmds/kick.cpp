@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:55 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 14:40:09 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/16 15:11:21 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ void	Server::Kick(User &user, Message &message)
     }
     if (message._argsNb == 3)
     {
-        //reply(user, user.getNickname() + "@IRC_NOUSHMAKS KICK " + channel_name + " " + nickname + "\n");
         _rplMsg = user.getNickname() + "@IRC_NOUSHMAKS KICK " + channel_name + " " + nickname + "\n";
         sendToChanUsers(channel_name, _rplMsg);
         //kick user from chan
@@ -58,13 +57,9 @@ void	Server::Kick(User &user, Message &message)
     if (message._argsNb > 3)
     {
         _rplMsg = "";
-        // for (size_t i = 3; i != message._argsNb; i++) // check if getArgsNb() one argument = 1 || one argument = 0
-        //     _rplMsg = _rplMsg + message._arguments[i]; // build reply message with users' arguments
-        _rplMsg = get_suffix(&message._arguments[3]);
-        _rplMsg = user.getNickname() + "@IRC_NOUSHMAKS KICK " + channel_name + " " + nickname + " " + _rplMsg + "\n";
+        _rplMsg = user.getNickname() + "@IRC_NOUSHMAKS KICK " + channel_name + " " + nickname + " " + get_suffix(&message._arguments[3]) + "\n";
         sendToChanUsers(channel_name, _rplMsg);
-        // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
-        //reply(user, _rplMsg);
+        //kick user from chan
         return ;
     }
 }
