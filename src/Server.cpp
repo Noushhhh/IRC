@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/14 09:28:36 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/14 13:51:40 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,8 +238,8 @@ bool                    Server::pollDispatch()
                         break ;
                     }
                 }
-                std::cerr << msg;
-				handleMessage(*(getUserItWithFd(it->fd)), msg); // check if reference of uesr good
+                std::cerr << "message sent by client: " << msg << "FEUR \n";
+                handleMessage(*(getUserItWithFd(it->fd)), msg); // check if reference of uesr good
                 msg = "";
                 errno = 0;
             }

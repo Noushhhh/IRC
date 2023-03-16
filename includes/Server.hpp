@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/14 08:59:01 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/14 11:02:15 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,30 +44,31 @@ class Server
 
 
 // setters
-        bool                                init();
-        void                                setSock(int type, int protocol);
-        void                                bindSock();
-        void                                listenTo(int backlog);
+        bool                                    init();
+        void                                    setSock(int type, int protocol);
+        void                                    bindSock();
+        void                                    listenTo(int backlog);
 
 // functions
-        bool                                checkPass();
-		void                                closeEmptyChans();
+        bool                                    checkPass();
+		void                                    closeEmptyChans();
         //void					            close();
 		//void					            receiveData();
 		
-        bool                                pollDispatch();
-        bool                                addUser();
-        bool                                closeUser(std::vector< struct pollfd >::iterator &it);
+        bool                                    pollDispatch();
+        bool                                    addUser();
+        bool                                    closeUser(std::vector< struct pollfd >::iterator &it);
 
-        bool                                handleMessage(User &user, std::string raw_message);
-        bool                                isChannel(std::string channel_name);
-        bool                                isUserWNickname(std::string user_name);
-        bool                                isUserOnChan(const std::string nickname, const std::string channel_name);
-        Channel                             *getChannelWithName(std::string channel_name);
-        User                                *getUserWithNickname(std::string nickname);
-        std::list< User >::iterator         getUserItWithFd(int fd);
-        std::list< Channel >::iterator      getChanItWithName(std::string name);
-        void                                sendToChanUsers(std::string channel_name, std::string message);
+        bool                                    handleMessage(User &user, std::string raw_message);
+        bool                                    isChannel(std::string channel_name);
+        bool                                    isUserWNickname(std::string user_name);
+        bool                                    isUserOnChan(const std::string nickname, const std::string channel_name);
+        Channel                                 *getChannelWithName(std::string channel_name);
+        User                                    *getUserWithNickname(std::string nickname);
+        std::list< User >::iterator             getUserItWithFd(int fd);
+        std::list< Channel >::iterator          getChanItWithName(std::string name);
+        std::vector< struct pollfd >::iterator  &findPollFd(int fd);
+        void                                    sendToChanUsers(std::string channel_name, std::string message);
 
 // commands
 
