@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:09 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 13:46:14 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/16 13:56:38 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	Server::Nick(User &user, Message &message)
 {
-    std::cout << "ici " << std::endl;
 	if (message._argsNb < 2)
 	{
         reply(user, ERR_NONICKNAMEGIVEN);

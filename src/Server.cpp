@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 13:54:26 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/16 14:07:11 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -443,7 +443,9 @@ void                    Server::sendToChanUsers(std::string channel_name, std::s
     while (_channelsListIt != getChanList()->end()) // send to users of the channel
     {
         if (_channelsListIt->getName() == channel_name)
+        {
             _channelsListIt->sendToUsers(message);
+        }
         _channelsListIt++;
     }
 }
