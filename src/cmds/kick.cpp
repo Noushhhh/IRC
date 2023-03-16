@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:55 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/14 09:25:22 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/14 09:30:55 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,8 @@ void	Server::Kick(User &user, Message &message)
     }
     if (message._argsNb == 3)
     {
+        reply(user, user.getNickname() + " @ IRC_NOUSHMAKS KICK " + channel_name + nickname + "\n");
         //kick user from chan
-        // _rplMsg = user.getNickname() + " @ IRC_NOUSHMAKS KICK #" + channel_name + nickname + "\n";
-        // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
-        reply(user, user.getNickname() + " @ IRC_NOUSHMAKS KICK #" + channel_name + nickname + "\n");
         return ;
     }
     if (message._argsNb > 3)

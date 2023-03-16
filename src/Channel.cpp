@@ -329,6 +329,7 @@ void				Channel::setMutedList(User &user, User *target, int &addOrRemove)
 			reply(user, RPL_NOTMUTED(target->getNickname(), this->getName()));
 	}
 }
+
 void				Channel::setBanList(Server &serv, User &user, User *target, int &addOrRemove)
 {	
 	if (target->getNickname() == _creator->getNickname())

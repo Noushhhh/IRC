@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 14:27:34 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/14 13:51:55 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/16 10:15:32 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,3 +86,24 @@ void    reply(User &user, std::string reply)
 {
     send (user.getSockfd(), reply.c_str(), reply.length(), 0);
 }
+
+std::vector<std::string>    split_cmd(std::string cmd)
+{
+    std::vector <std::string> cmd_array;
+	char *string_to_split = new char[cmd.length()+1];
+	std::strcpy(string_to_split, cmd.c_str());
+	char *token = strtok(string_to_split, "\r\n");
+	// if (!token)
+    // {
+    //     cmd_array = NULL;
+	// 	return cmd_array;
+    // }
+	while(token != NULL)
+	{
+		cmd_array.push_back(token);
+		token = strtok(NULL, "\r\n");
+	}
+	delete[] string_to_split;
+	return cmd_array ;
+}
+

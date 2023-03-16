@@ -16,8 +16,6 @@
 #include "irc.hpp"
 #include "User.hpp"
 
-
-
 class Message
 {
 public	:

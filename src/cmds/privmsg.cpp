@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/14 09:26:45 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/15 11:24:04 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void	Server::PrivMsg(User &user, Message &message)
 
     else if (isUserWNickname(target)) // else check if message to user
     {
-        
         priv_msg = user.getNickname() + " PRIVMSG " + target + priv_msg + "\n";
 		send(getUserWithNickname(target)->getSockfd(), priv_msg.c_str(), priv_msg.length(), 0); // send priv message to the target
         return ;

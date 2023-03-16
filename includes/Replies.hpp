@@ -33,7 +33,7 @@
 
 //LIST 322 / 323
 
-#define	RPL_LIST(channel, topic)    channel + " :" + topic + "\n"
+#define	RPL_LIST(channel, topic)    channel + " " + topic + "\n"
 #define RPL_LISTEND				    ": end of LIST\n"
 
 //JOIN
@@ -43,7 +43,7 @@
 //TOPIC / 331 / 332
 
 #define	RPL_NOTOPIC(channel)        channel + ": No topic is set\n"
-#define	RPL_TOPIC(channel, topic)   channel + ": " + topic + "\n"
+#define	RPL_TOPIC(channel, topic)   channel + " " + topic + "\n"
 
 //INVITE / 341
 
