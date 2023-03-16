@@ -3,24 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/13 14:32:31 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/16 09:54:36 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
 #include "../../includes/Channel.hpp"
 
-static void joinRPL(Channel chan, User user)
+static void joinRPL(Channel &chan, User user)
 {
     //TO DO : if channel mode is quiet only one username is sent (the activ user)
 
-    std::string                 rpl_buff = RPL_TOPIC(chan.getName(), chan.getTopic());;
+    std::string                  rpl_buff = RPL_TOPIC(chan.getName(), chan.getTopic());
     std::list< User *>::iterator it = chan.getUsersList().begin();
 
-    if (chan.getTopic() == "")
+    if (chan.getTopic().empty())
         rpl_buff = RPL_NOTOPIC(chan.getName());
     send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
 

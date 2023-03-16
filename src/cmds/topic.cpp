@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:25 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/15 10:51:49 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/16 09:42:59 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ void	Server::Topic(User &user, Message &message)
         reply(user, ERR_NOSUCHCHANNEL(channel_name));
         return ;
     }
-    Channel *channel = getChannelWithName(channel_name);
-    if (!channel->isUserInChannel(user)) // check if user in channel
+    Channel *channel = getChannelWithName(channel_name); // TO DO > function to get reference to channel to set topic 
+    if (!channel->isUserInChannel(user))
     {
         reply(user, ERR_NOTONCHANNEL(channel_name));
         return ;
@@ -52,7 +52,7 @@ void	Server::Topic(User &user, Message &message)
         std::string new_topic = get_suffix(&message._arguments[1]);
         if (new_topic.find(":") != 0)
             return ;
-        if (new_topic.size() == 1) // if empty stirng for topic (after ":""), topic cleared
+        if (new_topic.size() == 1) // if empty string for topic (after ":""), topic cleared
         {
             channel->setTopic("");
             _rplMsg = "Topic unset on " + channel_name;
@@ -63,7 +63,8 @@ void	Server::Topic(User &user, Message &message)
         {
             if (channel->getTopicStatus() == false || channel->userIsOp(user.getNickname()) == true) // check if user has the rights to set new topic
             {
-                channel->setTopic(new_topic);
+                getChannelWithName(channel_name)->setTopic(new_topic);
+                // channel->setTopic(new_topic);
                 _rplMsg = "New topic set on " + channel_name + new_topic + "\n";
                 channel->sendToUsers(_rplMsg);
                 return ;
