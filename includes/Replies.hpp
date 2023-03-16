@@ -92,7 +92,7 @@
 #define	ERR_NOSUCHNICK(nick)        nick + ": No such nick\n" // 401
 #define ERR_NONICKNAMEGIVEN		    ": No nickname given\n" //431
 #define ERR_ERRONEUSNICKNAME(nick)  nick + ": Erroneous nickname\n" //432 when a nick contains invalid char
-#define ERR_NICKNAMEINUSE(nick)     nick + ": Nickname is in use\n" // 433
+#define ERR_NICKNAMEINUSE(nick)     "433 " + nick + ": Nickname is in use.\n" // 433
 
 //USER
 

@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/14 11:02:15 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/16 16:44:47 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ class Server
         User                                    *getUserWithNickname(std::string nickname);
         std::list< User >::iterator             getUserItWithFd(int fd);
         std::list< Channel >::iterator          getChanItWithName(std::string name);
-        std::vector< struct pollfd >::iterator  &findPollFd(int fd);
+        std::vector< struct pollfd >::iterator  findPollFd(int fd);
         void                                    sendToChanUsers(std::string channel_name, std::string message);
 
 // commands
@@ -103,7 +103,8 @@ class Server
         const int                               _port;
         const std::string                       _password;
         struct sockaddr_in                      _addr;
-        std::vector< struct pollfd >            _pollFds; //element new a delete
+        std::vector< pollfd >                   _pollFds; //element new a delete
+        std::vector< pollfd >::iterator         _pollFdsIt; //element new a delete
         std::list< User >                       _usersList; //List d'utilisateurs du serveur
         std::list< User >::iterator             _usersListIt;
         std::list< Channel >                    _channelsList;
