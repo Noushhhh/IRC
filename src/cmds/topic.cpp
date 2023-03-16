@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:25 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/14 09:27:17 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/16 10:11:09 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	Server::Topic(User &user, Message &message)
         return ;
     }
     std::string channel_name = message._arguments[0];
-    std::cout << channel_name << std::endl;
     if (!isChannel(channel_name))
     {
         reply(user, ERR_NOSUCHCHANNEL(channel_name));

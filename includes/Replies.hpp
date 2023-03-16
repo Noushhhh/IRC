@@ -58,7 +58,7 @@
 #define	RPL_USERSTART			                                ": UserID Terminal Host\n" //sent first
 #define	RPL_USERS(username, ttyline /*jsp cque c*/, hostname)   ": " + username + " " + ttyline + " " + hostname + "\n"
 #define RPL_ENDOFUSERS			                                ": End of users\n"
-#define RPL_NOUSERS				                                ":Nobody logged in\n"
+#define RPL_NOUSERS				                                ": Nobody logged in\n"
 
 // MODE / 221 (jcomprends pas trop auqnd elle s'envoie elle) / 501
 
