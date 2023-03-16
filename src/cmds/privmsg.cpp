@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 10:59:42 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/16 13:19:51 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	Server::PrivMsg(User &user, Message &message)
                 return ;
             if (getChannelWithName(target)->userIsMuted(user.getNickname()))
                 return ;
-            priv_msg = user.getNickname() + "@IRC_NOUSHMAKS" + " PRIVMSG " + target + priv_msg + "\n"; // split target with "@%#" to add after PRIVMSG
+            priv_msg = user.getNickname() + "@IRC_NOUSHMAKS" + " PRIVMSG " + target + " " + priv_msg + "\n"; // split target with "@%#" to add after PRIVMSG
             sendToChanUsers(target, priv_msg);
             // _channelsListIt = getChanList()->begin();
             // while (_channelsListIt != getChanList()->end()) // send to users of the channel
@@ -54,16 +54,13 @@ void	Server::PrivMsg(User &user, Message &message)
 
     else if (isUserWNickname(target)) // else check if message to user
     {
-        priv_msg = user.getNickname() + " PRIVMSG " + target + priv_msg + "\n";
+        priv_msg = user.getNickname() + " PRIVMSG " + target + " " + priv_msg + "\n";
 		send(getUserWithNickname(target)->getSockfd(), priv_msg.c_str(), priv_msg.length(), 0); // send priv message to the target
         return ;
     }
 
     else
-    {
         reply(user, ERR_NOSUCHNICK(target));
-    }
-    
 }
 
 // PRIVMSG message

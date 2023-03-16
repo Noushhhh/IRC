@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:25 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 11:13:56 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/16 11:23:06 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	Server::Topic(User &user, Message &message)
 {
+    std::cout << message._argsNb << std::endl;
+    std::cout << message._rawMessage << std::endl;
     if (message._argsNb < 2)
     {
         reply(user, ERR_NEEDMOREPARAMS(message._cmd));
@@ -25,7 +27,7 @@ void	Server::Topic(User &user, Message &message)
         reply(user, ERR_NOSUCHCHANNEL(channel_name));
         return ;
     }
-    Channel *channel = getChannelWithName(channel_name); // TO DO > function to get reference to channel to set topic 
+    Channel *channel = getChannelWithName(channel_name);
     if (!channel->isUserInChannel(user))
     {
         reply(user, ERR_NOTONCHANNEL(channel_name));
