@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:18 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 11:00:46 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/16 15:08:28 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,6 @@
 
 void	Server::Ping(User &user, Message &message)
 {
-    if (message._argsNb != 2)
-    {
-        reply(user, ERR_NEEDMOREPARAMS(message._cmd));
-        return ;
-    }
-    message._it = message._splitMessage.begin() + 1;
-    user.setPing(*message._it);
-    std::string pong_msg = "PONG IRC_NOUSHMAKS " + user.getPing();
-    reply(user, pong_msg);
+    user.setPing(message._arguments[0]);
+    reply(user, user.getPing() + "\n");
 }

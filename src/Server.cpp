@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 14:07:11 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/16 15:01:49 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,6 +239,7 @@ bool                    Server::pollDispatch()
                     }
                 }
                 std::vector <std::string> cmd_array = split_cmd(msg);
+                std::cout << "Message received" << msg << std::endl;
                 for (std::vector<std::string>::iterator cmd_it = cmd_array.begin(); cmd_it != cmd_array.end(); cmd_it++)
                 {
                     handleMessage(*(getUserItWithFd(it->fd)), *cmd_it); // check if reference of uesr good
