@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/15 11:24:04 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/16 10:34:32 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,18 @@
 
 void	Server::PrivMsg(User &user, Message &message)
 {
-    if (message._argsNb < 2)
+    if (message.getArgsNb() < 2)
     {
-        reply(user, ERR_NEEDMOREPARAMS(message._cmd));
+        reply(user, ERR_NEEDMOREPARAMS(message.getCmd()));
         return ;
     }
-    if (message._argsNb < 3)
+    if (message.getArgsNb() < 3)
     {
         reply(user, ERR_NOTEXTTOSEND);
         return ;
     }
-    std::string target = message._arguments[0];
-    std::string priv_msg = get_suffix(&message._arguments[1]);
+    std::string target = (message.getArguments())[0];
+    std::string priv_msg = get_suffix(&(message.getArguments())[1]);
     if ((target.find("#") == 0)) // supposed to be channel
     {
         if (isChannel(target)) // check that channel name valid

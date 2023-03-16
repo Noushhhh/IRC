@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:25 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 09:42:59 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/16 10:34:32 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 void	Server::Topic(User &user, Message &message)
 {
-    if (message._argsNb < 2)
+    if (message.getArgsNb() < 2)
     {
-        reply(user, ERR_NEEDMOREPARAMS(message._cmd));
+        reply(user, ERR_NEEDMOREPARAMS(message.getCmd()));
         return ;
     }
-    std::string channel_name = message._arguments[0];
+    std::string channel_name = (message.getArguments())[0];
     std::cout << channel_name << std::endl;
     if (!isChannel(channel_name))
     {
@@ -33,7 +33,7 @@ void	Server::Topic(User &user, Message &message)
         return ;
     }
 
-    if (message._argsNb == 2) // if user asks for topic of channel
+    if (message.getArgsNb() == 2) // if user asks for topic of channel
     {
         if (channel->getTopic().empty())
         {
@@ -47,9 +47,9 @@ void	Server::Topic(User &user, Message &message)
         }
     }
     
-    if (message._argsNb > 2) // if user wants to set new topic 
+    if (message.getArgsNb() > 2) // if user wants to set new topic 
     {
-        std::string new_topic = get_suffix(&message._arguments[1]);
+        std::string new_topic = get_suffix(&(message.getArguments())[1]);
         if (new_topic.find(":") != 0)
             return ;
         if (new_topic.size() == 1) // if empty string for topic (after ":""), topic cleared

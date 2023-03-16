@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:47 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/14 09:59:41 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/16 10:34:07 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 void	Server::Invite(User &user, Message &message)
 {
-    if (message._argsNb != 3)
+    if (message.getArgsNb() != 3)
     {
-        reply(user, ERR_NEEDMOREPARAMS(message._cmd));
+        reply(user, ERR_NEEDMOREPARAMS(message.getCmd()));
         return ;
     }
-    std::string nickname = message._arguments[0];
-    std::string channel = message._arguments[1]; // check if possible tomake a function that does 3 checks below code cleaner
-    if (message._arguments[1].find("#") != 0) // check if right channel format
+    std::string nickname = (message.getArguments())[0];
+    std::string channel = (message.getArguments())[1]; // check if possible tomake a function that does 3 checks below code cleaner
+    if ((message.getArguments())[1].find("#") != 0) // check if right channel format
     {
         reply(user, ERR_NOSUCHCHANNEL(channel));
         return ;

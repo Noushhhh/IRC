@@ -59,7 +59,7 @@ bool Message::splitMessage()
 		_splitMessage.push_back(token);
 		token = strtok(NULL, "\r \n");
 	}
-	getArguments();
+	getArgs();
 	delete[] string_to_split;
 	return true ;
 }
@@ -74,7 +74,7 @@ bool Message::parseMessage()
 	return true ;
 }
 
-void	Message::getArguments()
+void	Message::getArgs()
 {
 	_argsNb = _splitMessage.size();
 	_arguments = new std::string[_argsNb];
@@ -85,3 +85,29 @@ void	Message::getArguments()
 		i++;
 	}
 }
+
+/**************************************************************/
+/*                                                            */
+/*                         GETTERS                            */
+/*                                                            */
+/**************************************************************/
+
+std::string							Message::getRawMessage(void) const { return _rawMessage ; }
+std::vector <std::string> 			Message::getSplitMessage(void) const { return _splitMessage ; }
+std::string							Message::getCmd(void) const { return _cmd ; }
+std::string							*Message::getArguments(void) { return _arguments ; }
+std::vector <std::string>::iterator	Message::getIt(void) const { return _it ; }
+size_t								Message::getArgsNb(void) const { return _argsNb ; }
+
+/**************************************************************/
+/*                                                            */
+/*                         SETTERS                            */
+/*                                                            */
+/**************************************************************/
+
+void	Message::setRawMessage(std::string rawMessage) { _rawMessage = rawMessage ; }
+void	Message::setSplitMessage(std::vector <std::string> splitMessage) { _splitMessage = splitMessage ; }
+void	Message::setCmd(std::string cmd) { _cmd = cmd ; }
+void	Message::setArguments(std::string *arguments) { _arguments = arguments ; }
+void	Message::setIt(std::vector <std::string>::iterator it) { _it = it ; }
+void	Message::setArgsNb(size_t argsNb) { _argsNb = argsNb ; }

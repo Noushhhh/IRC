@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:01 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/13 15:12:09 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/16 10:34:32 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,15 +197,15 @@ void	Server::Mode(User &user, Message &message)
     int                                     i = 0;
     ssize_t                                 argsNB = 0;
     std::string                             err_buff;
-    std::vector< std::string >::iterator    msgEnd = message._splitMessage.end();
+    std::vector< std::string >::iterator    msgEnd = (message.getSplitMessage()).end();
     std::list< Channel >::iterator          channel;
     std::string                             modes;
     std::string                             *modeparams = NULL;
 
-    message._it = message._splitMessage.begin();
-    while (message._it != msgEnd)
+    message.getIt() = (message.getSplitMessage()).begin();
+    while (message.getIt() != msgEnd)
     {
-        message._it ++;
+        message.getIt() ++;
         argsNB ++;
     }
     modeparams = new std::string[argsNB];
@@ -220,14 +220,14 @@ void	Server::Mode(User &user, Message &message)
     }
     try
     {
-        message._it = message._splitMessage.begin(); // delete
-        message._it ++; // 2nd arg is supposed to be chan name // delete
-        channel = getChanItWithName((*message._it)); // delete
-        // channel = getChanItWithName(message._arguments[1]); // 2nd arg is supposed to be chan name // | and delete the 3 lines above
+        message.getIt() = (message.getSplitMessage()).begin(); // delete
+        message.getIt() ++; // 2nd arg is supposed to be chan name // delete
+        channel = getChanItWithName((*message.getIt())); // delete
+        // channel = getChanItWithName((message.getArguments())[1]); // 2nd arg is supposed to be chan name // | and delete the 3 lines above
     }
     catch(const Channel::BadNameException& e)
     {
-        err_buff = (*message._it); //  err_buff = message._arguments[1];
+        err_buff = (*message.getIt()); //  err_buff = (message.getArguments())[1];
         err_buff.append(e.badName()); // delete 
         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
         return ;
@@ -253,17 +253,17 @@ void	Server::Mode(User &user, Message &message)
     }
     else if (argsNB == 3)
     {
-        message._it ++; // 3rd arg is supposed to be modes
-        modes = *(message._it);
+        message.getIt() ++; // 3rd arg is supposed to be modes
+        modes = *(message.getIt());
         modesSet(user, modes, modeparams, channel);
     }
     else if ( argsNB > 3)
     {
-        message._it ++; // 3rd arg is supposed to be modes
-        modes = *(message._it);
-        while (++message._it != msgEnd)
+        message.getIt() ++; // 3rd arg is supposed to be modes
+        modes = *(message.getIt());
+        while (++message.getIt() != msgEnd)
         {
-            modeparams[i] = *(message._it); // modeparams[i] = message._arguments[3]; // 4rd arg and so forth are supposed to be modes params
+            modeparams[i] = *(message.getIt()); // modeparams[i] = (message.getArguments())[3]; // 4rd arg and so forth are supposed to be modes params
             i ++;
         }
         modesSet(user, modes, modeparams, channel);

@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:16 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/14 09:26:24 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/16 10:34:32 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	Server::Pass(User &user, Message &message)
 {
-	if (message._argsNb < 2)
+	if (message.getArgsNb() < 2)
 	{
-		reply(user, ERR_NEEDMOREPARAMS(message._cmd));
+		reply(user, ERR_NEEDMOREPARAMS(message.getCmd()));
 		return ;
 	}
 	if (user.getRegistered() == true)
@@ -25,7 +25,11 @@ void	Server::Pass(User &user, Message &message)
 		return ;
 	}
 	else
-		user.setPassword(message._arguments[0]);
+	{
+		//std::string password = (message.getArguments())[0];
+		// user.setPassword((message.getArguments())[0]);
+		user.setPassword((message.getArguments())[0]);
+	}
 }
 
 // PASS message

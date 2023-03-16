@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 09:54:36 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/16 10:30:39 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,19 +108,19 @@ void	Server::Join(User &user, Message &message)
     std::string::iterator it;
     bool chanExist = false;
 
-    message._it = message._splitMessage.begin() + 1; // channel name
+    message.getIt() = message.getSplitMessage().begin() + 1; // channel name
 
-    if (message._splitMessage.size() == 1)
+    if (message.getSplitMessage().size() == 1)
     {
         err_buff = ERR_NEEDMOREPARAMS(std::string("JOIN"));
         send(user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
         return ;
     }
-    if (message._splitMessage.size() == 2 || message._splitMessage.size() == 3)
-        chansSplit = split(std::string(*message._it));
-    if (message._splitMessage.size() == 3)
-        keysSplit = split(*(message._it + 1));
-    if (message._splitMessage.size() > 3)
+    if (message.getSplitMessage().size() == 2 || message.getSplitMessage().size() == 3)
+        chansSplit = split(std::string(*message.getIt()));
+    if (message.getSplitMessage().size() == 3)
+        keysSplit = split(*(message.getIt() + 1));
+    if (message.getSplitMessage().size() > 3)
     {
         err_buff = ERR_TOOMANYTARGETS(std::string("JOIN"));
         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
@@ -129,7 +129,7 @@ void	Server::Join(User &user, Message &message)
 
     // if passed arg is 0, remove user from all chans
     
-    if (message._splitMessage.size() == 2 && *(message._it) == "0")
+    if (message.getSplitMessage().size() == 2 && *(message.getIt()) == "0")
     {
         remove_from_all_channels(user, _channelsList);
         err_buff = " :succesfully removed from all channels\n";
@@ -182,7 +182,7 @@ void	Server::Join(User &user, Message &message)
                     
                     //if chan is key protected and a key args was given to JOIN cmd and it matchs chan key
                     
-                    if ((_channelsListIt->getPswdStatus() && message._splitMessage.size() > 2 &&
+                    if ((_channelsListIt->getPswdStatus() && message.getSplitMessage().size() > 2 &&
                     i < ft_arraySize(keysSplit) && pswdMatch(_channelsListIt->getPswd(), keysSplit[i]))
                     || (!_channelsListIt->getPswdStatus()))
                     {
@@ -206,7 +206,7 @@ void	Server::Join(User &user, Message &message)
                 {
                     // if a keyword is specified
                     
-                    if (message._splitMessage.size() > 2 && i < ft_arraySize(keysSplit) && keysSplit[i][0] != 0)
+                    if (message.getSplitMessage().size() > 2 && i < ft_arraySize(keysSplit) && keysSplit[i][0] != 0)
                     {
                         // if (i > keysSplit->size())
                         Channel *newChan = new Channel(chansSplit[i], keysSplit[i], user);

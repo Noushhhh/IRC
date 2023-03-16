@@ -18,7 +18,7 @@
 
 class Message
 {
-public	:
+private	:
 
 	std::string							_rawMessage;
 	std::vector <std::string>			_splitMessage;
@@ -38,7 +38,25 @@ public	:
 
 	bool						splitMessage(); // add error pass in bool function
 	bool						parseMessage();
-	void						getArguments();
+	void						getArgs();
+
+//getters
+	std::string							getRawMessage(void) const;
+	std::vector <std::string> 			getSplitMessage(void) const;
+	std::string							getCmd(void) const;
+	std::string							*getArguments(void);
+	std::vector <std::string>::iterator	getIt(void) const;
+	size_t								getArgsNb(void) const;
+
+//setters
+
+	void	setRawMessage(std::string rawMessage);
+	void	setSplitMessage(std::vector <std::string> splitMessage);
+	void	setCmd(std::string cmd);
+	void	setArguments(std::string *arguments);
+	void	setIt(std::vector <std::string>::iterator it);
+	void	setArgsNb(size_t argsNb);
+
 
 };
 

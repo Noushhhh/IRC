@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/15 10:42:13 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/16 10:33:47 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -379,18 +379,18 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
     if (!message.splitMessage())
 		return false ;
     int i = 0;
-	message._it = message._splitMessage.begin();
-	while(_handledCommands[i] != *message._it && i < HANDLEDCOMMANDSNB)
+	message.getIt() = message.getSplitMessage().begin();
+	while(_handledCommands[i] != *message.getIt() && i < HANDLEDCOMMANDSNB)
 		i++;
 	if (i >= HANDLEDCOMMANDSNB)
 	{
-		err_buff = ERR_UNKNOWNNCOMMAND(*message._splitMessage.begin());
+		err_buff = ERR_UNKNOWNNCOMMAND(*message.getSplitMessage().begin());
 		send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
 		return false;
 	}
 	else
 	{
-		//message._argsNb = message._splitMessage.size();
+		//message.getArgsNb() = message._splitMessage.size();
 		(void)(this->*_ptrF[i])(user, message);
         return true;
 	}

@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:14 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/14 09:26:17 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/16 10:34:32 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 void	Server::Part(User &user, Message &message)
 {
-    if (message._argsNb < 3)
+    if (message.getArgsNb() < 3)
      {
-        reply(user, ERR_NEEDMOREPARAMS(message._cmd));
+        reply(user, ERR_NEEDMOREPARAMS(message.getCmd()));
         return ;
 	}
-    std::string channel_name = message._arguments[0];
+    std::string channel_name = (message.getArguments())[0];
     if (!isChannel(channel_name))
     {
         reply(user, ERR_NOSUCHCHANNEL(channel_name));

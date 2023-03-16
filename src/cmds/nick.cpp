@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:09 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/14 09:26:08 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/16 10:27:36 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 void	Server::Nick(User &user, Message &message)
 {
-	if (message._argsNb < 2)
+	if (message.getArgsNb() < 2)
 	{
         reply(user, ERR_NONICKNAMEGIVEN);
 		return ;
 	}
-    std::string nickname = message._arguments[0];
+    std::string nickname = (message.getArguments())[0];
 	for (_usersListIt = _usersList.begin(); _usersListIt != _usersList.end(); _usersListIt++)
 	{
 		if (isUserWNickname(nickname))
