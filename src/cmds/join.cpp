@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 10:30:39 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/16 10:38:20 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,7 @@ void	Server::Join(User &user, Message &message)
 
     if (message.getSplitMessage().size() == 1)
     {
-        err_buff = ERR_NEEDMOREPARAMS(std::string("JOIN"));
-        send(user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+        reply(user, ERR_NEEDMOREPARAMS(std::string("JOIN")));
         return ;
     }
     if (message.getSplitMessage().size() == 2 || message.getSplitMessage().size() == 3)
@@ -122,8 +121,7 @@ void	Server::Join(User &user, Message &message)
         keysSplit = split(*(message.getIt() + 1));
     if (message.getSplitMessage().size() > 3)
     {
-        err_buff = ERR_TOOMANYTARGETS(std::string("JOIN"));
-        send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+        reply(user, ERR_TOOMANYTARGETS(std::string("JOIN")));
         return ;
     }
 
@@ -132,8 +130,7 @@ void	Server::Join(User &user, Message &message)
     if (message.getSplitMessage().size() == 2 && *(message.getIt()) == "0")
     {
         remove_from_all_channels(user, _channelsList);
-        err_buff = " :succesfully removed from all channels\n";
-        send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+        reply(user, RPL_JOINZERO(user.getNickname()));
     }
     else
     {    
@@ -150,8 +147,7 @@ void	Server::Join(User &user, Message &message)
 
                     if (_channelsListIt->getUserItInList(_channelsListIt->getUsersList(), user.getNickname()) != _channelsListIt->getUsersList().end())
                     {
-                        err_buff = ERR_USERONCHANNEL(_channelsListIt->getName(), user.getNickname());
-                        send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+                        reply (user, ERR_USERONCHANNEL(_channelsListIt->getName(), user.getNickname()));
                         chanExist = true;
                         break ;
                     }
@@ -160,22 +156,19 @@ void	Server::Join(User &user, Message &message)
 
                     if (_channelsListIt->getInviteStatus() == true)
                     {
-                        err_buff = ERR_ISINVITEONLY(_channelsListIt->getName());
-                        send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+                        reply (user, ERR_ISINVITEONLY(_channelsListIt->getName()));
                         chanExist = true;
                         break ;
                     }
                     else if (_channelsListIt->userIsBanned(user.getNickname()) == true)
                     {
-                        err_buff = ERR_ISBANNED(_channelsListIt->getName());
-                        send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+                        reply (user, ERR_ISBANNED(user.getNickname(), _channelsListIt->getName()));
                         chanExist = true;
                         break ;
                     }
                     else if (_channelsListIt->getUsersLimitStatus() == true  && _channelsListIt->getUsersLimit() <= _channelsListIt->getUsersList().size())
                     {
-                        err_buff = ERR_USERLIMITREACHED(_channelsListIt->getName());
-                        send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+                        reply (user, ERR_USERLIMITREACHED(_channelsListIt->getName()));
                         chanExist = true;
                         break ;
                     }
@@ -192,8 +185,7 @@ void	Server::Join(User &user, Message &message)
                         chanExist = true;
                         break ;
                     }
-                    err_buff = ERR_BADCHANNELKEY(_channelsListIt->getName());
-                    send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+                    reply (user, ERR_BADCHANNELKEY(_channelsListIt->getName()));
                     chanExist = true;
                     break ;
                 }

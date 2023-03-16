@@ -6,11 +6,27 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:38 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 10:29:20 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/16 10:37:49 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
+
+std::vector< struct pollfd >::iterator &Server::findPollFd(int fd)
+{
+    std::vector< struct pollfd >::iterator *it = NULL; 
+    std::vector< struct pollfd >::iterator end = _pollFds.end();
+
+    *it = _pollFds.begin();
+
+    while ((*it) != end)
+    {
+        if ((*it)->fd == fd)
+            return (*it);
+        it ++;
+    }
+    return (*it);
+}
 
 void	Server::cmdUser(User &user, Message &message)
 {
@@ -44,7 +60,7 @@ void	Server::cmdUser(User &user, Message &message)
     else
     {
         reply(user, ERR_PASSWDMISMATCH);
-        //close user
+        closeUser(findPollFd(user.getSockfd()));
         return ;
     }
     return ; 

@@ -32,6 +32,7 @@ Message::Message(const Message &src)
 
 Message::~Message()
 {
+	delete [] _arguments;
 	// std::cerr << "Debug message: Message Default Destructor called" << std::endl;
 }
 

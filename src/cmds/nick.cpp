@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:09 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 10:27:36 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/16 10:39:18 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void	Server::Nick(User &user, Message &message)
     {
         if (!std::isprint(static_cast <unsigned char> (nickname[i])))
         {
-            std::cout << nickname[i] << std::endl;
             reply(user, ERR_ERRONEUSNICKNAME(nickname));
             return ;
         }

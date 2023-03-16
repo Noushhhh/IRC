@@ -39,6 +39,7 @@ _topic("")
 	this->_isSecret			= false;
 	this->_isTopicOPOnly	= true;
 	this->_isUsersLimit		= false;
+	this->_usersLimit		= 0;
 	_usersList.push_back(&chanCreator);
 	_opList.push_back(&chanCreator);
 }
@@ -64,6 +65,7 @@ _topic("")
 	this->_isSecret			= false;
 	this->_isTopicOPOnly	= true;
 	this->_isUsersLimit		= false;
+	this->_usersLimit		= 0;
 	_usersList.push_back(&chanCreator);
 	_opList.push_back(&chanCreator);
 }
@@ -90,7 +92,6 @@ Channel &Channel::operator=(const Channel &src)
 	this->_opList			= src._opList;
 	this->_mutedUsersList	= src._mutedUsersList;
 	this->_banUsersList		= src._banUsersList;
-	this->_opList			= src._opList;
 	this->_type				= src._type;
 	this->_isPswdProtected	= src._isPswdProtected;
 	this->_isInviteOnly		= src._isInviteOnly;	
@@ -100,6 +101,9 @@ Channel &Channel::operator=(const Channel &src)
 	this->_isPrivate		= src._isPrivate;
 	this->_isSecret			= src._isSecret;
 	this->_isTopicOPOnly	= src._isTopicOPOnly;
+	this->_isUsersLimit		= src._isUsersLimit;
+	this->_usersLimit		= src._usersLimit;		
+
 	return (*this);
 }
 

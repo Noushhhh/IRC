@@ -36,6 +36,10 @@
 #define	RPL_LIST(channel, topic)    channel + " " + topic + "\n"
 #define RPL_LISTEND				    ": end of LIST\n"
 
+//JOIN
+
+#define RPL_JOINZERO(nick)          nick + " :succesfully removed from all channels\n"
+
 //TOPIC / 331 / 332
 
 #define	RPL_NOTOPIC(channel)        channel + ": No topic is set\n"
@@ -54,7 +58,7 @@
 #define	RPL_USERSTART			                                ": UserID Terminal Host\n" //sent first
 #define	RPL_USERS(username, ttyline /*jsp cque c*/, hostname)   ": " + username + " " + ttyline + " " + hostname + "\n"
 #define RPL_ENDOFUSERS			                                ": End of users\n"
-#define RPL_NOUSERS				                                ":Nobody logged in\n"
+#define RPL_NOUSERS				                                ": Nobody logged in\n"
 
 // MODE / 221 (jcomprends pas trop auqnd elle s'envoie elle) / 501
 
@@ -117,7 +121,7 @@
 #define ERR_ISCHANOP(nick)              nick + ": is chanop and cannot be muted, banned or unoped\n"
 #define ERR_BADCHANNELKEY(chan)         chan + ": Cannot join channel (+k)\n" // 475
 #define ERR_CHANOPRIVSNEEDED(chan)      chan + ": You're not channel operator\n" // 482
-#define ERR_ISBANNED(chan)              ": is banned from " + chan + "\n"
+#define ERR_ISBANNED(nick, chan)        nick + ": is banned from " + chan + "\n"
 #define ERR_USERLIMITREACHED(chan)      chan + ": users limit reached\n"
 
 // PING & PONG
