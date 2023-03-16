@@ -38,6 +38,10 @@ Message::~Message()
 Message &Message::operator=(const Message &src)
 {
 	_rawMessage = src._rawMessage;
+	_splitMessage = src._splitMessage;
+	_cmd = src._cmd;
+	_arguments = src._arguments;
+	_it = src._it;
 	_argsNb = src._argsNb;
 	return *this;
 }
@@ -53,7 +57,6 @@ bool Message::splitMessage()
 	while(token != NULL)
 	{
 		_splitMessage.push_back(token);
-		//_arguments[i] = token; // test if works if no conversion from char to string. to cast ?
 		token = strtok(NULL, "\r \n");
 	}
 	getArguments();
@@ -82,4 +85,3 @@ void	Message::getArguments()
 		i++;
 	}
 }
-
