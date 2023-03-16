@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:59 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 10:32:16 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/16 10:58:31 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	Server::List(User &user, Message &message)
 {
-    if (message.getArgsNb() < 1)
+    if (message._argsNb < 1)
         return ;
     if (getChanList()->empty())
     {
@@ -23,7 +23,7 @@ void	Server::List(User &user, Message &message)
         return ;
     }
 
-    if (message.getArgsNb() == 1)
+    if (message._argsNb == 1)
     {
         for (_channelsListIt = _channelsList.begin(); _channelsListIt != _channelsList.end(); _channelsListIt++)
         {
@@ -36,9 +36,9 @@ void	Server::List(User &user, Message &message)
         return ;
     }
 
-    for (size_t i = 0; i != (message.getArgsNb() - 1); i++)
+    for (size_t i = 0; i != (message._argsNb - 1); i++)
     {
-        _channelsListIt = getChanItWithName((message.getArguments())[i]);
+        _channelsListIt = getChanItWithName(message._arguments[i]);
         if (_channelsListIt->getSecrecyStatus() == true)
             _channelsListIt++;
         _rplMsg = _channelsListIt->getName() + _channelsListIt->getTopic() + "\n"; 

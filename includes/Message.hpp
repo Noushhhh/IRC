@@ -18,7 +18,7 @@
 
 class Message
 {
-private	:
+public	:
 
 	std::string							_rawMessage;
 	std::vector <std::string>			_splitMessage;

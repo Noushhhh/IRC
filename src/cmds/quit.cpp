@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:23 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 10:34:32 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/16 10:59:42 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 void	Server::Quit(User &user, Message &message)
 {
     std::string quit_msg;
-    if (message.getArgsNb() < 2)
+    if (message._argsNb < 2)
     {
-        reply(user, ERR_NEEDMOREPARAMS(message.getCmd()));
+        reply(user, ERR_NEEDMOREPARAMS(message._cmd));
         return ;
     }
     quit_msg = quit_msg = user.getNickname() + "@IRC_NOUSHMAKS QUIT '\n'";
-    if (message.getArgsNb() > 2)
-         quit_msg = quit_msg + get_suffix(&(message.getArguments())[1]);
+    if (message._argsNb > 2)
+         quit_msg = quit_msg + get_suffix(&message._arguments[1]);
     std::list <Channel *>::iterator cit = user.getJoinedChans().begin();
     while (cit != user.getJoinedChans().begin())
     {
