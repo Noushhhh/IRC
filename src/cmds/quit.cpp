@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:23 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 13:24:58 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/16 13:45:39 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,24 @@ void	Server::Quit(User &user, Message &message)
         reply(user, ERR_NEEDMOREPARAMS(message._cmd));
         return ;
     }
-    quit_msg = quit_msg = user.getNickname() + "@IRC_NOUSHMAKS QUIT '\n'";
-    if (message._argsNb > 2)
+    quit_msg = quit_msg = user.getNickname() + "@IRC_NOUSHMAKS QUIT :Quit: ";
+    if (message._argsNb > 1)
          quit_msg = quit_msg + get_suffix(&message._arguments[0]);
-    std::list <Channel *>::iterator cit = user.getJoinedChans().begin();
-    while (cit != user.getJoinedChans().end())
+    //std::list <Channel *>::iterator cit = user.getJoinedChans().begin();
+    for (std::list <Channel *>::iterator cit = user.getJoinedChans().begin(); cit != user.getJoinedChans().end(); cit++)
     {
+        std::cout << "ici" << std::endl; 
+        (*cit)->getName();
         (*cit)->sendToUsers(quit_msg); // send to all users of chans in which user was
-        cit++;
+       // sendToChanUsers((*cit)->getName(), quit_msg);
     }
+    // while (cit != user.getJoinedChans().end())
+    // {
+    //     std::cout << "ici" << std::endl; 
+    //     //(*cit)->sendToUsers(quit_msg); // send to all users of chans in which user was
+    //     sendToChanUsers((*cit)->getName(), quit_msg);
+    //     cit++;
+    // }
     // function to close user
 }
 
