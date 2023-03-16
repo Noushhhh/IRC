@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:55 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 10:39:03 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/16 13:33:14 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,18 @@
 
 void	Server::Kick(User &user, Message &message)
 {
-    if (message._argsNb < 4)
+    if (message._argsNb < 3)
     {
         reply(user, ERR_NEEDMOREPARAMS(message._cmd));
         return ;
     }
     std::string channel_name = message._arguments[0];
-    if (channel_name.find("#") != 0)
+    Channel *chan = getChannelWithName(channel_name);
+    if (!chan->userIsOp(user.getNickname()))
     {
-         reply(user, ERR_NOSUCHCHANNEL(channel_name));
+        reply(user, ERR_NOPRIVILEGES(user.getNickname(), chan->getName()));
         return ;
     }
-    else
-        channel_name = channel_name.substr(1);
     if (!isChannel(channel_name))
     {
         reply(user, ERR_NOSUCHCHANNEL(channel_name));
@@ -40,7 +39,7 @@ void	Server::Kick(User &user, Message &message)
     std::string nickname = message._arguments[1];
     if (!isUserWNickname(nickname))
     {
-        reply(user, ERR_NOTONCHANNEL(channel_name));
+        reply(user, ERR_USERNOTINCHANNEL(nickname, channel_name));
         return ;
     }
     if (!isUserOnChan(nickname, channel_name))
@@ -48,20 +47,25 @@ void	Server::Kick(User &user, Message &message)
         reply(user, ERR_NOTONCHANNEL(channel_name));
         return ;
     }
+    User    *target = getUserWithNickname(nickname);
     if (message._argsNb == 3)
     {
-        reply(user, user.getNickname() + " @ IRC_NOUSHMAKS KICK " + channel_name + nickname + "\n");
+        reply(user, user.getNickname() + " @ IRC_NOUSHMAKS KICK " + channel_name + " " + nickname + "\n");
         //kick user from chan
+        chan->kickUser(target);
         return ;
     }
     if (message._argsNb > 3)
     {
         _rplMsg = "";
-        for (size_t i = 3; i != message._argsNb; i++) // check if _argsNb one argument = 1 || one argument = 0
-            _rplMsg = _rplMsg + message._arguments[i]; // build reply message with users' arguments
-        _rplMsg = user.getNickname() + " @ IRC_NOUSHMAKS KICK #" + channel_name + nickname + "\n";
-        // send(user.getSockfd(), _errMsg.c_str(), _errMsg.length(), 0);
-        reply(user, _rplMsg);
+        reply (user, user.getNickname() + " @ IRC_NOUSHMAKS KICK " + channel_name + " " + nickname + "\n");
+        for (size_t i = 2; i != message._argsNb; i++)
+        {
+            _rplMsg.append(message._arguments[i]); // build reply message with users' arguments
+            _rplMsg.push_back(' ');
+        }
+        reply(*target, "You got kicked from: " + chan->getName() + ": " + _rplMsg + "\n");
+        chan->kickUser(target);
         return ;
     }
 }

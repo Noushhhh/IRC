@@ -85,7 +85,7 @@
 #define ERR_NEEDMOREPARAMS(cmd)     cmd + ": Not enough parameters\n" // 461
 #define ERR_UNKNOWNNCOMMAND(cmd)    cmd + ": Unknown command\n" // 421
 #define ERR_PASSWDMISMATCH		    ": Password incorrect\n" // 464
-#define ERR_NOPRIVILEGES		    ": Permission Denied- You're not an IRC operator\n" // 481
+#define ERR_NOPRIVILEGES(nick, chan)nick + ": Permission Denied- You're not an IRC operator on channel " + chan + "\n" // 481
 
 //NICK
 

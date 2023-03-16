@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 10:39:07 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/16 13:50:40 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,7 +239,11 @@ bool                    Server::pollDispatch()
                     }
                 }
                 std::cerr << "message sent by client: " << msg << "FEUR \n";
-                handleMessage(*(getUserItWithFd(it->fd)), msg); // check if reference of uesr good
+                std::vector <std::string> cmd_array = split_cmd(msg);
+                for (std::vector<std::string>::iterator cmd_it = cmd_array.begin(); cmd_it != cmd_array.end(); cmd_it++)
+                {
+                    handleMessage(*(getUserItWithFd(it->fd)), *cmd_it); // check if reference of uesr good
+                }
                 msg = "";
                 errno = 0;
             }
@@ -275,7 +279,8 @@ bool                    Server::addUser()
     newFd = accept(_sock, (struct sockaddr *)&newAddr, &nSize);
     if (newFd < 0)
         return (false);
-    struct pollfd *tmpfd = new struct pollfd;
+    struct pollfd tmp;
+    struct pollfd *tmpfd = &tmp; /*= new struct pollfd*/;
     tmpfd->fd = newFd;
     tmpfd->events = POLLIN|POLLHUP;
     tmpfd->revents = 0;
