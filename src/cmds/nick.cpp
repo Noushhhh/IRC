@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:09 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 10:11:23 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/17 13:46:00 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,11 @@ void	Server::Nick(User &user, Message &message)
 	}
     for (size_t i = 0; i < nickname.length(); i++)
     {
+        if (nickname == "anonymous")
+        {
+            reply(user, ERR_ERRONEUSNICKNAME(nickname));
+            return ;
+        }
         if (!std::isprint(static_cast <unsigned char> (nickname[i])))
         {
             reply(user, ERR_ERRONEUSNICKNAME(nickname));
@@ -39,15 +44,21 @@ void	Server::Nick(User &user, Message &message)
     if (user.getRegistered() == false)
     {
         user.setNickname(nickname);
-        _rplMsg = "New nick in use: " + nickname + "\n";
+        _rplMsg = "new nick in use :" + nickname + "\n";
         reply(user, _rplMsg);
         return ;
     }
     else
     {
         _rplMsg = user.getNickname() + " changed nickname to: " + nickname + "\n";
+        for (_channelsListIt = _channelsList.begin(); _channelsListIt != _channelsList.end(); _channelsListIt++)
+        {
+            if (_channelsListIt->getQuietStatus())
+                _channelsListIt++;
+            sendToChanUsers(_channelsListIt->getName(), _rplMsg);
+        }
         user.setNickname(nickname);
-        reply(user, _rplMsg);
+        //reply(user, _rplMsg);
         return ;
     }
 }

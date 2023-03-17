@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:14 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/14 09:26:17 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/17 10:49:45 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,36 @@
 
 void	Server::Part(User &user, Message &message)
 {
-    if (message._argsNb < 3)
+    if (message._argsNb < 2)
      {
         reply(user, ERR_NEEDMOREPARAMS(message._cmd));
         return ;
 	}
-    std::string channel_name = message._arguments[0];
-    if (!isChannel(channel_name))
+    std::string *channels_to_part = cppsplit(message._arguments[0], ','); 
+    for (size_t i = 0; !(channels_to_part[i].empty()); i++)
     {
-        reply(user, ERR_NOSUCHCHANNEL(channel_name));
-        return ;
+        if (!isChannel(channels_to_part[i]))
+        {
+            reply(user, ERR_NOSUCHCHANNEL(channels_to_part[i]));
+            return ;
+        }
+        else
+        {
+            Channel *channel = getChannelWithName(channels_to_part[i]);
+            if (!channel->isUserInChannel(user)) // check if user in channel
+            {
+                reply(user, ERR_NOTONCHANNEL(channels_to_part[i]));
+                return ;
+            }
+        }
     }
-    Channel *channel = getChannelWithName(channel_name);
-    if (!channel->isUserInChannel(user)) // check if user in channel
+    for (size_t i = 0; !(channels_to_part[i].empty()); i++)
     {
-        reply(user, ERR_NOTONCHANNEL(channel_name));
-        return ;
+        _rplMsg = user.getNickname() + "@IRC_NOUSHMAKS PART #" + channels_to_part[i] + "\n";
+        sendToChanUsers(channels_to_part[i], _rplMsg);
+        // remove user from channel
     }
-    _rplMsg = user.getNickname() + "@IRC_NOUSHMAKS has left channel #" + channel_name + "\n";
-    sendToChanUsers(channel_name, _rplMsg);
-    // remove user from channel
+    // free channels to part?
 }
 // PART message
 //      Command: PART

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:01 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/13 15:12:09 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/16 11:00:46 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,12 +197,12 @@ void	Server::Mode(User &user, Message &message)
     int                                     i = 0;
     ssize_t                                 argsNB = 0;
     std::string                             err_buff;
-    std::vector< std::string >::iterator    msgEnd = message._splitMessage.end();
+    std::vector< std::string >::iterator    msgEnd = (message._splitMessage).end();
     std::list< Channel >::iterator          channel;
     std::string                             modes;
     std::string                             *modeparams = NULL;
 
-    message._it = message._splitMessage.begin();
+    message._it = (message._splitMessage).begin();
     while (message._it != msgEnd)
     {
         message._it ++;
@@ -220,7 +220,7 @@ void	Server::Mode(User &user, Message &message)
     }
     try
     {
-        message._it = message._splitMessage.begin(); // delete
+        message._it = (message._splitMessage).begin(); // delete
         message._it ++; // 2nd arg is supposed to be chan name // delete
         channel = getChanItWithName((*message._it)); // delete
         // channel = getChanItWithName(message._arguments[1]); // 2nd arg is supposed to be chan name // | and delete the 3 lines above

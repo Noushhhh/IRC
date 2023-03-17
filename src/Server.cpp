@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 13:50:40 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/17 15:03:24 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,8 +238,8 @@ bool                    Server::pollDispatch()
                         break ;
                     }
                 }
-                std::cerr << "message sent by client: " << msg << "FEUR \n";
                 std::vector <std::string> cmd_array = split_cmd(msg);
+                std::cout << "Message received" << msg << std::endl;
                 for (std::vector<std::string>::iterator cmd_it = cmd_array.begin(); cmd_it != cmd_array.end(); cmd_it++)
                 {
                     handleMessage(*(getUserItWithFd(it->fd)), *cmd_it); // check if reference of uesr good
@@ -445,7 +445,9 @@ void                    Server::sendToChanUsers(std::string channel_name, std::s
     while (_channelsListIt != getChanList()->end()) // send to users of the channel
     {
         if (_channelsListIt->getName() == channel_name)
+        {
             _channelsListIt->sendToUsers(message);
+        }
         _channelsListIt++;
     }
 }

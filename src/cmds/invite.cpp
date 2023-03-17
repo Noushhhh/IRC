@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:47 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/14 09:59:41 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/17 10:59:37 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void	Server::Invite(User &user, Message &message)
         chan->getUsersList().push_back(target);
 
         send(target->getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
-        // add target to channel 
         return ;
     }
 }
