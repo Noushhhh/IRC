@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:09 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/17 11:06:41 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/17 11:43:38 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,11 @@ void	Server::Nick(User &user, Message &message)
 	}
     for (size_t i = 0; i < nickname.length(); i++)
     {
+        if (nickname == "anonymous")
+        {
+            reply(user, ERR_ERRONEUSNICKNAME(nickname));
+            return ;
+        }
         if (!std::isprint(static_cast <unsigned char> (nickname[i])))
         {
             reply(user, ERR_ERRONEUSNICKNAME(nickname));
@@ -45,7 +50,13 @@ void	Server::Nick(User &user, Message &message)
     }
     else
     {
-        //_rplMsg = user.getNickname() + " changed nickname to: " + nickname + "\n";
+        _rplMsg = user.getNickname() + " changed nickname to: " + nickname + "\n";
+        for (_channelsListIt = _channelsList.begin(); _channelsListIt != _channelsList.end(); _channelsListIt++)
+        {
+            if (_channelsListIt->getQuietStatus())
+                _channelsListIt++;
+            sendToChanUsers(_channelsListIt->getName(), _rplMsg);
+        }
         user.setNickname(nickname);
         //reply(user, _rplMsg);
         return ;

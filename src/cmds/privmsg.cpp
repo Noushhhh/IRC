@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/17 11:26:53 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/17 11:29:14 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	Server::PrivMsg(User &user, Message &message)
             priv_msg = user.getNickname() + "@IRC_NOUSHMAKS" + " PRIVMSG " + target + " " + priv_msg + "\n";
             sendToChanUsers(target, priv_msg);
         }
+
         else
         {
             reply(user, ERR_NOSUCHCHANNEL(target));
