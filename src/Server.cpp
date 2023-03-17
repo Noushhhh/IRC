@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 17:13:46 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/17 09:47:46 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 Server::Server() :
 _sock(0),
+_nickModificator(2),
 _port(9999),
 _password("0000"),
 _usersListIt(_usersList.begin()),
@@ -60,6 +61,7 @@ _errMsg("")
 
 Server::Server(int port, std::string password) :
 _sock(0),
+_nickModificator(2),
 _port(port),
 _password(password),
 _usersListIt(_usersList.begin()),
@@ -114,6 +116,7 @@ _addr(src._addr)
 
 Server &Server::operator=(const Server &src)
 {
+    this->_nickModificator = src._nickModificator;
     this->_sock = src._sock;
     this->_addr = src._addr;
     return (*this);

@@ -33,8 +33,9 @@
 
 //LIST 322 / 323
 
-#define	RPL_LIST(channel, topic)    channel + " " + topic + "\n"
-#define RPL_LISTEND				    ": end of LIST\n"
+#define	RPL_LISTSTART(nick)         ":127.0.0.1 321 " + nick + "Channel :Name Topic\n"
+#define	RPL_LIST(channel, topic)    ":127.0.0.1 322 " + channel + " " + topic + "\n"
+#define RPL_LISTEND(nick)           ":127.0.0.1 323 " + nick + ": end of LIST\n"
 
 //JOIN
 
@@ -55,10 +56,10 @@
 
 //USER 392 / 393 / 394 / 395
 
-#define	RPL_USERSTART			                                ": UserID Terminal Host\n" //sent first
-#define	RPL_USERS(username, ttyline /*jsp cque c*/, hostname)   ": " + username + " " + ttyline + " " + hostname + "\n"
-#define RPL_ENDOFUSERS			                                ": End of users\n"
-#define RPL_NOUSERS				                                ": Nobody logged in\n"
+#define	RPL_USERSTART(channel)			                        channel + ": UserID Terminal Host\n" //sent first
+#define	RPL_USERS(channel, username, ttyline, hostname)         channel + ": " + username + " " + ttyline + " " + hostname + "\n"
+#define RPL_ENDOFUSERS(channel)			                        channel + ": End of users\n"
+#define RPL_NOUSERS(channel)				                    channel + ": Nobody logged in\n"
 
 // MODE / 221 (jcomprends pas trop auqnd elle s'envoie elle) / 501
 

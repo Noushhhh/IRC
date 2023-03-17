@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/16 16:44:47 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/17 09:56:36 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ class Server
     private :
 
         int                                     _sock;
+        ssize_t                                 _nickModificator;
         const int                               _port;
         const std::string                       _password;
         struct sockaddr_in                      _addr;
@@ -108,7 +109,7 @@ class Server
         std::list< User >                       _usersList; //List d'utilisateurs du serveur
         std::list< User >::iterator             _usersListIt;
         std::list< Channel >                    _channelsList;
-        std::list< Channel >::iterator         _channelsListIt;
+        std::list< Channel >::iterator          _channelsListIt;
         std::string                             _rplMsg;
         std::string                             _errMsg;
 

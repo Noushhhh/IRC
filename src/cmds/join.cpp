@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 10:16:10 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/17 14:52:20 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,20 @@ static void joinRPL(Channel &chan, User user)
 
     if (chan.getUsersList().size() == 0)
     {
-        rpl_buff = RPL_NOUSERS;
+        rpl_buff = RPL_NOUSERS(chan.getName());
         send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
         return ;
     }
 
-    rpl_buff = RPL_USERSTART;
+    rpl_buff = RPL_USERSTART(chan.getName());
     send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
     while (it != chan.getUsersList().end())
     {
-        rpl_buff = RPL_USERS((*it)->getNickname(),,);
+        rpl_buff = RPL_USERS((chan.getName()), (*it)->getNickname(),,);
         send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
         it ++;
     }
-    rpl_buff = RPL_ENDOFUSERS;
+    rpl_buff = RPL_ENDOFUSERS(chan.getName());
     send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
 }
 
@@ -205,6 +205,7 @@ void	Server::Join(User &user, Message &message)
                         user.getJoinedChans().push_back(newChan);
                         _channelsList.push_back(*newChan);
                         joinRPL(*newChan, user);
+                        reply (user, ": 127.0.0.1 324" + user.getNickname() + newChan->getName() + "\n");
                     }
                     
                     //if none is
@@ -214,6 +215,7 @@ void	Server::Join(User &user, Message &message)
                         user.getJoinedChans().push_back(newChan);
                         _channelsList.push_back(*newChan);
                         joinRPL(*newChan, user);
+                        reply (user, ": 127.0.0.1 324 " + user.getNickname() + " " + newChan->getName() + "\n");
                     }
                     
                 }

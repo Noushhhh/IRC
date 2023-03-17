@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:09 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 10:11:23 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/17 09:45:38 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,14 @@ void	Server::Nick(User &user, Message &message)
 	{
 		if (isUserWNickname(nickname))
         {
+            std::stringstream strs;
+            strs << _nickModificator;
+
             reply(user, ERR_NICKNAMEINUSE(nickname));
+            message._arguments[0].append(strs.str());
+            _nickModificator ++;
+            std::cout << message._arguments[0] << std::endl;
+            Nick(user, message);
             return ;
         }
 	}
