@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:59 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/17 11:04:40 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/17 11:05:54 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	Server::List(User &user, Message &message)
         _rplMsg = RPL_LIST(_channelsListIt->getName(), _channelsListIt->getTopic());
         send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
     }
+    reply(user, RPL_LISTEND);
     reply(user, _rplMsg);
     return ;
 }
