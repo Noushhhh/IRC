@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:09 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 13:56:38 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/17 09:54:02 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,16 @@ void	Server::Nick(User &user, Message &message)
     if (user.getRegistered() == false)
     {
         user.setNickname(nickname);
-        _rplMsg = "New nick in use: " + nickname + "\n";
+        _rplMsg = ERR_NICKNAMEINUSE(nickname);
         reply(user, _rplMsg);
         return ;
     }
     else
     {
-        _rplMsg = user.getNickname() + " changed nickname to: " + nickname + "\n";
+        //_rplMsg = user.getNickname() + " changed nickname to: " + nickname + "\n";
+        
         user.setNickname(nickname);
-        reply(user, _rplMsg);
+        //reply(user, _rplMsg);
         return ;
     }
 }
