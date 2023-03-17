@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:38 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 16:51:05 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/17 14:58:02 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	Server::cmdUser(User &user, Message &message)
         return ;
     }
     user.setUsername(message._arguments[0]);
-    if ((message._arguments[1]).length() != 1 || !((message._arguments[1]).find_first_not_of("012345678")) || message._arguments[2] != "*")
+    if (message._arguments[1].length() != 1 || !((message._arguments[1]).find_first_not_of("012345678")) || message._arguments[2] != "*")
     {
         reply(user, "wrong format for user mode: try: '0 *'\n");
         return ;
