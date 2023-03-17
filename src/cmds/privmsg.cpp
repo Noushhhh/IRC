@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 15:11:54 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/17 11:26:53 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,25 @@ void	Server::PrivMsg(User &user, Message &message)
     }
     std::string target = message._arguments[0];
     std::string priv_msg = get_suffix(&message._arguments[1]);
+    if (priv_msg[0] != ':')
+    {
+        reply(user, ERR_NOTEXTTOSEND);
+        return ;
+    }
+    Channel *chan = getChannelWithName(target);
     if ((target.find("#") == 0)) // supposed to be channel
     {
         if (isChannel(target)) // check that channel name valid
         {
-            if (getChannelWithName(target)->userIsBanned(user.getNickname()))
+            if (chan->userIsBanned(user.getNickname()))
                 return ;
-            if (getChannelWithName(target)->userIsMuted(user.getNickname()))
+            if (chan->userIsMuted(user.getNickname()))
                 return ;
+            if ((chan->getModerationStatus() == true) || (chan->getOutsideMsgStatus() == false))
+            {
+                reply(user, ERR_CANNOTSENDTOCHAN(target));
+                return ;
+            }
             priv_msg = user.getNickname() + "@IRC_NOUSHMAKS" + " PRIVMSG " + target + " " + priv_msg + "\n";
             sendToChanUsers(target, priv_msg);
         }
@@ -53,7 +64,9 @@ void	Server::PrivMsg(User &user, Message &message)
     }
 
     else
+    {
         reply(user, ERR_NOSUCHNICK(target));
+    }
 }
 
 // PRIVMSG message
