@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/17 11:29:14 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/17 13:56:21 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,10 @@ void	Server::PrivMsg(User &user, Message &message)
                 return ;
             if (chan->userIsMuted(user.getNickname()))
                 return ;
-            if ((chan->getModerationStatus() == true) || (chan->getOutsideMsgStatus() == false))
+            if ((chan->getModerationStatus() == true) || (chan->getOutsideMsgStatus() == true))
             {
+                std::cout <<" Mod status " << chan->getModerationStatus() << std::endl;
+                std::cout <<" Mod status " << chan->getOutsideMsgStatus() << std::endl;
                 reply(user, ERR_CANNOTSENDTOCHAN(target));
                 return ;
             }
