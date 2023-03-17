@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:59 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/17 14:58:22 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/17 15:01:55 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ void	Server::List(User &user, Message &message)
         return ;
     if (getChanList()->empty())
     {
-        std::cout << "test" << std::endl;
-        reply(user, "No channels created yet \n");
         reply(user, RPL_LISTEND(user.getNickname()));
         return ;
     }
@@ -31,7 +29,8 @@ void	Server::List(User &user, Message &message)
         {
             if (_channelsListIt->getSecrecyStatus() == true)
                 _channelsListIt++;
-            reply(user, RPL_LIST(_channelsListIt->getName(), _channelsListIt->getTopic()));
+            _rplMsg = RPL_LIST(_channelsListIt->getName(), _channelsListIt->getTopic());
+            reply(user, _rplMsg);
         }
             std :: cout <<"user fd : " << user.getSockfd()<< std::endl;
         reply(user, RPL_LISTEND(user.getNickname()));
@@ -43,9 +42,10 @@ void	Server::List(User &user, Message &message)
         _channelsListIt = getChanItWithName(message._arguments[i]);
         if (_channelsListIt->getSecrecyStatus() == true)
             _channelsListIt++;
-        _rplMsg = _channelsListIt->getName() + _channelsListIt->getTopic() + "\n"; 
+        _rplMsg = RPL_LIST(_channelsListIt->getName(), _channelsListIt->getTopic());
         send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
     }
+    reply(user, RPL_LISTEND(user.getNickname()));
     reply(user, _rplMsg);
     return ;
 }

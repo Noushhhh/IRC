@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 14:27:34 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/17 14:06:16 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/17 15:00:01 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ std::string get_suffix(std::string *arguments)
             full_argument = full_argument + " ";
         i++;
     }
+    //full_argument = full_argument + "\n";
     return (full_argument);
 }
 
@@ -94,11 +95,6 @@ std::vector<std::string>    split_cmd(std::string cmd)
 	char *string_to_split = new char[cmd.length()+1];
 	std::strcpy(string_to_split, cmd.c_str());
 	char *token = strtok(string_to_split, "\r\n");
-	// if (!token)
-    // {
-    //     cmd_array = NULL;
-	// 	return cmd_array;
-    // }
 	while(token != NULL)
 	{
 		cmd_array.push_back(token);

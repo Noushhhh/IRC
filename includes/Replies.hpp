@@ -21,7 +21,7 @@
 
 //01 to 03, welcome rpl
 
-#define RPL_WELCOME(nickname)       "welcome to Internet Relay Network " + nickname + " ! \n"
+#define RPL_WELCOME(nickname)       "welcome to IRC NOUSHMAKS " + nickname + " ! \n"
 #define RPL_YOURHOST(servername)    "your host is " + servername ".\n"
 #define RPL_CREATED				    "This server was created, in the 6th year of the 6th decade of the 6th century.\n"
 
