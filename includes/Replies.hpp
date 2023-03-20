@@ -15,6 +15,8 @@
 
 #include "irc.hpp"
 
+#define SERVER ":ircserv"
+
 // add /n at the ned of every string 
 
 /*********************************** REPLIES ***********************************/
