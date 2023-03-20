@@ -15,8 +15,6 @@
 
 #include "irc.hpp"
 
-#define 
-
 // add /n at the ned of every string 
 
 /*********************************** REPLIES ***********************************/
