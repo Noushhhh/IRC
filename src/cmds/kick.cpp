@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:55 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/17 15:09:52 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/20 13:44:34 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,35 +16,35 @@ void	Server::Kick(User &user, Message &message)
 {
     if (message._argsNb < 3)
     {
-        reply(user, ERR_NEEDMOREPARAMS(message._cmd));
+        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd));
         return ;
     }
     std::string channel_name = message._arguments[0];
     Channel *chan = getChannelWithName(channel_name);
     if (!chan->userIsOp(user.getNickname()))
     {
-        reply(user, ERR_NOPRIVILEGES(user.getNickname(), chan->getName()));
+        reply(user, ERR_NOPRIVILEGES(user.getReplyName()));
         return ;
     }
     if (!isChannel(channel_name))
     {
-        reply(user, ERR_NOSUCHCHANNEL(channel_name));
+        reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), channel_name));
         return ;
     }
     if (!user.isOnChan(channel_name))
     {
-        reply(user, ERR_NOTONCHANNEL(channel_name));
+        reply(user, ERR_NOTONCHANNEL(user.getReplyName(), channel_name));
         return ;
     }
     std::string nickname = message._arguments[1];
     if (!isUserWNickname(nickname))
     {
-        reply(user, ERR_USERNOTINCHANNEL(nickname, channel_name));
+        reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), nickname, channel_name));
         return ;
     }
     if (!isUserOnChan(nickname, channel_name))
     {
-        reply(user, ERR_NOTONCHANNEL(channel_name));
+        reply(user, ERR_NOTONCHANNEL(user.getReplyName(), channel_name));
         return ;
     }
     User    *target = getUserWithNickname(nickname);

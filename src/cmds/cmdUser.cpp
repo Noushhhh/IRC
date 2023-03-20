@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:38 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/17 10:52:12 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/20 13:49:28 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ void	Server::cmdUser(User &user, Message &message)
 {
     if (message._argsNb < 5)
     {
-        reply(user, ERR_NEEDMOREPARAMS(message._cmd));
+        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd));
         return ;
 	}
     if (user.getRegistered() == true)
     {
-        reply(user, ERR_ALREADYREGISTERED);
+        reply(user, ERR_ALREADYREGISTERED(user.getReplyName()));
         return ;
     }
     user.setUsername(message._arguments[0]);
@@ -55,12 +55,12 @@ void	Server::cmdUser(User &user, Message &message)
     if (user.getPassword() == this->getPassword())
     {
         user.setRegistered();
-        reply(user, RPL_WELCOME(user.getNickname()));
+        reply(user, RPL_WELCOME(user.getReplyName(), user.getNickname()));
         return ;
     }
     else
     {
-        reply(user, ERR_PASSWDMISMATCH);
+        reply(user, ERR_PASSWDMISMATCH(user.getReplyName()));
         closeUser(findPollFd(user.getSockfd()));
         return ;
     }
