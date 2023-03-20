@@ -43,7 +43,7 @@
 //TOPIC / 331 / 332
 
 #define	RPL_NOTOPIC(channel)        "331 " + channel + ": No topic is set\n"
-#define	RPL_TOPIC(channel, topic)   "332 "+ channel + " " + topic + "\n"
+#define	RPL_TOPIC(channel, topic)   "332 " + channel + " " + topic + "\n"
 
 //INVITE / 341
 
@@ -92,7 +92,7 @@
 #define	ERR_NOSUCHNICK(nick)        "406 " + nick + ": No such nick\n" // 401
 #define ERR_NONICKNAMEGIVEN		    "431: No nickname given\n" //431
 #define ERR_ERRONEUSNICKNAME(nick)  "432 " + nick + ": Erroneous nickname\n" //432 when a nick contains invalid char
-#define ERR_NICKNAMEINUSE(nick)     "433 "nick + ": Nickname is in use\n" // 433
+#define ERR_NICKNAMEINUSE(nick)     "433 " + nick + ": Nickname is in use\n" // 433
 
 //USER
 
