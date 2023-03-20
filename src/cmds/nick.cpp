@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:09 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/20 13:46:19 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/20 15:39:53 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	Server::Nick(User &user, Message &message)
 {
 	if (message._argsNb < 2)
 	{
-        reply(user, ERR_NONICKNAMEGIVEN(user.getReplyName()));
+        reply(user, ERR_NONICKNAMEGIVEN(user.getReplyName(), user.getNickname()));
 		return ;
 	}
     std::string nickname = message._arguments[0];
@@ -44,6 +44,8 @@ void	Server::Nick(User &user, Message &message)
     if (user.getRegistered() == false)
     {
         user.setNickname(nickname);
+        // _rplMsg = user.getReplyName() + " NICK " + nickname;
+        // reply(user, _rplMsg);
         _rplMsg = "new nick in use :" + nickname + "\n";
         reply(user, _rplMsg);
         return ;
@@ -51,6 +53,8 @@ void	Server::Nick(User &user, Message &message)
     else
     {
         _rplMsg = user.getNickname() + " changed nickname to: " + nickname + "\n";
+        // _rplMsg = user.getReplyName() + " NICK " + nickname;
+        reply(user, _rplMsg);
         for (_channelsListIt = _channelsList.begin(); _channelsListIt != _channelsList.end(); _channelsListIt++)
         {
             if (_channelsListIt->getQuietStatus())
@@ -58,7 +62,7 @@ void	Server::Nick(User &user, Message &message)
             sendToChanUsers(_channelsListIt->getName(), _rplMsg);
         }
         user.setNickname(nickname);
-        //reply(user, _rplMsg);
+        reply(user, _rplMsg);
         return ;
     }
 }

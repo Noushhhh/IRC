@@ -25,18 +25,18 @@
 #define RPL_YOURHOST(rplname, servername)           rplname + " 002: your host is " + servername ".\n"
 #define RPL_CREATED                                 rplname + " 003: This server was created, in the 6th year of the 6th decade of the 6th century.\n"
 
-//AWAY 301 / 305 / 306
+// //AWAY 301 / 305 / 306
 
-#define	RPL_AWAY(rplname, nickname)                 rplname + " 301 " + nickname + " :Is away\n" //send when you send a msg to an away user
-#define RPL_UNAWAY(rplname)                         rplname + " 305 : You are no longer away\n"
-#define	RPL_NOAWAY(rplname)                         rplname + " 306 : You have been marked as being away\n"
+// #define	RPL_AWAY(rplname, nickname)                 rplname + " 301 " + nickname + " :Is away\n" //send when you send a msg to an away user
+// #define RPL_UNAWAY(rplname)                         rplname + " 305 : You are no longer away\n"
+// #define	RPL_NOAWAY(rplname)                         rplname + " 306 : You have been marked as being away\n"
 
 //LIST 322 / 323
 
 #define	RPL_LIST(rplname, nickname, channel, topic)       rplname + " 322 " + nickname + " " + channel + ": " + topic + "\n"
 #define RPL_LISTEND(rplname, nickname)				      rplname + " 323 " + nickname + ": end of LIST\n"
 
-//JOIN
+// //JOIN
 
 #define RPL_JOINZERO(rplname, nick)                         rplname + nick + " :succesfully removed from all channels\n"
 
@@ -49,9 +49,9 @@
 
 #define	RPL_INVITING(rplname, channel, nick)            rplname + " 341 " + nick + " " + channel + ": Was succesfully invited to " + channel + "\n"
 
-//OPER / 381
+// //OPER / 381
 
-#define RPL_YOUREOPER(rplname)			        rplname + " 381 : You are now an IRC operator\n"
+// #define RPL_YOUREOPER(rplname)			        rplname + " 381 : You are now an IRC operator\n"
 
 //USER 392 / 393 / 394 / 395
 
@@ -84,15 +84,16 @@
 
 #define ERR_NEEDMOREPARAMS(rplname, cmd)        rplname + " 461 " + cmd + ": Not enough parameters\n" // 461
 #define ERR_UNKNOWNNCOMMAND(rplname, cmd)       rplname + " 421 " + cmd + ": Unknown command\n" // 421
-#define ERR_PASSWDMISMATCH(rplname)		        rplname + " 464: Password incorrect\n" // 464
+#define ERR_PASSWDMISMATCH(rplname)		        rplname + " 464 : Password incorrect\n" // 464
 #define ERR_NOPRIVILEGES(rplname)		        rplname + " 481: Permission Denied- You're not an IRC operator\n" // 481
 
 //NICK
 
 #define	ERR_NOSUCHNICK(rplname, nick)           rplname + " 406 " + nick + ": No such nick\n" // 401
-#define ERR_NONICKNAMEGIVEN(rplname)		    rplname + " 431 " + nick + ": No nickname given\n" //431
+#define ERR_NONICKNAMEGIVEN(rplname, nick)		    rplname + " 431 " + nick + ": No nickname given\n" //431
 #define ERR_ERRONEUSNICKNAME(rplname, nick)     rplname + " 432 " + nick + ": Erroneous nickname\n" //432 when a nick contains invalid char
 #define ERR_NICKNAMEINUSE(rplname, nick)        rplname + " 433 " + nick + ": Nickname is in use\n" // 433
+//#define CMD_NICK()
 
 //USER
 
