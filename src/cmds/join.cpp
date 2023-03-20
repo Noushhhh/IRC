@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/20 14:22:41 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/20 15:54:23 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ static void joinRPL(Channel &chan, User user)
 
     std::string                  rpl_buff = RPL_TOPIC(user.getReplyName(), user.getNickname(), chan.getName(), chan.getTopic());
     std::list< User *>::iterator it = chan.getUsersList().begin();
+
+    chan.sendToAllChanUser(user.getReplyName().append(" JOIN #feur\n")); // TO DO, send to all users
 
     if (chan.getTopic().empty())
         rpl_buff = RPL_NOTOPIC(user.getReplyName(), user.getNickname(), chan.getName());
@@ -205,6 +207,7 @@ void	Server::Join(User &user, Message &message)
                         user.getJoinedChans().push_back(newChan);
                         _channelsList.push_back(*newChan);
                         joinRPL(*newChan, user);
+                        reply (user, ":127.0.0.1 324 Max #feur \n");
                     }
                     
                     //if none is
@@ -214,6 +217,7 @@ void	Server::Join(User &user, Message &message)
                         user.getJoinedChans().push_back(newChan);
                         _channelsList.push_back(*newChan);
                         joinRPL(*newChan, user);
+                        reply (user, "::Max!mgolinva@127.0.0.1 324 :Max #feur \n");
                     }
                     
                 }

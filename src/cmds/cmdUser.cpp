@@ -3,29 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   cmdUser.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:38 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/20 13:49:28 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/20 16:05:15 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
 
-std::vector< struct pollfd >::iterator &Server::findPollFd(int fd)
+std::vector< struct pollfd >::iterator Server::findPollFd(int fd)
 {
-    std::vector< struct pollfd >::iterator *it = NULL; 
+    std::vector< struct pollfd >::iterator it = _pollFds.begin(); 
     std::vector< struct pollfd >::iterator end = _pollFds.end();
 
-    *it = _pollFds.begin();
-
-    while ((*it) != end)
+    while ((it) != end)
     {
-        if ((*it)->fd == fd)
-            return (*it);
+        if ((it)->fd == fd)
+            return (it);
         it ++;
     }
-    return (*it);
+    return (it);
 }
 
 void	Server::cmdUser(User &user, Message &message)
@@ -38,6 +36,7 @@ void	Server::cmdUser(User &user, Message &message)
     if (user.getRegistered() == true)
     {
         reply(user, ERR_ALREADYREGISTERED(user.getReplyName()));
+        closeUser (_pollFdsIt); 
         return ;
     }
     user.setUsername(message._arguments[0]);
@@ -61,7 +60,7 @@ void	Server::cmdUser(User &user, Message &message)
     else
     {
         reply(user, ERR_PASSWDMISMATCH(user.getReplyName()));
-        closeUser(findPollFd(user.getSockfd()));
+        closeUser (_pollFdsIt);
         return ;
     }
 }

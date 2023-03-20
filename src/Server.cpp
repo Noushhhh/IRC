@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/20 13:38:42 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/20 16:01:49 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 Server::Server() :
 _sock(0),
+_nickModificator(2),
 _port(9999),
 _password("0000"),
 _usersListIt(_usersList.begin()),
@@ -60,6 +61,7 @@ _errMsg("")
 
 Server::Server(int port, std::string password) :
 _sock(0),
+_nickModificator(2),
 _port(port),
 _password(password),
 _usersListIt(_usersList.begin()),
@@ -114,6 +116,7 @@ _addr(src._addr)
 
 Server &Server::operator=(const Server &src)
 {
+    this->_nickModificator = src._nickModificator;
     this->_sock = src._sock;
     this->_addr = src._addr;
     return (*this);
@@ -207,13 +210,16 @@ bool                    Server::pollDispatch()
 			closeEmptyChans();
 		if (poll (_pollFds.begin().base(), _pollFds.size(), -1) < 0)
             return (false);
-		for (it = _pollFds.begin(); it != _pollFds.end(); it ++)
+        _pollFdsIt = _pollFds.begin();
+		for (; _pollFdsIt != _pollFds.end(); _pollFdsIt ++)
 		{
-            if (it->events == 0)
+            if (!_pollFdsIt->events)
+                break;
+            if (_pollFdsIt->events == 0)
                 continue;
-            else if ((it->revents & POLLIN) == POLLIN)
+            else if ((_pollFdsIt->revents & POLLIN) == POLLIN)
             {
-                if (it->fd == _sock)
+                if (_pollFdsIt->fd == _sock)
                 {
                     if (this->addUser() == false)
                     {
@@ -226,11 +232,12 @@ bool                    Server::pollDispatch()
                 while (errno != EAGAIN && errno != EWOULDBLOCK)
                 {
                     memset(buff, 0, MAX_CHAR);
-                    r = recv(it->fd, buff, MAX_CHAR - 1, MSG_DONTWAIT);
+                    r = recv(_pollFdsIt->fd, buff, MAX_CHAR - 1, MSG_DONTWAIT);
                     msg.append(std::string(buff));
+                    std::cout << "message : " << msg << "-message end." << std::endl;
                     if (r == 0)
                     {
-                        if (!this->closeUser(it))
+                        if (!this->closeUser(_pollFdsIt))
                         {
                             // close all sockets
                             return (false);
@@ -239,10 +246,9 @@ bool                    Server::pollDispatch()
                     }
                 }
                 std::vector <std::string> cmd_array = split_cmd(msg);
-                std::cout << "Message received" << msg << std::endl;
                 for (std::vector<std::string>::iterator cmd_it = cmd_array.begin(); cmd_it != cmd_array.end(); cmd_it++)
                 {
-                    handleMessage(*(getUserItWithFd(it->fd)), *cmd_it); // check if reference of uesr good
+                    handleMessage(*(getUserItWithFd(_pollFdsIt->fd)), *cmd_it); // check if reference of uesr good
                 }
                 msg = "";
                 errno = 0;
@@ -280,7 +286,7 @@ bool                    Server::addUser()
     if (newFd < 0)
         return (false);
     struct pollfd tmp;
-    struct pollfd *tmpfd = &tmp; /*= new struct pollfd*/;
+    struct pollfd *tmpfd = &tmp;
     tmpfd->fd = newFd;
     tmpfd->events = POLLIN|POLLHUP;
     tmpfd->revents = 0;
@@ -296,9 +302,9 @@ bool                    Server::addUser()
 bool                    Server::closeUser(std::vector< struct pollfd >::iterator &it)
 {
     //supress from all channels he belongs to
-	
+	std::list< User >::iterator lit = _usersList.begin();
     remove_from_all_channels(*getUserItWithFd(it->fd), _channelsList);
-    for (std::list< User >::iterator lit = _usersList.begin(); lit != _usersList.end(); lit ++)
+    for (; lit != _usersList.end(); lit ++)
     {
         if (lit->getSockfd() == it->fd)
         {
@@ -306,6 +312,8 @@ bool                    Server::closeUser(std::vector< struct pollfd >::iterator
             break;
         }
     }
+    if (lit == _usersList.end())
+        return (false);
     if (close(it->fd) < 0)
         return (false);
     _pollFds.erase(it);
@@ -445,9 +453,7 @@ void                    Server::sendToChanUsers(std::string channel_name, std::s
     while (_channelsListIt != getChanList()->end()) // send to users of the channel
     {
         if (_channelsListIt->getName() == channel_name)
-        {
             _channelsListIt->sendToUsers(message);
-        }
         _channelsListIt++;
     }
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:09 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/20 15:41:09 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/20 16:08:56 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,14 @@ void	Server::Nick(User &user, Message &message)
 	{
 		if (isUserWNickname(nickname))
         {
+            std::stringstream strs;
+            strs << _nickModificator;
+
             reply(user, ERR_NICKNAMEINUSE(user.getReplyName(), nickname));
+            message._arguments[0].append(strs.str());
+            _nickModificator ++;
+            std::cout << message._arguments[0] << std::endl;
+            Nick(user, message);
             return ;
         }
 	}

@@ -63,6 +63,7 @@
 // MODE / 221 (jcomprends pas trop auqnd elle s'envoie elle) / 501
 
 #define	RPL_UMODIS(rplname, userModeStr)            rplname + " 221:" + userModeStr + "\n"
+#define RPL_CHANNELMODEIS(replynick, channel, nick, modestring)   replynick + " 324 :" + nick + " " + channel + " " + modestring
 #define RPL_MUTED(rplname, nick, channel)           rplname + nick + ": Was succesfully muted in " + channel + "\n"
 #define RPL_ALLRDYMUTED(rplname, nick, channel)     rplname + nick + ": Was allready muted in " + channel + "\n"
 #define RPL_UNMUTED(rplname, nick, channel)         rplname + nick + ": Was succesfully unmuted in " + channel + "\n"
