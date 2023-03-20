@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:25 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 15:12:25 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/20 14:21:51 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,19 @@ void	Server::Topic(User &user, Message &message)
     std::cout << message._rawMessage << std::endl;
     if (message._argsNb < 2)
     {
-        reply(user, ERR_NEEDMOREPARAMS(message._cmd));
+        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd));
         return ;
     }
     std::string channel_name = message._arguments[0];
     if (!isChannel(channel_name))
     {
-        reply(user, ERR_NOSUCHCHANNEL(channel_name));
+        reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), channel_name));
         return ;
     }
     Channel *channel = getChannelWithName(channel_name);
     if (!channel->isUserInChannel(user))
     {
-        reply(user, ERR_NOTONCHANNEL(channel_name));
+        reply(user, ERR_NOTONCHANNEL(user.getReplyName(), channel_name));
         return ;
     }
 
@@ -38,12 +38,12 @@ void	Server::Topic(User &user, Message &message)
     {
         if (channel->getTopic().empty())
         {
-            reply(user, RPL_NOTOPIC(channel_name));
+            reply(user, RPL_NOTOPIC(user.getReplyName(), user.getNickname(), channel_name));
             return ;
         }
         else
         {
-            reply(user, RPL_TOPIC(channel_name, channel->getTopic()));
+            reply(user, RPL_TOPIC(user.getReplyName(), user.getNickname(), channel_name, channel->getTopic()));
             return ;
         }
     }
@@ -74,7 +74,7 @@ void	Server::Topic(User &user, Message &message)
             }
             else
             {
-                reply(user, ERR_CHANOPRIVSNEEDED(channel_name));
+                reply(user, ERR_CHANOPRIVSNEEDED(user.getReplyName(), channel_name));
                 return ;
             }
         }

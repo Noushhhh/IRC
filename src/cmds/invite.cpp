@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:47 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/17 10:59:37 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/20 13:39:51 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,40 +16,40 @@ void	Server::Invite(User &user, Message &message)
 {
     if (message._argsNb != 3)
     {
-        reply(user, ERR_NEEDMOREPARAMS(message._cmd));
+        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd));
         return ;
     }
     std::string nickname = message._arguments[0];
     std::string channel = message._arguments[1]; // check if possible tomake a function that does 3 checks below code cleaner
     if (message._arguments[1].find("#") != 0) // check if right channel format
     {
-        reply(user, ERR_NOSUCHCHANNEL(channel));
+        reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), channel));
         return ;
     }
     if (!isUserWNickname(nickname)) // check if nickname exists
     {
-        reply(user, ERR_NOTONCHANNEL(nickname));
+        reply(user, ERR_NOTONCHANNEL(user.getReplyName(), nickname));
         return ;
     }
     if (!isChannel(channel)) // check if channel exists
      {
-        reply(user, ERR_NOSUCHCHANNEL(channel));
+        reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), channel));
         return ;
     }
     else if (!_channelsListIt->isUserInChannel(user))  // check if user is on channel 
     {
-        reply(user, ERR_NOTONCHANNEL(user.getNickname()));
+        reply(user, ERR_NOTONCHANNEL(user.getReplyName(), user.getNickname()));
         return ;
     }
     else if (_channelsListIt->isUserInChannelNickname(nickname)) // check if user already on channel 
     {
-        reply(user, ERR_USERONCHANNEL(channel, nickname));
+        reply(user, ERR_USERONCHANNEL(user.getReplyName(), channel, nickname));
         return ;
     }
     else
     {
-        _rplMsg = RPL_INVITING(channel, nickname);
-        reply(user, RPL_INVITING(channel, nickname));
+        _rplMsg = RPL_INVITING(user.getReplyName(), channel, nickname);
+        reply(user, RPL_INVITING(user.getReplyName(), channel, nickname));
         Channel *chan = getChannelWithName(channel);
         User *target = getUserWithNickname(nickname); // update when merge with max function list user
 

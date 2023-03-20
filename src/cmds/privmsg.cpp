@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/17 13:56:21 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/20 13:47:45 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,19 @@ void	Server::PrivMsg(User &user, Message &message)
 {
     if (message._argsNb < 2)
     {
-        reply(user, ERR_NEEDMOREPARAMS(message._cmd));
+        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd));
         return ;
     }
     if (message._argsNb < 3)
     {
-        reply(user, ERR_NOTEXTTOSEND);
+        reply(user, ERR_NOTEXTTOSEND(user.getReplyName()));
         return ;
     }
     std::string target = message._arguments[0];
     std::string priv_msg = get_suffix(&message._arguments[1]);
     if (priv_msg[0] != ':')
     {
-        reply(user, ERR_NOTEXTTOSEND);
+        reply(user, ERR_NOTEXTTOSEND(user.getReplyName()));
         return ;
     }
     Channel *chan = getChannelWithName(target);
@@ -44,7 +44,7 @@ void	Server::PrivMsg(User &user, Message &message)
             {
                 std::cout <<" Mod status " << chan->getModerationStatus() << std::endl;
                 std::cout <<" Mod status " << chan->getOutsideMsgStatus() << std::endl;
-                reply(user, ERR_CANNOTSENDTOCHAN(target));
+                reply(user, ERR_CANNOTSENDTOCHAN(user.getReplyName(), target));
                 return ;
             }
             priv_msg = user.getNickname() + "@IRC_NOUSHMAKS" + " PRIVMSG " + target + " " + priv_msg + "\n";
@@ -53,7 +53,7 @@ void	Server::PrivMsg(User &user, Message &message)
 
         else
         {
-            reply(user, ERR_NOSUCHCHANNEL(target));
+            reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), target));
             return ;
         }
         return ;
@@ -68,7 +68,7 @@ void	Server::PrivMsg(User &user, Message &message)
 
     else
     {
-        reply(user, ERR_NOSUCHNICK(target));
+        reply(user, ERR_NOSUCHNICK(user.getReplyName(), target));
     }
 }
 

@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:14 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/17 10:49:45 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/20 13:46:35 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	Server::Part(User &user, Message &message)
 {
     if (message._argsNb < 2)
      {
-        reply(user, ERR_NEEDMOREPARAMS(message._cmd));
+        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd));
         return ;
 	}
     std::string *channels_to_part = cppsplit(message._arguments[0], ','); 
@@ -24,7 +24,7 @@ void	Server::Part(User &user, Message &message)
     {
         if (!isChannel(channels_to_part[i]))
         {
-            reply(user, ERR_NOSUCHCHANNEL(channels_to_part[i]));
+            reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), channels_to_part[i]));
             return ;
         }
         else
@@ -32,7 +32,7 @@ void	Server::Part(User &user, Message &message)
             Channel *channel = getChannelWithName(channels_to_part[i]);
             if (!channel->isUserInChannel(user)) // check if user in channel
             {
-                reply(user, ERR_NOTONCHANNEL(channels_to_part[i]));
+                reply(user, ERR_NOTONCHANNEL(user.getReplyName(), channels_to_part[i]));
                 return ;
             }
         }

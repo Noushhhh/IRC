@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:09 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/17 13:46:00 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/20 13:46:19 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	Server::Nick(User &user, Message &message)
 {
 	if (message._argsNb < 2)
 	{
-        reply(user, ERR_NONICKNAMEGIVEN);
+        reply(user, ERR_NONICKNAMEGIVEN(user.getReplyName()));
 		return ;
 	}
     std::string nickname = message._arguments[0];
@@ -24,7 +24,7 @@ void	Server::Nick(User &user, Message &message)
 	{
 		if (isUserWNickname(nickname))
         {
-            reply(user, ERR_NICKNAMEINUSE(nickname));
+            reply(user, ERR_NICKNAMEINUSE(user.getReplyName(), nickname));
             return ;
         }
 	}
@@ -32,12 +32,12 @@ void	Server::Nick(User &user, Message &message)
     {
         if (nickname == "anonymous")
         {
-            reply(user, ERR_ERRONEUSNICKNAME(nickname));
+            reply(user, ERR_ERRONEUSNICKNAME(user.getReplyName(), nickname));
             return ;
         }
         if (!std::isprint(static_cast <unsigned char> (nickname[i])))
         {
-            reply(user, ERR_ERRONEUSNICKNAME(nickname));
+            reply(user, ERR_ERRONEUSNICKNAME(user.getReplyName(), nickname));
             return ;
         }
     }

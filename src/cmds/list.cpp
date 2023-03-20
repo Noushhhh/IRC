@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:59 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/17 11:46:58 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/20 14:29:26 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	Server::List(User &user, Message &message)
         return ;
     if (getChanList()->empty())
     {
-        reply(user, RPL_LISTEND);
+        reply(user, RPL_LISTEND(user.getReplyName(), user.getNickname()));
         return ;
     }
 
@@ -28,10 +28,10 @@ void	Server::List(User &user, Message &message)
         {
             if (_channelsListIt->getSecrecyStatus() == true)
                 _channelsListIt++;
-            _rplMsg = RPL_LIST(_channelsListIt->getName(), _channelsListIt->getTopic());
+            _rplMsg = RPL_LIST(user.getReplyName(), user.getNickname(), _channelsListIt->getName(), _channelsListIt->getTopic());
             reply(user, _rplMsg);
         }
-        reply(user, RPL_LISTEND);
+        reply(user, RPL_LISTEND(user.getReplyName(), user.getNickname()));
         return ;
     }
 
@@ -40,10 +40,10 @@ void	Server::List(User &user, Message &message)
         _channelsListIt = getChanItWithName(message._arguments[i]);
         if (_channelsListIt->getSecrecyStatus() == true)
             _channelsListIt++;
-        _rplMsg = RPL_LIST(_channelsListIt->getName(), _channelsListIt->getTopic());
+        _rplMsg = RPL_LIST(user.getReplyName(), user.getNickname(), _channelsListIt->getName(), _channelsListIt->getTopic());
         send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
     }
-    reply(user, RPL_LISTEND);
+    reply(user, RPL_LISTEND(user.getReplyName(), user.getNickname()));
     reply(user, _rplMsg);
     return ;
 }
