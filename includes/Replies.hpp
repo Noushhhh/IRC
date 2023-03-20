@@ -21,9 +21,9 @@
 
 //01 to 03, welcome rpl
 
-#define RPL_WELCOME(nickname)       "welcome to IRC NOUSHMAKS " + nickname + " ! \n"
-#define RPL_YOURHOST(servername)    "your host is " + servername ".\n"
-#define RPL_CREATED				    "This server was created, in the 6th year of the 6th decade of the 6th century.\n"
+#define RPL_WELCOME(nickname)       ":Max!mgolinva@127.0.0.1 001 " + nickname + " :Welcome to IRC NOUSHMAKS " + nickname + " ! \n"
+#define RPL_YOURHOST(servername)    ":Max!mgolinva@127.0.0.1 002 :your host is " + servername ".\n"
+#define RPL_CREATED				    ":Max!mgolinva@127.0.0.1 003 :This server was created, in the 6th year of the 6th decade of the 6th century.\n"
 
 //AWAY 301 / 305 / 306
 
@@ -43,8 +43,8 @@
 
 //TOPIC / 331 / 332
 
-#define	RPL_NOTOPIC(channel)        channel + ": No topic is set\n"
-#define	RPL_TOPIC(channel, topic)   channel + " " + topic + "\n"
+#define	RPL_NOTOPIC(replynick, channel, nick)        replynick + " 331 " + nick + " " + channel + " :No topic is set\n"
+#define	RPL_TOPIC(replynick, channel, nick, topic)        ":" + replynick + " 331 " + nick + " " + channel + " :" + topic + "\n"
 
 //INVITE / 341
 
@@ -64,6 +64,7 @@
 // MODE / 221 (jcomprends pas trop auqnd elle s'envoie elle) / 501
 
 #define	RPL_UMODIS(userModeStr)     " :" + userModeStr + "\n"
+#define RPL_CHANNELMODEIS(replynick, channel, nick, modestring)   replynick + " 324 :" + nick + " " + channel + " " + modestring
 #define RPL_MUTED(nick, channel)    nick + ": Was succesfully muted in " + channel + "\n"
 #define RPL_ALLRDYMUTED(nick, channel)    nick + ": Was allready muted in " + channel + "\n"
 #define RPL_UNMUTED(nick, channel)  nick + ": Was succesfully unmuted in " + channel + "\n"

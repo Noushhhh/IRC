@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:01 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 11:00:46 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/20 15:14:44 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,18 +176,21 @@ std::list< Channel >::iterator &channel)
 
 void    modeQueryReply(Channel &channel, User &user)
 {
-    std::stringstream strs;
+    std::stringstream   strs;
+    std::string         msg = user.getReplyName() + " 324 :" + channel.getName() + " ";
     strs << channel.getUsersLimit();
 
-    (channel.getPswdStatus() == true ? reply(user, channel.getName().append(": is password protected\n")) : reply(user, channel.getName().append(": is not password protected\n")));
-    (channel.getInviteStatus() == true ? reply(user, channel.getName().append(": is invite only\n")) : reply(user, channel.getName().append(": is not invite only\n")));
-    (channel.getModerationStatus() == true ? reply(user, channel.getName().append(": is moderated\n")) : reply(user, channel.getName().append(": is not moderated\n")));
-    (channel.getQuietStatus() == true ? reply(user, channel.getName().append(": is quiet\n")) : reply(user, channel.getName().append(": is not quiet\n")));
-    (channel.getOutsideMsgStatus() == true ? reply(user, channel.getName().append(": cannot receive outside messages\n")) : reply(user, channel.getName().append(": can receive outside messages\n")));
-    (channel.getPrivacyStatus() == true ? reply(user, channel.getName().append(": is private\n")) : reply(user, channel.getName().append(": is not private\n")));
-    (channel.getSecrecyStatus() == true ? reply(user, channel.getName().append(": is secret\n")) : reply(user, channel.getName().append(": is not secret\n")));
-    (channel.getTopicStatus() == true ? reply(user, channel.getName().append(": topic's can only be set by ChanOp\n")) : reply(user, channel.getName().append(": topic's can be set by everyone\n")));
-    (channel.getUsersLimitStatus() == true ? reply(user, channel.getName().append(": has a max amount of connected user of : ").append(strs.str()).append("\n")) : reply(user, channel.getName().append(": has no user limit\n")));
+    (channel.getPswdStatus() == true ? msg + "+k" : msg + "-k");
+    (channel.getInviteStatus() == true ? msg + "+i" : msg + "-i");
+    (channel.getModerationStatus() == true ? msg + "+m" : msg + "-m");
+    (channel.getQuietStatus() == true ? msg + "+q" : msg + "-q");
+    (channel.getOutsideMsgStatus() == true ? msg + "+n" : msg + "-n");
+    (channel.getPrivacyStatus() == true ? msg + "+p" : msg + "-p");
+    (channel.getSecrecyStatus() == true ? msg + "+s" : msg + "-s");
+    (channel.getTopicStatus() == true ? msg + "+t" : msg + "-t");
+    (channel.getUsersLimitStatus() == true ? msg + "+l" : msg + "-l");
+    msg + "\n";
+    reply (user, msg);
 }
 
 void	Server::Mode(User &user, Message &message)
@@ -247,7 +250,8 @@ void	Server::Mode(User &user, Message &message)
     
     if (argsNB == 2)
     {
-        modeQueryReply(*channel, user);
+        // modeQueryReply(*channel, user);
+	    reply (user, RPL_CHANNELMODEIS(user.getReplyName(), channel->getName(), user.getNickname(), channel->modeIs()));
         return ;
         //display mode query info
     }

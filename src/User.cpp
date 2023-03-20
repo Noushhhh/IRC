@@ -93,11 +93,12 @@ void    User::setPong(std::string pong)
 int                     User::getSockfd()       const {return (_sockfd);}
 std::string             User::getPassword()     const {return (_givenPassword);}
 std::string             User::getNickname()     const {return (_nickname);}
+std::string			    User::getReplyName()	      {return (":" + _nickname + "!" + _username + "@" + "127.0.0.1");};
 bool			        User::getRegistered()   const { return (_isRegistered);};
-std::string             User::getUsername()   const {return (_username);}
-std::string             User::getRealname()   const {return (_realname);}
-std::string		        User::getPing() const {return (_ping);}
-std::string		        User::getPong() const {return (_pong);}
+std::string             User::getUsername()     const {return (_username);}
+std::string             User::getRealname()     const {return (_realname);}
+std::string		        User::getPing()         const {return (_ping);}
+std::string		        User::getPong()         const {return (_pong);}
 std::list< Channel *>   &User::getJoinedChans()	    {return (_joinedChannels);}
 
 

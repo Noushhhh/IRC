@@ -51,6 +51,7 @@ class User
         int             		getSockfd()     const;
 		std::string				getPassword()	const;
         std::string     		getNickname()   const;
+		std::string				getReplyName();
 		bool					getRegistered()   const;
 		std::string				getUsername()	const;
 		std::string				getRealname()	const;

@@ -158,27 +158,21 @@ void				Channel::setPswd(User &user, std::string pswd, int &addOrRemove)
 	{
 		_password = pswd;
 		_isPswdProtected = true;
-		reply(user, this->getName().append(": Password protection successfully set\n"));
 	}
 	else
 	{
 		_password = "";
 		_isPswdProtected = false;
-		reply(user, this->getName().append(": Password protection successfully removed\n"));
 	}
+	sendToAllChanUser(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
 }
 void				Channel::setInviteMode(User &user, int &addOrRemove)
 {	
 	if (addOrRemove == ADD)
-	{
 		_isInviteOnly = true;
-		reply(user, this->getName().append(": Invite only mode successfully set\n"));
-	}
 	else
-	{
 		_isInviteOnly = false;
-		reply(user, this->getName().append(": Invite only mode successfully removed\n"));
-	}
+	sendToAllChanUser(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
 }
 
 void				Channel::setModerationMode(Server &serv, User &user, int &addOrRemove)
@@ -196,13 +190,10 @@ void				Channel::setModerationMode(Server &serv, User &user, int &addOrRemove)
 				setMutedList(user, serv.getUserWithNickname((*it)->getNickname()), addOrRemove);
 			}
 		}
-		reply(user, this->getName().append(": Moderation mode successfully set\n"));
 	}
 	else
-	{
 		_isModerated = false;
-		reply(user, this->getName().append(": Moderation mode successfully removed\n"));
-	}
+	sendToAllChanUser(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
 }
 
 void				Channel::setQuietMode(User &user, int &addOrRemove)
@@ -211,69 +202,46 @@ void				Channel::setQuietMode(User &user, int &addOrRemove)
 	if (addOrRemove == ADD)
 	{
 		_isQuiet = true;
-		reply(user, this->getName().append(": Quiet mode successfully set\n"));
 	}
 	else
-	{
 		_isQuiet = false;
-		reply(user, this->getName().append(": Quiet mode successfully removed\n"));
-	}
+	sendToAllChanUser(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
 }
 
 void				Channel::setOutsideMsgMode(User &user, int &addOrRemove)
 {
 	if (addOrRemove == ADD)
-	{
 		_isNoOutsideMsg = true;
-		reply(user, this->getName().append(": No Outside message mode successfully set\n"));
-	}
 	else
-	{
 		_isNoOutsideMsg = false;
-		reply(user, this->getName().append(": No Outside message mode successfully removed\n"));
-	}
+	sendToAllChanUser(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
 }
 
 void				Channel::setPrivateMode(User &user, int &addOrRemove)
 {
 	if (addOrRemove == ADD)
-	{
-		_isPrivate = true;
 		reply(user, this->getName().append(": Private mode successfully set\n"));
-	}
 	else
-	{
 		_isPrivate = false;
-		reply(user, this->getName().append(": Private mode successfully removed\n"));
-	}
+	sendToAllChanUser(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
 }
 
 void				Channel::setSecretMode(User &user, int &addOrRemove)
 {
 	if (addOrRemove == ADD)
-	{
 		_isSecret = true;
-		reply(user, this->getName().append(": Secret mode successfuly set\n"));
-	}
 	else
-	{
 		_isSecret = false;
-		reply(user, this->getName().append(": Secret mode successfuly removed\n"));
-	}
+	sendToAllChanUser(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
 }
 
 void				Channel::setTopicMode(User &user, int &addOrRemove)
 {
 	if (addOrRemove == ADD)
-	{
 		_isTopicOPOnly = true;
-		reply(user, this->getName().append(": Topic set OP only mode successfuly set\n"));
-	}
 	else
-	{
 		_isTopicOPOnly = false;
-		reply(user, this->getName().append(": Topic set OP only mode successfuly removed\n"));
-	}
+	sendToAllChanUser(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
 }
 
 void				Channel::setUsersLimit(User &user, std::string userLimit, int &addOrRemove)
@@ -295,12 +263,13 @@ void				Channel::setUsersLimit(User &user, std::string userLimit, int &addOrRemo
 		}
 		_usersLimit = static_cast< ssize_t >(std::atoi(userLimit.c_str()));
 		_isUsersLimit = true;
-		reply(user,  RPL_USERLIMITSET(_name, userLimit));
+		sendToAllChanUser(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
+		sendToAllChanUser(RPL_USERLIMITSET(_name, userLimit));
 	}
 	else
 	{
 		_isUsersLimit = false;
-		reply(user, this->getName().append(": users limit successfully removed\n"));
+		sendToAllChanUser(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
 	}
 }
 
@@ -315,7 +284,7 @@ void				Channel::setMutedList(User &user, User *target, int &addOrRemove)
 		else
 		{
 			this->_mutedUsersList.push_back(target);
-			reply(user, RPL_MUTED(target->getNickname(), this->getName()));
+			sendToAllChanUser(RPL_MUTED(target->getNickname(), this->getName()));
 		}
 	}
 	else
@@ -323,7 +292,7 @@ void				Channel::setMutedList(User &user, User *target, int &addOrRemove)
 		if (this->getUserItInList(_mutedUsersList, target->getNickname()) != _mutedUsersList.end())
 		{
 			this->_mutedUsersList.erase(getUserItInList(_mutedUsersList, target->getNickname()));
-			reply(user, RPL_UNMUTED(target->getNickname(), this->getName()));
+			sendToAllChanUser(RPL_UNMUTED(target->getNickname(), this->getName()));
 		}
 		else
 			reply(user, RPL_NOTMUTED(target->getNickname(), this->getName()));
@@ -340,7 +309,7 @@ void				Channel::setBanList(Server &serv, User &user, User *target, int &addOrRe
 			reply(user, RPL_ALLRDYBANNED(target->getNickname(), this->getName()));
 		else
 		{
-			reply(user, RPL_BANNED(target->getNickname(), this->getName()));
+			sendToAllChanUser(RPL_BANNED(target->getNickname(), this->getName()));
 			if (this->getUserItInList(_opList, target->getNickname()) != _opList.end())
 				this->_opList.erase(this->getUserItInList(_opList, target->getNickname()));
 			if (this->getUserItInList(_mutedUsersList, target->getNickname()) != _mutedUsersList.end())
@@ -355,7 +324,7 @@ void				Channel::setBanList(Server &serv, User &user, User *target, int &addOrRe
 		if (this->getUserItInList(_banUsersList, target->getNickname()) != _banUsersList.end())
 		{
 			this->_banUsersList.erase(getUserItInList(_banUsersList, target->getNickname()));
-			reply(user, RPL_UNBANNED(target->getNickname(), this->getName()));
+			sendToAllChanUser(RPL_UNBANNED(target->getNickname(), this->getName()));
 		}
 		else
 			reply(user, RPL_NOTBANNED(target->getNickname(), this->getName()));
@@ -373,7 +342,7 @@ void				Channel::setOpList(User &user, User *target, int &addOrRemove)
 		else
 		{
 			this->_opList.push_back(target);
-			reply (user, RPL_OPED(target->getNickname(), this->getName()));
+			sendToAllChanUser(RPL_OPED(target->getNickname(), this->getName()));
 		}
 	}
 	else
@@ -381,7 +350,7 @@ void				Channel::setOpList(User &user, User *target, int &addOrRemove)
 		if (this->getUserItInList(_opList, target->getNickname()) != _opList.end())
 		{
 			this->_opList.erase(getUserItInList(_opList, target->getNickname()));
-			reply (user, RPL_UNOPED(target->getNickname(), this->getName()));
+			sendToAllChanUser(RPL_UNOPED(target->getNickname(), this->getName()));
 		}
 		else
 			reply(user, RPL_NOTOP(target->getNickname(), this->getName()));
@@ -532,6 +501,34 @@ bool				Channel::userIsInChan(std::string nickname)
         }
     }
 	return (false);
+}
+
+std::string   		Channel::modeIs()
+{
+    std::string         modestring = "";
+
+    (this->getPswdStatus() == true ? modestring += "+k" : modestring += "-k");
+    (this->getInviteStatus() == true ? modestring += "+i" : modestring += "-i");
+    (this->getModerationStatus() == true ? modestring += "+m" : modestring += "-m");
+    (this->getQuietStatus() == true ? modestring += "+q" : modestring += "-q");
+    (this->getOutsideMsgStatus() == true ? modestring += "+n" : modestring += "-n");
+    (this->getPrivacyStatus() == true ? modestring += "+p" : modestring += "-p");
+    (this->getSecrecyStatus() == true ? modestring += "+s" : modestring += "-s");
+    (this->getTopicStatus() == true ? modestring += "+t" : modestring += "-t");
+    (this->getUsersLimitStatus() == true ? modestring += "+l" : modestring += "-l");
+    modestring += "\n";
+	return (modestring);
+}
+
+void				Channel::sendToAllChanUser(std::string msg)
+{
+	std::list< User *>::iterator it = this->_usersList.begin();
+	std::list< User *>::iterator end = this->_usersList.end();
+	while (it != end)
+	{
+		reply (*(*it), msg);
+		it ++;
+	}
 }
 
 /**************************************************************/

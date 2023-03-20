@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:25 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/17 15:02:16 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/20 10:25:51 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,12 @@ void	Server::Topic(User &user, Message &message)
     {
         if (channel->getTopic().empty())
         {
-            reply(user, RPL_NOTOPIC(channel_name));
+            reply(user, RPL_NOTOPIC(user.getReplyName(), channel_name, user.getNickname()));
             return ;
         }
         else
         {
-            reply(user, RPL_TOPIC(channel_name, channel->getTopic()));
+            reply(user, RPL_TOPIC(user.getReplyName(), channel_name, user.getNickname(), channel->getTopic()));
             return ;
         }
     }
