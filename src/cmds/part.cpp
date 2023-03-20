@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:14 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/20 17:25:00 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/20 17:26:26 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,7 @@ void	Server::Part(User &user, Message &message)
     }
     for (size_t i = 0; !(channels_to_part[i].empty()); i++)
     {
-        _rplMsg = user.getNickname() + "@IRC_NOUSHMAKS PART #" + channels_to_part[i] + "\n";
-        
+        _rplMsg = user.getReplyName() + " PART " + channels_to_part[i] + "\n";
         sendToChanUsers(channels_to_part[i], _rplMsg);
         // remove user from channel
     }
