@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:23 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 14:41:20 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/20 13:47:51 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	Server::Quit(User &user, Message &message)
     std::string quit_msg;
     if (message._argsNb < 2)
     {
-        reply(user, ERR_NEEDMOREPARAMS(message._cmd));
+        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd));
         return ;
     }
     quit_msg = quit_msg = user.getNickname() + "@IRC_NOUSHMAKS QUIT :Quit ";

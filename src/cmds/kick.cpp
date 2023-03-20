@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:55 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 15:11:21 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/20 13:44:34 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,49 +16,52 @@ void	Server::Kick(User &user, Message &message)
 {
     if (message._argsNb < 3)
     {
-        reply(user, ERR_NEEDMOREPARAMS(message._cmd));
+        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd));
         return ;
     }
     std::string channel_name = message._arguments[0];
-    std::cout << channel_name << std::endl;
-    if (channel_name.find("#") != 0)
+    Channel *chan = getChannelWithName(channel_name);
+    if (!chan->userIsOp(user.getNickname()))
     {
-         reply(user, ERR_NOSUCHCHANNEL(channel_name));
+        reply(user, ERR_NOPRIVILEGES(user.getReplyName()));
         return ;
     }
     if (!isChannel(channel_name))
     {
-        reply(user, ERR_NOSUCHCHANNEL(channel_name));
+        reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), channel_name));
         return ;
     }
     if (!user.isOnChan(channel_name))
     {
-        reply(user, ERR_NOTONCHANNEL(channel_name));
+        reply(user, ERR_NOTONCHANNEL(user.getReplyName(), channel_name));
         return ;
     }
     std::string nickname = message._arguments[1];
     if (!isUserWNickname(nickname))
     {
-        reply(user, ERR_NOTONCHANNEL(channel_name));
+        reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), nickname, channel_name));
         return ;
     }
     if (!isUserOnChan(nickname, channel_name))
     {
-        reply(user, ERR_NOTONCHANNEL(channel_name));
+        reply(user, ERR_NOTONCHANNEL(user.getReplyName(), channel_name));
         return ;
     }
+    User    *target = getUserWithNickname(nickname);
     if (message._argsNb == 3)
     {
         _rplMsg = user.getNickname() + "@IRC_NOUSHMAKS KICK " + channel_name + " " + nickname + "\n";
         sendToChanUsers(channel_name, _rplMsg);
         //kick user from chan
+        chan->kickUser(target);
         return ;
     }
     if (message._argsNb > 3)
     {
         _rplMsg = "";
-        _rplMsg = user.getNickname() + "@IRC_NOUSHMAKS KICK " + channel_name + " " + nickname + " " + get_suffix(&message._arguments[3]) + "\n";
+        _rplMsg = user.getNickname() + "@IRC_NOUSHMAKS KICK " + channel_name + " " + nickname + ": " + get_suffix(&message._arguments[2]) + "\n";
         sendToChanUsers(channel_name, _rplMsg);
+        chan->kickUser(target);
         //kick user from chan
         return ;
     }

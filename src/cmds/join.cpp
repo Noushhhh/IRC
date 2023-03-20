@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/20 15:38:09 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/20 15:54:23 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,31 +17,32 @@ static void joinRPL(Channel &chan, User user)
 {
     //TO DO : if channel mode is quiet only one username is sent (the activ user)
 
-    std::string                  rpl_buff = RPL_TOPIC(user.getReplyName(), chan.getName(), user.getNickname(), chan.getTopic());
+    std::string                  rpl_buff = RPL_TOPIC(user.getReplyName(), user.getNickname(), chan.getName(), chan.getTopic());
     std::list< User *>::iterator it = chan.getUsersList().begin();
 
     chan.sendToAllChanUser(user.getReplyName().append(" JOIN #feur\n")); // TO DO, send to all users
 
     if (chan.getTopic().empty())
-        rpl_buff = RPL_NOTOPIC(user.getReplyName(), chan.getName(), user.getNickname());
-    // send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
-    reply(user, rpl_buff);
+        rpl_buff = RPL_NOTOPIC(user.getReplyName(), user.getNickname(), chan.getName());
+    send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
 
     if (chan.getUsersList().size() == 0)
     {
-        reply(user, RPL_NOUSERS(chan.getName())); 
+        rpl_buff = RPL_NOUSERS(user.getReplyName());
+        send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
         return ;
     }
 
-    reply (user, RPL_USERSTART(chan.getName()));
+    rpl_buff = RPL_USERSTART(user.getReplyName());
+    send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
     while (it != chan.getUsersList().end())
     {
-        // reply (user, RPL_USERS("","","",""));
+        rpl_buff = RPL_USERS(user.getReplyName(), (*it)->getNickname(),,);
+        send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
         it ++;
     }
-    // rpl_buff = ;
-    // send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
-    reply (user, RPL_ENDOFUSERS(chan.getName()));
+    rpl_buff = RPL_ENDOFUSERS(user.getReplyName());
+    send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
 }
 
 void remove_from_all_channels(User &user, std::list< Channel > &channelList)
@@ -113,7 +114,7 @@ void	Server::Join(User &user, Message &message)
 
     if (message._splitMessage.size() == 1)
     {
-        reply(user, ERR_NEEDMOREPARAMS(std::string("JOIN")));
+        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd));
         return ;
     }
     if (message._splitMessage.size() == 2 || message._splitMessage.size() == 3)
@@ -122,7 +123,7 @@ void	Server::Join(User &user, Message &message)
         keysSplit = split(*(message._it + 1));
     if (message._splitMessage.size() > 3)
     {
-        reply(user, ERR_TOOMANYTARGETS(std::string("JOIN")));
+        reply(user, ERR_TOOMANYTARGETS(user.getReplyName(), message._cmd));
         return ;
     }
 
@@ -131,7 +132,7 @@ void	Server::Join(User &user, Message &message)
     if (message._splitMessage.size() == 2 && *(message._it) == "0")
     {
         remove_from_all_channels(user, _channelsList);
-        reply(user, RPL_JOINZERO(user.getNickname()));
+        reply(user, RPL_JOINZERO(user.getReplyName(), user.getNickname()));
     }
     else
     {    
@@ -148,7 +149,7 @@ void	Server::Join(User &user, Message &message)
 
                     if (_channelsListIt->getUserItInList(_channelsListIt->getUsersList(), user.getNickname()) != _channelsListIt->getUsersList().end())
                     {
-                        reply (user, ERR_USERONCHANNEL(_channelsListIt->getName(), user.getNickname()));
+                        reply (user, ERR_USERONCHANNEL(user.getReplyName(), _channelsListIt->getName(), user.getNickname()));
                         chanExist = true;
                         break ;
                     }
@@ -157,19 +158,19 @@ void	Server::Join(User &user, Message &message)
 
                     if (_channelsListIt->getInviteStatus() == true)
                     {
-                        reply (user, ERR_ISINVITEONLY(_channelsListIt->getName()));
+                        reply (user, ERR_INVITEONLYCHAN(user.getReplyName(), _channelsListIt->getName()));
                         chanExist = true;
                         break ;
                     }
                     else if (_channelsListIt->userIsBanned(user.getNickname()) == true)
                     {
-                        reply (user, ERR_ISBANNED(user.getNickname(), _channelsListIt->getName()));
+                        reply (user, ERR_ISBANNED(user.getReplyName(), user.getNickname(), _channelsListIt->getName()));
                         chanExist = true;
                         break ;
                     }
                     else if (_channelsListIt->getUsersLimitStatus() == true  && _channelsListIt->getUsersLimit() <= _channelsListIt->getUsersList().size())
                     {
-                        reply (user, ERR_USERLIMITREACHED(_channelsListIt->getName()));
+                        reply (user, ERR_USERLIMITREACHED(user.getReplyName(), _channelsListIt->getName()));
                         chanExist = true;
                         break ;
                     }
@@ -186,7 +187,7 @@ void	Server::Join(User &user, Message &message)
                         chanExist = true;
                         break ;
                     }
-                    reply (user, ERR_BADCHANNELKEY(_channelsListIt->getName()));
+                    reply (user, ERR_BADCHANNELKEY(user.getReplyName(), _channelsListIt->getName()));
                     chanExist = true;
                     break ;
                 }

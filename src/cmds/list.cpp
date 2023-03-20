@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:59 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/17 15:01:55 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/20 16:05:43 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	Server::List(User &user, Message &message)
         return ;
     if (getChanList()->empty())
     {
-        reply(user, RPL_LISTEND(user.getNickname()));
+        reply(user, RPL_LISTEND(user.getReplyName(), user.getNickname()));
         return ;
     }
 
@@ -29,11 +29,10 @@ void	Server::List(User &user, Message &message)
         {
             if (_channelsListIt->getSecrecyStatus() == true)
                 _channelsListIt++;
-            _rplMsg = RPL_LIST(_channelsListIt->getName(), _channelsListIt->getTopic());
+            _rplMsg = RPL_LIST(user.getReplyName(), user.getNickname(), _channelsListIt->getName(), _channelsListIt->getTopic());
             reply(user, _rplMsg);
         }
-            std :: cout <<"user fd : " << user.getSockfd()<< std::endl;
-        reply(user, RPL_LISTEND(user.getNickname()));
+        reply(user, RPL_LISTEND(user.getReplyName(), user.getNickname()));
         return ;
     }
 
@@ -42,10 +41,10 @@ void	Server::List(User &user, Message &message)
         _channelsListIt = getChanItWithName(message._arguments[i]);
         if (_channelsListIt->getSecrecyStatus() == true)
             _channelsListIt++;
-        _rplMsg = RPL_LIST(_channelsListIt->getName(), _channelsListIt->getTopic());
+        _rplMsg = RPL_LIST(user.getReplyName(), user.getNickname(), _channelsListIt->getName(), _channelsListIt->getTopic());
         send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
     }
-    reply(user, RPL_LISTEND(user.getNickname()));
+    reply(user, RPL_LISTEND(user.getReplyName(), user.getNickname()));
     reply(user, _rplMsg);
     return ;
 }

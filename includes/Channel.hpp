@@ -114,8 +114,11 @@ class Channel
 		bool						userIsOp(std::string nickname);
 		bool 						userIsBanned(std::string nickname);
 		bool 						userIsMuted(std::string nickname);
+		void						kickUser(User *target);
 		std::string					modeIs();
 		void						sendToAllChanUser(std::string msg);
+
+
 
 		//exceptions
 

@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/20 11:36:25 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/20 16:01:49 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -378,7 +378,7 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 		i++;
 	if (i >= HANDLEDCOMMANDSNB)
 	{
-		err_buff = ERR_UNKNOWNNCOMMAND(*message._splitMessage.begin());
+		err_buff = ERR_UNKNOWNNCOMMAND(user.getReplyName(), *message._splitMessage.begin());
 		send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
 		return false;
 	}

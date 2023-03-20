@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:38 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/17 15:00:45 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/20 16:05:15 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,12 @@ void	Server::cmdUser(User &user, Message &message)
 {
     if (message._argsNb < 5)
     {
-        reply(user, ERR_NEEDMOREPARAMS(message._cmd));
+        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd));
         return ;
 	}
     if (user.getRegistered() == true)
     {
-        reply(user, ERR_ALREADYREGISTERED);
+        reply(user, ERR_ALREADYREGISTERED(user.getReplyName()));
         closeUser (_pollFdsIt); 
         return ;
     }
@@ -54,12 +54,12 @@ void	Server::cmdUser(User &user, Message &message)
     if (user.getPassword() == this->getPassword())
     {
         user.setRegistered();
-        reply(user, RPL_WELCOME(user.getNickname()));
+        reply(user, RPL_WELCOME(user.getReplyName(), user.getNickname()));
         return ;
     }
     else
     {
-        reply(user, ERR_PASSWDMISMATCH);
+        reply(user, ERR_PASSWDMISMATCH(user.getReplyName()));
         closeUser (_pollFdsIt);
         return ;
     }
