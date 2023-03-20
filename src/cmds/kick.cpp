@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:55 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/17 15:09:52 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/20 13:14:50 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	Server::Kick(User &user, Message &message)
     Channel *chan = getChannelWithName(channel_name);
     if (!chan->userIsOp(user.getNickname()))
     {
-        reply(user, ERR_NOPRIVILEGES(user.getNickname(), chan->getName()));
+        reply(user, ERR_NOPRIVILEGES);
         return ;
     }
     if (!isChannel(channel_name))

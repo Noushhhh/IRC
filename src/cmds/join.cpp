@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 11:00:46 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/20 13:13:13 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ void	Server::Join(User &user, Message &message)
 
                     if (_channelsListIt->getInviteStatus() == true)
                     {
-                        reply (user, ERR_ISINVITEONLY(_channelsListIt->getName()));
+                        reply (user, ERR_INVITEONLYCHAN(_channelsListIt->getName()));
                         chanExist = true;
                         break ;
                     }
