@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:09 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/20 15:41:09 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/20 16:04:23 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ void	Server::Nick(User &user, Message &message)
     }
     else
     {
-        _rplMsg = user.getNickname() + " changed nickname to: " + nickname + "\n";
-        // _rplMsg = user.getReplyName() + " NICK " + nickname;
+        //_rplMsg = user.getNickname() + " changed nickname to: " + nickname + "\n";
+        _rplMsg = user.getReplyName() + " NICK " + nickname + "\n";
         // reply(user, _rplMsg);
         for (_channelsListIt = _channelsList.begin(); _channelsListIt != _channelsList.end(); _channelsListIt++)
         {
@@ -63,6 +63,8 @@ void	Server::Nick(User &user, Message &message)
         }
         user.setNickname(nickname);
         reply(user, _rplMsg);
+        reply(user, "yo\n");
+        std::cout << "rplmsg NICK      " << _rplMsg << std::endl;
         return ;
     }
 }
