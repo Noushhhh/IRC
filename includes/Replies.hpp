@@ -21,8 +21,8 @@
 
 //01 to 03, welcome rpl
 
-#define RPL_WELCOME(nickname)       "welcome to Internet Relay Network " + nickname + " ! \n"
-#define RPL_YOURHOST(servername)    "your host is " + servername ".\n"
+#define RPL_WELCOME(nickname)       "01 RPL_WELCOME welcome to Internet Relay Network " + nickname + " ! \n"
+#define RPL_YOURHOST(servername)    "03 RPL_YOURHOST your host is " + servername ".\n"
 #define RPL_CREATED				    "This server was created, in the 6th year of the 6th decade of the 6th century.\n"
 
 //AWAY 301 / 305 / 306
@@ -92,7 +92,7 @@
 #define	ERR_NOSUCHNICK(nick)        nick + ": No such nick\n" // 401
 #define ERR_NONICKNAMEGIVEN		    ": No nickname given\n" //431
 #define ERR_ERRONEUSNICKNAME(nick)  nick + ": Erroneous nickname\n" //432 when a nick contains invalid char
-#define ERR_NICKNAMEINUSE(nick)     nick + ": Nickname is in use\n" // 433
+#define ERR_NICKNAMEINUSE(nick)     "443 ERR_NICKNQMEINUSE" + nick + ": Nickname is in use\n" // 433
 
 //USER
 
