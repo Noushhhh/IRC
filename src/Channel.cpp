@@ -534,6 +534,15 @@ bool				Channel::userIsInChan(std::string nickname)
 	return (false);
 }
 
+void				Channel::kickUser(User *target)
+{
+	if (this->getUserItInList(_opList, target->getNickname()) != _opList.end())
+		this->_opList.erase(this->getUserItInList(_opList, target->getNickname()));
+	if (this->getUserItInList(_mutedUsersList, target->getNickname()) != _mutedUsersList.end())
+		this->_mutedUsersList.erase(this->getUserItInList(_mutedUsersList, target->getNickname()));
+	this->_usersList.erase(this->getUserItInList(_usersList, target->getNickname()));
+}
+
 /**************************************************************/
 /*                                                            */
 /*                      EXCEPTION CLASSES                     */

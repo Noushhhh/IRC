@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/16 15:01:49 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/17 15:03:24 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,7 +279,8 @@ bool                    Server::addUser()
     newFd = accept(_sock, (struct sockaddr *)&newAddr, &nSize);
     if (newFd < 0)
         return (false);
-    struct pollfd *tmpfd = new struct pollfd;
+    struct pollfd tmp;
+    struct pollfd *tmpfd = &tmp; /*= new struct pollfd*/;
     tmpfd->fd = newFd;
     tmpfd->events = POLLIN|POLLHUP;
     tmpfd->revents = 0;
