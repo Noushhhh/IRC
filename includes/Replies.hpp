@@ -38,7 +38,7 @@
 
 // //JOIN
 
-#define RPL_JOINZERO(rplname, nick)                         rplname + nick + " :succesfully removed from all channels\n"
+#define RPL_JOINZERO(rplname, nick)                         rplname + " " + nick + " :succesfully removed from all channels\n"
 
 //TOPIC / 331 / 332
 

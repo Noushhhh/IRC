@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/20 17:11:32 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/20 18:38:21 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void joinRPL(Channel &chan, User user)
     std::string                  rpl_buff = RPL_TOPIC(user.getReplyName(), user.getNickname(), chan.getName(), chan.getTopic());
     std::list< User *>::iterator it = chan.getUsersList().begin();
 
-    chan.sendToAllChanUser(user.getReplyName() + " JOIN #feur\n\r");
+    chan.sendToAllChanUser(user.getReplyName() + " JOIN " +chan.getName() + "\r\n");
 
     if (chan.getTopic().empty())
         rpl_buff = RPL_NOTOPIC(user.getReplyName(), user.getNickname(), chan.getName());
@@ -38,11 +38,11 @@ static void joinRPL(Channel &chan, User user)
     while (it != chan.getUsersList().end())
     {
         if (chan.getSecrecyStatus())
-            reply(user, RPL_NAMEREPLY(user.getReplyName(), "@", chan.getName(), user.getNickname()));
+            reply(user, RPL_NAMEREPLY((*it)->getReplyName(), "@", chan.getName(), (*it)->getNickname()));
         if (chan.getPrivacyStatus())
-            reply(user, RPL_NAMEREPLY(user.getReplyName(), "*", chan.getName(), user.getNickname()));
+            reply(user, RPL_NAMEREPLY((*it)->getReplyName(), "*", chan.getName(), (*it)->getNickname()));
         else
-            reply(user, RPL_NAMEREPLY(user.getReplyName(), "=", chan.getName(), user.getNickname()));
+            reply(user, RPL_NAMEREPLY((*it)->getReplyName(), "=", chan.getName(), (*it)->getNickname()));
         it ++;
     }
     reply (user, RPL_ENDOFNAMES(user.getReplyName(), user.getNickname(),chan.getName()));
@@ -52,6 +52,7 @@ void remove_from_all_channels(User &user, std::list< Channel > &channelList)
 {
     std::list< Channel >::iterator  cIt = channelList.begin();
     std::list< User *>::iterator     uIt;
+    user.getJoinedChans().erase(user.getJoinedChans().begin(), user.getJoinedChans().end());
     while (cIt != channelList.end())
     {
         uIt = cIt->getUsersList().begin();

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/20 13:47:45 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/20 17:57:58 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ void	Server::PrivMsg(User &user, Message &message)
         {
             if (chan->userIsBanned(user.getNickname()))
                 return ;
-            if (chan->userIsMuted(user.getNickname()))
+            else if (chan->userIsMuted(user.getNickname()))
                 return ;
-            if ((chan->getModerationStatus() == true) || (chan->getOutsideMsgStatus() == true))
+            else if (chan->getOutsideMsgStatus() == true && user.isOnChan(chan->getName()))
             {
                 std::cout <<" Mod status " << chan->getModerationStatus() << std::endl;
                 std::cout <<" Mod status " << chan->getOutsideMsgStatus() << std::endl;
