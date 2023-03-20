@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:59 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/20 16:05:43 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/20 16:18:02 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,12 @@ void	Server::List(User &user, Message &message)
 
     if (message._argsNb == 1)
     {
-        reply (user, RPL_LIST(_channelsList.begin()->getName(), _channelsList.begin()->getTopic()));
+        reply (user, RPL_LIST(user.getReplyName(), user.getNickname(), _channelsList.begin()->getName(), _channelsList.begin()->getTopic()));
         for (_channelsListIt = _channelsList.begin(); _channelsListIt != _channelsList.end(); _channelsListIt++)
         {
             if (_channelsListIt->getSecrecyStatus() == true)
                 _channelsListIt++;
-            _rplMsg = RPL_LIST(user.getReplyName(), user.getNickname(), _channelsListIt->getName(), _channelsListIt->getTopic());
-            reply(user, _rplMsg);
+            reply (user, RPL_LIST(user.getReplyName(), user.getNickname(), _channelsList.begin()->getName(), _channelsList.begin()->getTopic()));
         }
         reply(user, RPL_LISTEND(user.getReplyName(), user.getNickname()));
         return ;
@@ -41,8 +40,7 @@ void	Server::List(User &user, Message &message)
         _channelsListIt = getChanItWithName(message._arguments[i]);
         if (_channelsListIt->getSecrecyStatus() == true)
             _channelsListIt++;
-        _rplMsg = RPL_LIST(user.getReplyName(), user.getNickname(), _channelsListIt->getName(), _channelsListIt->getTopic());
-        send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
+        reply (user, RPL_LIST(user.getReplyName(), user.getNickname(), _channelsList.begin()->getName(), _channelsList.begin()->getTopic()));
     }
     reply(user, RPL_LISTEND(user.getReplyName(), user.getNickname()));
     reply(user, _rplMsg);

@@ -350,7 +350,7 @@ void				Channel::setOpList(User &user, User *target, int &addOrRemove)
 		if (this->getUserItInList(_opList, target->getNickname()) != _opList.end())
 		{
 			this->_opList.erase(getUserItInList(_opList, target->getNickname()));
-			sendToAllChanUser(user, RPL_UNOPED(user.getReplyName(), target->getNickname(), this->getName()));
+			sendToAllChanUser(RPL_UNOPED(user.getReplyName(), target->getNickname(), this->getName()));
 		}
 		else
 			reply(user, RPL_NOTOP(user.getReplyName(), target->getNickname(), this->getName()));
