@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/20 16:27:02 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/20 17:11:32 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ static void joinRPL(Channel &chan, User user)
     std::string                  rpl_buff = RPL_TOPIC(user.getReplyName(), user.getNickname(), chan.getName(), chan.getTopic());
     std::list< User *>::iterator it = chan.getUsersList().begin();
 
-    chan.sendToAllChanUser(user.getReplyName().append(" JOIN #feur\n")); // TO DO, send to all users
+    chan.sendToAllChanUser(user.getReplyName() + " JOIN #feur\n\r");
 
     if (chan.getTopic().empty())
         rpl_buff = RPL_NOTOPIC(user.getReplyName(), user.getNickname(), chan.getName());
-    send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
+    reply(user, rpl_buff);
 
     if (chan.getUsersList().size() == 0)
     {
@@ -33,16 +33,19 @@ static void joinRPL(Channel &chan, User user)
         return ;
     }
 
-    rpl_buff = RPL_USERSTART(user.getReplyName());
-    send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
+    // rpl_buff = RPL_USERSTART(user.getReplyName(), user.getNickname());
+    // send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
     while (it != chan.getUsersList().end())
     {
-        rpl_buff = RPL_USERS(user.getReplyName(), (*it)->getNickname(),,);
-        send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
+        if (chan.getSecrecyStatus())
+            reply(user, RPL_NAMEREPLY(user.getReplyName(), "@", chan.getName(), user.getNickname()));
+        if (chan.getPrivacyStatus())
+            reply(user, RPL_NAMEREPLY(user.getReplyName(), "*", chan.getName(), user.getNickname()));
+        else
+            reply(user, RPL_NAMEREPLY(user.getReplyName(), "=", chan.getName(), user.getNickname()));
         it ++;
     }
-    rpl_buff = RPL_ENDOFUSERS(user.getReplyName());
-    send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
+    reply (user, RPL_ENDOFNAMES(user.getReplyName(), user.getNickname(),chan.getName()));
 }
 
 void remove_from_all_channels(User &user, std::list< Channel > &channelList)
@@ -207,7 +210,7 @@ void	Server::Join(User &user, Message &message)
                         user.getJoinedChans().push_back(newChan);
                         _channelsList.push_back(*newChan);
                         joinRPL(*newChan, user);
-                        reply (user, ":127.0.0.1 324 Max #feur \n");
+	                    // reply (user, RPL_CHANNELMODEIS(user.getReplyName(), newChan->getName(), user.getNickname(), newChan->modeIs()));
                     }
                     
                     //if none is
@@ -217,7 +220,7 @@ void	Server::Join(User &user, Message &message)
                         user.getJoinedChans().push_back(newChan);
                         _channelsList.push_back(*newChan);
                         joinRPL(*newChan, user);
-                        reply (user, "::Max!mgolinva@127.0.0.1 324 :Max #feur \n");
+	                    // reply (user, RPL_CHANNELMODEIS(user.getReplyName(), newChan->getName(), user.getNickname(), newChan->modeIs()));
                     }
                     
                 }
