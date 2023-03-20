@@ -52,8 +52,8 @@ void	Server::Nick(User &user, Message &message)
     }
     else
     {
-        _rplMsg = user.getNickname() + " changed nickname to: " + nickname + "\n";
-        // _rplMsg = user.getReplyName() + " NICK " + nickname;
+        //_rplMsg = user.getNickname() + " changed nickname to: " + nickname + "\n";
+        _rplMsg = user.getReplyName() + " NICK " + nickname;
         // reply(user, _rplMsg);
         for (_channelsListIt = _channelsList.begin(); _channelsListIt != _channelsList.end(); _channelsListIt++)
         {
@@ -61,8 +61,8 @@ void	Server::Nick(User &user, Message &message)
                 _channelsListIt++;
             sendToChanUsers(_channelsListIt->getName(), _rplMsg);
         }
-        user.setNickname(nickname);
-        reply(user, _rplMsg);
+        //user.setNickname(nickname);
+        //reply(user, _rplMsg);
         return ;
     }
 }
