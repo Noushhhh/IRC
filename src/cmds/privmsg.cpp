@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/21 17:02:18 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/21 17:30:27 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ void	Server::PrivMsg(User &user, Message &message)
     {
         reply(user, ERR_NOSUCHNICK(user.getReplyName(), target));
     }
-    //TO DO : message is being sent 2 times to to the emiter, gotta fix that
 }
 
 // PRIVMSG message
