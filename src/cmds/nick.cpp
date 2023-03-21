@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:09 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/21 14:10:30 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/21 14:17:13 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,14 @@ void	Server::Nick(User &user, Message &message)
     }
     if (user.getRegistered() == false)
     {
-        _rplMsg = user.getReplyName() + " NICK " + nickname;
+        _rplMsg = user.getReplyName() + " NICK " + nickname + "\n";
         user.setNickname(nickname);
         reply(user, _rplMsg);
         return ;
     }
     else
     {
-        _rplMsg = user.getReplyName() + " NICK " + nickname;
+        _rplMsg = user.getReplyName() + " NICK " + nickname + "\n";
         for (_channelsListIt = _channelsList.begin(); _channelsListIt != _channelsList.end(); _channelsListIt++)
         {
             if (_channelsListIt->getQuietStatus())
