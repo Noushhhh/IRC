@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:09 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/20 17:36:12 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/21 13:30:21 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,23 +24,10 @@ void	Server::Nick(User &user, Message &message)
 	{
 		if (isUserWNickname(nickname))
         {
-            std::stringstream strs;
-            strs << _nickModificator;
-
             reply(user, ERR_NICKNAMEINUSE(user.getReplyName(), nickname));
-            message._arguments[0].append(strs.str());
-            _nickModificator ++;
-            std::cout << message._arguments[0] << std::endl;
-            Nick(user, message);
             return ;
         }
 	}
-
-    // if (isUserWNickname(nickname))
-    // {
-    //     reply(user, ERR_NICKNAMEINUSE(user.getReplyName(), nickname));
-    //     return ;
-    // }
     for (size_t i = 0; i < nickname.length(); i++)
     {
         if (nickname == "anonymous")
@@ -56,10 +43,10 @@ void	Server::Nick(User &user, Message &message)
     }
     if (user.getRegistered() == false)
     {
-        _rplMsg = user.getReplyName() + " NICK " + nickname + "\n";
         user.setNickname(nickname);
+        // _rplMsg = user.getReplyName() + " NICK " + nickname;
         // reply(user, _rplMsg);
-        // _rplMsg = "new nick in use :" + nickname + "\n";
+        _rplMsg = "new nick in use :" + nickname + "\n";
         reply(user, _rplMsg);
         return ;
     }
@@ -67,7 +54,7 @@ void	Server::Nick(User &user, Message &message)
     {
         //_rplMsg = user.getNickname() + " changed nickname to: " + nickname + "\n";
         _rplMsg = user.getReplyName() + " NICK " + nickname;
-        reply(user, _rplMsg);
+        // reply(user, _rplMsg);
         for (_channelsListIt = _channelsList.begin(); _channelsListIt != _channelsList.end(); _channelsListIt++)
         {
             if (_channelsListIt->getQuietStatus())
@@ -75,7 +62,7 @@ void	Server::Nick(User &user, Message &message)
             sendToChanUsers(_channelsListIt->getName(), _rplMsg);
         }
         //user.setNickname(nickname);
-        //reply(user, _rplMsg);
+        reply(user, _rplMsg);
         return ;
     }
 }
