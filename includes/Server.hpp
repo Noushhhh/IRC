@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/21 11:43:20 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/21 13:34:34 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ class Server
         User                                    *getUserWithNickname(std::string nickname);
         std::list< User >::iterator             getUserItWithFd(int fd);
         std::list< Channel >::iterator          getChanItWithName(std::string name);
-        std::vector< struct pollfd >::iterator  findPollFd(int fd);
+        std::vector< struct pollfd >::iterator  &findPollFd(int fd);
         void                                    sendToChanUsers(std::string channel_name, std::string message);
 
 // commands
@@ -101,16 +101,14 @@ class Server
     private :
 
         int                                     _sock;
-        ssize_t                                 _nickModificator;
         const int                               _port;
         const std::string                       _password;
         struct sockaddr_in                      _addr;
-        std::vector< pollfd >                   _pollFds; //element new a delete
-        std::vector< pollfd >::iterator         _pollFdsIt; //element new a delete
+        std::vector< struct pollfd >            _pollFds; //element new a delete
         std::list< User >                       _usersList; //List d'utilisateurs du serveur
         std::list< User >::iterator             _usersListIt;
         std::list< Channel >                    _channelsList;
-        std::list< Channel >::iterator          _channelsListIt;
+        std::list< Channel >::iterator         _channelsListIt;
         std::string                             _rplMsg;
         std::string                             _errMsg;
 
