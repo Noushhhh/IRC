@@ -15,8 +15,6 @@
 
 #include "irc.hpp"
 
-#define SERVER ":ircserv"
-
 /*********************************** REPLIES ***********************************/
 
 //001 to 003, welcome rpl 
@@ -85,7 +83,7 @@
 
 //WHO 352
 
-// #define RPL_WHOREPLY(rplname, channel, username, host, server, nick, flags, realname) rplname + " " + channel + " " + username + " " + host + " " + nick +  " " + flags + " :1 " + realname + "\n\r" 
+#define RPL_WHOREPLY(rplname, channel, username, host, server, nick, flags, realname) rplname + " " + channel + " " + username + " " + host + " " + nick +  " " + flags + " :1 " + realname + "\n\r" 
 
 /************************************ ERRORS ************************************/
 
@@ -120,17 +118,17 @@
 
 //CHANNEL RELATED
 
-#define	ERR_NOSUCHCHANNEL(rplname, channel)         rplname + " 402 " + channel + ":No such channel\n" // 403
-#define ERR_CANNOTSENDTOCHAN(rplname, channel)      rplname + " 404 " + channel + ":Cannot send to channel\n" // 404
-#define ERR_UNAVAILRESOURCE(rplname, nickOrChan)    rplname + nickOrChan + ":is temporarily unavailable\n" //437 pas sur du bail
-#define ERR_NOTONCHANNEL(rplname, chan)             rplname + " 442 " + chan + ":You are not on that channel\n" // 442
-#define ERR_USERONCHANNEL(rplname, chan, user)      rplname + " 443 " + user + ":Is already on channel " + chan + "\n" // 443
-#define ERR_USERNOTINCHANNEL(rplname, nick, chan)   rplname + " 451 " + nick + ":is not on channel " + chan + "\n" // 441
-#define ERR_ISCHANOP(rplname, nick)                 rplname + nick + ":is chanop and cannot be muted, banned or unoped\n"
-#define ERR_BADCHANNELKEY(rplname, chan)            rplname + " 475 " + chan + ":Cannot join channel (+k)\n" // 475
-#define ERR_CHANOPRIVSNEEDED(rplname, chan)         rplname + " 482 " + chan + ":You're not channel operator\n" // 482
-#define ERR_ISBANNED(rplname, nick, chan)           rplname + nick + ":is banned from " + chan + "\n"
-#define ERR_USERLIMITREACHED(rplname, chan)         rplname + chan + ":users limit reached\n"
+#define	ERR_NOSUCHCHANNEL(rplname, channel)         rplname + " 402 " + channel + " :No such channel\n" // 403
+#define ERR_CANNOTSENDTOCHAN(rplname, channel)      rplname + " 404 " + channel + " :Cannot send to channel\n" // 404
+#define ERR_UNAVAILRESOURCE(rplname, nickOrChan)    rplname + nickOrChan + " :is temporarily unavailable\n" //437 pas sur du bail
+#define ERR_NOTONCHANNEL(rplname, chan)             rplname + " 442 " + chan + " :You are not on that channel\n" // 442
+#define ERR_USERONCHANNEL(rplname, chan, user)      rplname + " 443 " + user + " :Is already on channel " + chan + "\n" // 443
+#define ERR_USERNOTINCHANNEL(rplname, nick, chan)   rplname + " 451 " + nick + " :is not on channel " + chan + "\n" // 441
+#define ERR_ISCHANOP(rplname, nick)                 rplname + nick + " :is chanop and cannot be muted, banned or unoped\n"
+#define ERR_BADCHANNELKEY(rplname, chan)            rplname + " 475 " + chan + " :Cannot join channel (+k)\n" // 475
+#define ERR_CHANOPRIVSNEEDED(rplname, chan)         rplname + " 482 " + chan + " :You're not channel operator\n" // 482
+#define ERR_ISBANNED(rplname, nick, chan)           rplname + nick + " :is banned from " + chan + "\n"
+#define ERR_USERLIMITREACHED(rplname, chan)         rplname + chan + " :users limit reached\n"
 
 // PING & PONG
 

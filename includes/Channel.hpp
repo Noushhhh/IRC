@@ -116,7 +116,6 @@ class Channel
 		bool 						userIsMuted(std::string nickname);
 		void						kickUser(User *target);
 		std::string					modeIs();
-		void						sendToAllChanUser(std::string msg);
 
 
 
