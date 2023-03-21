@@ -21,9 +21,9 @@
 
 //001 to 003, welcome rpl 
 
-#define RPL_WELCOME(rplname, nickname)              rplname + " 001 " + nickname + " :welcome to IRC NOUSHMAKS " + nickname + " ! \n"
-#define RPL_YOURHOST(rplname, servername)           rplname + " 002 :your host is " + servername ".\n"
-#define RPL_CREATED                                 rplname + " 003 :This server was created, in the 6th year of the 6th decade of the 6th century.\n"
+#define RPL_WELCOME(rplname, nickname)              rplname + " 001 " + nickname + ":welcome to IRC NOUSHMAKS " + nickname + " ! \n"
+#define RPL_YOURHOST(rplname, servername)           rplname + " 002: your host is " + servername ".\n"
+#define RPL_CREATED                                 rplname + " 003: This server was created, in the 6th year of the 6th decade of the 6th century.\n"
 
 // //AWAY 301 / 305 / 306
 
@@ -33,8 +33,8 @@
 
 //LIST 322 / 323
 
-#define	RPL_LIST(rplname, nickname, channel, topic)       rplname + " 322 " + nickname + " " + channel + ": " + topic + "\n"
-#define RPL_LISTEND(rplname, nickname)				      rplname + " 323 " + nickname + ": end of LIST\n"
+#define	RPL_LIST(rplname, nickname, channel, topic)       rplname + " 322 " + nickname + " " + channel + ":" + topic + "\n"
+#define RPL_LISTEND(rplname, nickname)				      rplname + " 323 " + nickname + ":end of LIST\n"
 
 // //JOIN
 
@@ -47,7 +47,7 @@
 
 //INVITE / 341
 
-#define	RPL_INVITING(rplname, channel, nick)            rplname + " 341 " + nick + " " + channel + ": Was succesfully invited to " + channel + "\n"
+#define	RPL_INVITING(rplname, channel, nick)            rplname + " 341 " + nick + " " + channel + ":Was succesfully invited to " + channel + "\n"
 
 // //OPER / 381
 
@@ -55,15 +55,14 @@
 
 //USER 392 / 393 / 394 / 395
 
-#define	RPL_USERSTART(rplname)			                                    rplname + " 392:UserID Terminal Host\n" //sent first
-#define	RPL_USERS(rplname, username, ttyline /*jsp cque c*/, hostname)      rplname + " 393:" + username + " " + ttyline + " " + hostname + "\n"
-#define RPL_ENDOFUSERS(rplname) 			                                rplname + " 394:End of users\n"
-#define RPL_NOUSERS(rplname)				                                rplname + " 395:Nobody logged in\n"
+#define	RPL_USERSTART(rplname)			                                    rplname + " 392: UserID Terminal Host\n" //sent first
+#define	RPL_USERS(rplname, username, ttyline /*jsp cque c*/, hostname)      rplname + " 393: " + username + " " + ttyline + " " + hostname + "\n"
+#define RPL_ENDOFUSERS(rplname) 			                                rplname + " 394: End of users\n"
+#define RPL_NOUSERS(rplname)				                                rplname + " 395: Nobody logged in\n"
 
 // MODE / 221 (jcomprends pas trop auqnd elle s'envoie elle) / 501
 
 #define	RPL_UMODIS(rplname, userModeStr)            rplname + " 221:" + userModeStr + "\n"
-#define RPL_CHANNELMODEIS(replynick, channel, nick, modestring)   replynick + " 324 :" + nick + " " + channel + " " + modestring
 #define RPL_MUTED(rplname, nick, channel)           rplname + nick + ":Was succesfully muted in " + channel + "\n"
 #define RPL_ALLRDYMUTED(rplname, nick, channel)     rplname + nick + ":Was allready muted in " + channel + "\n"
 #define RPL_UNMUTED(rplname, nick, channel)         rplname + nick + ":Was succesfully unmuted in " + channel + "\n"
