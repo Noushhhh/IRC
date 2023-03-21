@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/21 13:33:44 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/21 13:39:50 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ static void joinRPL(Channel &chan, User user)
 
     if (chan.getQuietStatus() == true)
         return ;
-    chan.sendToAllChanUser(user.getReplyName() + " JOIN " +chan.getName() + "\r\n");
+    // chan.sendToAllChanUser(user.getReplyName() + " JOIN " +chan.getName() + "\r\n");
+    chan.sendToUsers(user.getReplyName() + " JOIN " +chan.getName() + "\r\n");
 
     if (chan.getTopic().empty())
         rpl_buff = RPL_NOTOPIC(user.getReplyName(), user.getNickname(), chan.getName());
