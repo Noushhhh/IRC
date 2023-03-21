@@ -83,6 +83,10 @@
 
 #define RPL_USERLIMITSET(rplname, channel, nbr)     rplname + "  " + channel + ": Users limit was set to : " + nbr + "\n"
 
+//WHO 352
+
+// #define RPL_WHOREPLY(rplname, channel, username, host, server, nick, flags, realname) rplname + " " + channel + " " + username + " " + host + " " + nick +  " " + flags + " :1 " + realname + "\n\r" 
+
 /************************************ ERRORS ************************************/
 
 #define ERR_NEEDMOREPARAMS(rplname, cmd)        rplname + " 461 " + cmd + ": Not enough parameters\n" // 461

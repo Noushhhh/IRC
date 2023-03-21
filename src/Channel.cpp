@@ -186,10 +186,7 @@ void				Channel::setModerationMode(Server &serv, User &user, int &addOrRemove)
 		for (it = _usersList.begin(); it != end; it ++)
 		{
 			if (!userIsOp((*it)->getNickname()))
-			{
-				std::cout << "nick : " << (*it)->getNickname() << std::endl;
 				setMutedList(user, serv.getUserWithNickname((*it)->getNickname()), addOrRemove);
-			}
 		}
 	}
 	else

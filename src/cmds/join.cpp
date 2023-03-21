@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/20 18:38:21 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/21 10:42:20 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ static void joinRPL(Channel &chan, User user)
     std::string                  rpl_buff = RPL_TOPIC(user.getReplyName(), user.getNickname(), chan.getName(), chan.getTopic());
     std::list< User *>::iterator it = chan.getUsersList().begin();
 
+    if (chan.getQuietStatus() == true)
+        return ;
     chan.sendToAllChanUser(user.getReplyName() + " JOIN " +chan.getName() + "\r\n");
 
     if (chan.getTopic().empty())
@@ -33,8 +35,6 @@ static void joinRPL(Channel &chan, User user)
         return ;
     }
 
-    // rpl_buff = RPL_USERSTART(user.getReplyName(), user.getNickname());
-    // send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
     while (it != chan.getUsersList().end())
     {
         if (chan.getSecrecyStatus())

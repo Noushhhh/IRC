@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/20 17:57:58 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/21 10:42:05 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	Server::PrivMsg(User &user, Message &message)
                 reply(user, ERR_CANNOTSENDTOCHAN(user.getReplyName(), target));
                 return ;
             }
-            priv_msg = user.getNickname() + "@IRC_NOUSHMAKS" + " PRIVMSG " + target + " " + priv_msg + "\n";
+            priv_msg = user.getReplyName() + " PRIVMSG " + target + " " + priv_msg + "\n";
             sendToChanUsers(target, priv_msg);
         }
 
@@ -61,7 +61,7 @@ void	Server::PrivMsg(User &user, Message &message)
 
     else if (isUserWNickname(target)) // else check if message to user
     {
-        priv_msg = user.getNickname() + " PRIVMSG " + target + " " + priv_msg + "\n";
+        priv_msg = user.getReplyName() + " PRIVMSG " + target + " " + priv_msg + "\n";
 		send(getUserWithNickname(target)->getSockfd(), priv_msg.c_str(), priv_msg.length(), 0); // send priv message to the target
         return ;
     }
@@ -70,6 +70,7 @@ void	Server::PrivMsg(User &user, Message &message)
     {
         reply(user, ERR_NOSUCHNICK(user.getReplyName(), target));
     }
+    //TO DO : message is being sent 2 times to to the emiter, gotta fix that
 }
 
 // PRIVMSG message
