@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/21 16:42:40 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/21 17:22:36 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ class Server
 	void	Ping(User &user, Message &message);
     void	Cap(User &user, Message &message);
     void	Who(User &user, Message &message);
-	//void	Pong(User &user, Message &message);
+	void	Pong(User &user, Message &message);
 
     class ServerException : public std::exception
     {

@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:23 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/21 14:44:52 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/21 17:06:41 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,9 @@ void	Server::Quit(User &user, Message &message)
     for (std::list <Channel *>::iterator cit = user.getJoinedChans().begin(); cit != user.getJoinedChans().end(); cit++)
     {
         // std::cout << "Name channel" << (*cit)->getName() << std::endl;
-        (*cit)->sendToUsers(quit_msg); // send to all users of chans
+        (*cit)->sendToUsersExcept(user.getNickname(), quit_msg); // send to all users of chans
     }
+    
     // function to close user
 }
 
