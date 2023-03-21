@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:38 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/20 13:49:28 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/21 11:42:35 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ std::vector< struct pollfd >::iterator &Server::findPollFd(int fd)
     }
     return (*it);
 }
+
 
 void	Server::cmdUser(User &user, Message &message)
 {
