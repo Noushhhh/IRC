@@ -158,18 +158,23 @@ void				Channel::setPswd(User &user, std::string pswd, int &addOrRemove)
 	{
 		_password = pswd;
 		_isPswdProtected = true;
+		reply(user, this->getName().append(": Password protection successfully set\n"));
 	}
 	else
 	{
 		_password = "";
 		_isPswdProtected = false;
+		reply(user, this->getName().append(": Password protection successfully removed\n"));
 	}
 	sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
 }
 void				Channel::setInviteMode(User &user, int &addOrRemove)
 {	
 	if (addOrRemove == ADD)
+	{
 		_isInviteOnly = true;
+		reply(user, this->getName().append(": Invite only mode successfully set\n"));
+	}
 	else
 		_isInviteOnly = false;
 	sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
@@ -188,6 +193,7 @@ void				Channel::setModerationMode(Server &serv, User &user, int &addOrRemove)
 			if (!userIsOp((*it)->getNickname()))
 				setMutedList(user, serv.getUserWithNickname((*it)->getNickname()), addOrRemove);
 		}
+		reply(user, this->getName().append(": Moderation mode successfully set\n"));
 	}
 	else
 		_isModerated = false;
@@ -200,6 +206,7 @@ void				Channel::setQuietMode(User &user, int &addOrRemove)
 	if (addOrRemove == ADD)
 	{
 		_isQuiet = true;
+		reply(user, this->getName().append(": Quiet mode successfully set\n"));
 	}
 	else
 		_isQuiet = false;
@@ -209,7 +216,10 @@ void				Channel::setQuietMode(User &user, int &addOrRemove)
 void				Channel::setOutsideMsgMode(User &user, int &addOrRemove)
 {
 	if (addOrRemove == ADD)
+	{
 		_isNoOutsideMsg = true;
+		reply(user, this->getName().append(": No Outside message mode successfully set\n"));
+	}
 	else
 		_isNoOutsideMsg = false;
 	sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
@@ -218,7 +228,10 @@ void				Channel::setOutsideMsgMode(User &user, int &addOrRemove)
 void				Channel::setPrivateMode(User &user, int &addOrRemove)
 {
 	if (addOrRemove == ADD)
+	{
+		_isPrivate = true;
 		reply(user, this->getName().append(": Private mode successfully set\n"));
+	}
 	else
 		_isPrivate = false;
 	sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
@@ -227,7 +240,10 @@ void				Channel::setPrivateMode(User &user, int &addOrRemove)
 void				Channel::setSecretMode(User &user, int &addOrRemove)
 {
 	if (addOrRemove == ADD)
+	{
 		_isSecret = true;
+		reply(user, this->getName().append(": Secret mode successfuly set\n"));
+	}
 	else
 		_isSecret = false;
 	sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
@@ -236,7 +252,10 @@ void				Channel::setSecretMode(User &user, int &addOrRemove)
 void				Channel::setTopicMode(User &user, int &addOrRemove)
 {
 	if (addOrRemove == ADD)
+	{
 		_isTopicOPOnly = true;
+		reply(user, this->getName().append(": Topic set OP only mode successfuly set\n"));
+	}
 	else
 		_isTopicOPOnly = false;
 	sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));

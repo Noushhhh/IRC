@@ -68,10 +68,10 @@ class Channel
 		//getters
 
 		std::list< User *>::iterator	getUserItInList(std::list< User *> &list, std::string name);
-		std::string						getName()					   	  const;
-		std::string						getNameErrorSrc()				  const;
-		std::string						getPswd()						  const;
-		std::string						getTopic()						  const;
+		std::string					getName()					   	  const;
+		std::string					getNameErrorSrc()				  const;
+		std::string					getPswd()						  const;
+		std::string					getTopic()						  const;
 		User						*getChanCreator()				  const;
 		std::list< User *>			&getUsersList()			 	 		   ;
 		std::list< User *>			&getOpList()			 	 		   ;
