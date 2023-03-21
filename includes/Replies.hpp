@@ -20,13 +20,8 @@
 //001 to 003, welcome rpl 
 
 #define RPL_WELCOME(rplname, nickname)              rplname + " 001 " + nickname + " :welcome to IRC NOUSHMAKS " + nickname + " ! \n"
-<<<<<<< HEAD
-#define RPL_YOURHOST(rplname, servername)           rplname + " 002 :your host is " + servername ".\n"
-#define RPL_CREATED                                 rplname + " 003 :This server was created, in the 6th year of the 6th decade of the 6th century.\n"
-=======
 #define RPL_YOURHOST(rplname, servername)           rplname + " 002: your host is " + servername ".\n"
 #define RPL_CREATED                                 rplname + " 003: This server was created, in the 6th year of the 6th decade of the 6th century.\n"
->>>>>>> fix(Nick)
 
 // //AWAY 301 / 305 / 306
 
