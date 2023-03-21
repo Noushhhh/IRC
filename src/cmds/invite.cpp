@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   invite.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:47 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/20 13:39:51 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/21 11:28:17 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	Server::Invite(User &user, Message &message)
         chan->getUsersList().push_back(target);
 
         send(target->getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
+        reply(*target ,target->getReplyName() + " JOIN " + chan->getName() + "\r\n");
         return ;
     }
 }

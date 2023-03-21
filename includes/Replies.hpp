@@ -38,7 +38,7 @@
 
 // //JOIN
 
-#define RPL_JOINZERO(rplname, nick)                         rplname + nick + " :succesfully removed from all channels\n"
+#define RPL_JOINZERO(rplname, nick)                         rplname + " " + nick + " :succesfully removed from all channels\n"
 
 //TOPIC / 331 / 332
 
@@ -82,6 +82,10 @@
 #define RPL_NOTOP(rplname, nick, channel)           rplname + nick + ":Was not chanop in " + channel + "\n"
 
 #define RPL_USERLIMITSET(rplname, channel, nbr)     rplname + "  " + channel + ":Users limit was set to : " + nbr + "\n"
+
+//WHO 352
+
+// #define RPL_WHOREPLY(rplname, channel, username, host, server, nick, flags, realname) rplname + " " + channel + " " + username + " " + host + " " + nick +  " " + flags + " :1 " + realname + "\n\r" 
 
 /************************************ ERRORS ************************************/
 

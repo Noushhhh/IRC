@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/20 16:31:25 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/21 11:43:20 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #define PROTOCOL 0
 #define BIND 1
 #define LISTEN 2
-#define HANDLEDCOMMANDSNB 14
+#define HANDLEDCOMMANDSNB 15
 
 #include "irc.hpp"
 #include "User.hpp"
@@ -87,6 +87,7 @@ class Server
 	void	PrivMsg(User &user, Message &message);
 	void	Ping(User &user, Message &message);
     void	Cap(User &user, Message &message);
+    void	Who(User &user, Message &message);
 	//void	Pong(User &user, Message &message);
 
     class ServerException : public std::exception

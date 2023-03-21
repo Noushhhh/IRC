@@ -23,6 +23,7 @@ CMD_FILES = pass.cpp \
 			privmsg.cpp \
 			ping_pong.cpp \
 			cap.cpp \
+			who.cpp 
 
 SRC = 		${addprefix src/, ${SRC_FILES}}
 SRC_CMD =	${addprefix src/cmds/, ${CMD_FILES}} 
