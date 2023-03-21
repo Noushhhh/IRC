@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:55 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/20 13:44:34 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/21 14:27:08 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	Server::Kick(User &user, Message &message)
     User    *target = getUserWithNickname(nickname);
     if (message._argsNb == 3)
     {
-        _rplMsg = user.getNickname() + "@IRC_NOUSHMAKS KICK " + channel_name + " " + nickname + "\n";
+        _rplMsg = user.getReplyName() + " KICK " + channel_name + " " + nickname + "\n";
         sendToChanUsers(channel_name, _rplMsg);
         //kick user from chan
         chan->kickUser(target);
@@ -59,7 +59,7 @@ void	Server::Kick(User &user, Message &message)
     if (message._argsNb > 3)
     {
         _rplMsg = "";
-        _rplMsg = user.getNickname() + "@IRC_NOUSHMAKS KICK " + channel_name + " " + nickname + ": " + get_suffix(&message._arguments[2]) + "\n";
+        _rplMsg = user.getReplyName() + " KICK " + channel_name + " " + nickname + " :" + get_suffix(&message._arguments[2]) + "\n";
         sendToChanUsers(channel_name, _rplMsg);
         chan->kickUser(target);
         //kick user from chan
