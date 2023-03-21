@@ -166,6 +166,7 @@ void				Channel::setPswd(User &user, std::string pswd, int &addOrRemove)
 		_isPswdProtected = false;
 		reply(user, this->getName().append(": Password protection successfully removed\n"));
 	}
+	sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
 }
 void				Channel::setInviteMode(User &user, int &addOrRemove)
 {	
@@ -175,10 +176,8 @@ void				Channel::setInviteMode(User &user, int &addOrRemove)
 		reply(user, this->getName().append(": Invite only mode successfully set\n"));
 	}
 	else
-	{
 		_isInviteOnly = false;
-		reply(user, this->getName().append(": Invite only mode successfully removed\n"));
-	}
+	sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
 }
 
 void				Channel::setModerationMode(Server &serv, User &user, int &addOrRemove)
@@ -197,10 +196,8 @@ void				Channel::setModerationMode(Server &serv, User &user, int &addOrRemove)
 		reply(user, this->getName().append(": Moderation mode successfully set\n"));
 	}
 	else
-	{
 		_isModerated = false;
-		reply(user, this->getName().append(": Moderation mode successfully removed\n"));
-	}
+	sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
 }
 
 void				Channel::setQuietMode(User &user, int &addOrRemove)
@@ -212,10 +209,8 @@ void				Channel::setQuietMode(User &user, int &addOrRemove)
 		reply(user, this->getName().append(": Quiet mode successfully set\n"));
 	}
 	else
-	{
 		_isQuiet = false;
-		reply(user, this->getName().append(": Quiet mode successfully removed\n"));
-	}
+	sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
 }
 
 void				Channel::setOutsideMsgMode(User &user, int &addOrRemove)
@@ -226,10 +221,8 @@ void				Channel::setOutsideMsgMode(User &user, int &addOrRemove)
 		reply(user, this->getName().append(": No Outside message mode successfully set\n"));
 	}
 	else
-	{
 		_isNoOutsideMsg = false;
-		reply(user, this->getName().append(": No Outside message mode successfully removed\n"));
-	}
+	sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
 }
 
 void				Channel::setPrivateMode(User &user, int &addOrRemove)
@@ -240,10 +233,8 @@ void				Channel::setPrivateMode(User &user, int &addOrRemove)
 		reply(user, this->getName().append(": Private mode successfully set\n"));
 	}
 	else
-	{
 		_isPrivate = false;
-		reply(user, this->getName().append(": Private mode successfully removed\n"));
-	}
+	sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
 }
 
 void				Channel::setSecretMode(User &user, int &addOrRemove)
@@ -254,10 +245,8 @@ void				Channel::setSecretMode(User &user, int &addOrRemove)
 		reply(user, this->getName().append(": Secret mode successfuly set\n"));
 	}
 	else
-	{
 		_isSecret = false;
-		reply(user, this->getName().append(": Secret mode successfuly removed\n"));
-	}
+	sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
 }
 
 void				Channel::setTopicMode(User &user, int &addOrRemove)
@@ -268,10 +257,8 @@ void				Channel::setTopicMode(User &user, int &addOrRemove)
 		reply(user, this->getName().append(": Topic set OP only mode successfuly set\n"));
 	}
 	else
-	{
 		_isTopicOPOnly = false;
-		reply(user, this->getName().append(": Topic set OP only mode successfuly removed\n"));
-	}
+	sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
 }
 
 void				Channel::setUsersLimit(User &user, std::string userLimit, int &addOrRemove)
@@ -293,12 +280,13 @@ void				Channel::setUsersLimit(User &user, std::string userLimit, int &addOrRemo
 		}
 		_usersLimit = static_cast< ssize_t >(std::atoi(userLimit.c_str()));
 		_isUsersLimit = true;
-		reply(user,  RPL_USERLIMITSET(user.getReplyName(), _name, userLimit));
+		sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
+		sendToUsers(RPL_USERLIMITSET(user.getReplyName(), _name, userLimit));
 	}
 	else
 	{
 		_isUsersLimit = false;
-		reply(user, this->getName().append(": users limit successfully removed\n"));
+		sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
 	}
 }
 
@@ -313,7 +301,7 @@ void				Channel::setMutedList(User &user, User *target, int &addOrRemove)
 		else
 		{
 			this->_mutedUsersList.push_back(target);
-			reply(user, RPL_MUTED(user.getReplyName(), target->getNickname(), this->getName()));
+			sendToUsers(RPL_MUTED(user.getReplyName(), target->getNickname(), this->getName()));
 		}
 	}
 	else
@@ -321,7 +309,7 @@ void				Channel::setMutedList(User &user, User *target, int &addOrRemove)
 		if (this->getUserItInList(_mutedUsersList, target->getNickname()) != _mutedUsersList.end())
 		{
 			this->_mutedUsersList.erase(getUserItInList(_mutedUsersList, target->getNickname()));
-			reply(user, RPL_UNMUTED(user.getReplyName(), target->getNickname(), this->getName()));
+			sendToUsers(RPL_UNMUTED(user.getReplyName(), target->getNickname(), this->getName()));
 		}
 		else
 			reply(user, RPL_NOTMUTED(user.getReplyName(), target->getNickname(), this->getName()));
@@ -338,7 +326,7 @@ void				Channel::setBanList(Server &serv, User &user, User *target, int &addOrRe
 			reply(user, RPL_ALLRDYBANNED(user.getReplyName(), target->getNickname(), this->getName()));
 		else
 		{
-			reply(user, RPL_BANNED(user.getReplyName(), target->getNickname(), this->getName()));
+			sendToUsers(RPL_BANNED(user.getReplyName(), target->getNickname(), this->getName()));
 			if (this->getUserItInList(_opList, target->getNickname()) != _opList.end())
 				this->_opList.erase(this->getUserItInList(_opList, target->getNickname()));
 			if (this->getUserItInList(_mutedUsersList, target->getNickname()) != _mutedUsersList.end())
@@ -353,7 +341,7 @@ void				Channel::setBanList(Server &serv, User &user, User *target, int &addOrRe
 		if (this->getUserItInList(_banUsersList, target->getNickname()) != _banUsersList.end())
 		{
 			this->_banUsersList.erase(getUserItInList(_banUsersList, target->getNickname()));
-			reply(user, RPL_UNBANNED(user.getReplyName(), target->getNickname(), this->getName()));
+			sendToUsers(RPL_UNBANNED(user.getReplyName(), target->getNickname(), this->getName()));
 		}
 		else
 			reply(user, RPL_NOTBANNED(user.getReplyName(), target->getNickname(), this->getName()));
@@ -371,7 +359,7 @@ void				Channel::setOpList(User &user, User *target, int &addOrRemove)
 		else
 		{
 			this->_opList.push_back(target);
-			reply (user, RPL_OPED(user.getReplyName(), target->getNickname(), this->getName()));
+			sendToUsers(RPL_OPED(user.getReplyName(), target->getNickname(), this->getName()));
 		}
 	}
 	else
@@ -379,7 +367,7 @@ void				Channel::setOpList(User &user, User *target, int &addOrRemove)
 		if (this->getUserItInList(_opList, target->getNickname()) != _opList.end())
 		{
 			this->_opList.erase(getUserItInList(_opList, target->getNickname()));
-			reply (user, RPL_UNOPED(user.getReplyName(), target->getNickname(), this->getName()));
+			sendToUsers(RPL_UNOPED(user.getReplyName(), target->getNickname(), this->getName()));
 		}
 		else
 			reply(user, RPL_NOTOP(user.getReplyName(), target->getNickname(), this->getName()));
@@ -442,7 +430,8 @@ bool				Channel::isNameValid(std::string name) // can contain multiple channel c
 void				Channel::sendToUsers(std::string message)
 {
 	std::list < User *>::iterator it = _usersList.begin();
-	while (it != _usersList.end())
+	std::list< User *>::iterator end = _usersList.end();
+	while (it != end)
 	{
 		send((*it)->getSockfd(), message.c_str(), message.length(), 0);
 		it++;
@@ -530,6 +519,23 @@ bool				Channel::userIsInChan(std::string nickname)
         }
     }
 	return (false);
+}
+
+std::string   		Channel::modeIs()
+{
+    std::string         modestring = "";
+
+    (this->getPswdStatus() == true ? modestring += "+k" : modestring += "-k");
+    (this->getInviteStatus() == true ? modestring += "+i" : modestring += "-i");
+    (this->getModerationStatus() == true ? modestring += "+m" : modestring += "-m");
+    (this->getQuietStatus() == true ? modestring += "+q" : modestring += "-q");
+    (this->getOutsideMsgStatus() == true ? modestring += "+n" : modestring += "-n");
+    (this->getPrivacyStatus() == true ? modestring += "+p" : modestring += "-p");
+    (this->getSecrecyStatus() == true ? modestring += "+s" : modestring += "-s");
+    (this->getTopicStatus() == true ? modestring += "+t" : modestring += "-t");
+    (this->getUsersLimitStatus() == true ? modestring += "+l" : modestring += "-l");
+    modestring += "\n";
+	return (modestring);
 }
 
 void				Channel::kickUser(User *target)

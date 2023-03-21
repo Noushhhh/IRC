@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/21 13:34:34 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/21 14:26:00 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #define BIND 1
 #define LISTEN 2
 #define HANDLEDCOMMANDSNB 15
+#define SERVER "@NOUSHMAKSIRC"
+#define HOST "127.0.0.1"
 
 #include "irc.hpp"
 #include "User.hpp"
