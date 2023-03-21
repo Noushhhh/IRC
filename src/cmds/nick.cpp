@@ -6,7 +6,11 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:09 by mgolinva          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/03/21 14:35:59 by aandric          ###   ########.fr       */
+=======
+/*   Updated: 2023/03/21 14:31:38 by aandric          ###   ########.fr       */
+>>>>>>> 3ca188e0658c5386c6e57aea8f80de217c5d1f03
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +49,22 @@ void	Server::Nick(User &user, Message &message)
     {
         _rplMsg = user.getReplyName() + " NICK " + nickname + "\n";
         user.setNickname(nickname);
+<<<<<<< HEAD
+=======
+        // reply(user, _rplMsg);
+>>>>>>> 3ca188e0658c5386c6e57aea8f80de217c5d1f03
         reply(user, _rplMsg);
         return ;
     }
     else
     {
+<<<<<<< HEAD
         _rplMsg = user.getReplyName() + " NICK " + nickname +'\n';
+=======
+        //_rplMsg = user.getNickname() + " changed nickname to: " + nickname + "\n";
+        _rplMsg = user.getReplyName() + " NICK " + nickname +'\n';
+        // reply(user, _rplMsg);
+>>>>>>> 3ca188e0658c5386c6e57aea8f80de217c5d1f03
         for (_channelsListIt = _channelsList.begin(); _channelsListIt != _channelsList.end(); _channelsListIt++)
         {
             if (_channelsListIt->getQuietStatus())
