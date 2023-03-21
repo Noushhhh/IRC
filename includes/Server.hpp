@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/21 14:26:00 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/21 16:42:40 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ class Server
         std::list< User >::iterator             getUserItWithFd(int fd);
         std::list< Channel >::iterator          getChanItWithName(std::string name);
         std::vector< struct pollfd >::iterator  &findPollFd(int fd);
-        void                                    sendToChanUsers(std::string channel_name, std::string message);
+        void                                    sendChanUsers(std::string channel_name, std::string message);
+        void                                    sendChanUsersExcept(std::string nick, std::string channel_name, std::string message);
 
 // commands
 

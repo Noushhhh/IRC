@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/21 13:34:51 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/21 16:43:17 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -443,7 +443,7 @@ bool					Server::isUserOnChan(const std::string nickname, const std::string chan
     return (false);
 }
 
-void                    Server::sendToChanUsers(std::string channel_name, std::string message)
+void                    Server::sendChanUsers(std::string channel_name, std::string message)
 {
     _channelsListIt = getChanList()->begin();
     while (_channelsListIt != getChanList()->end()) // send to users of the channel
@@ -451,6 +451,19 @@ void                    Server::sendToChanUsers(std::string channel_name, std::s
         if (_channelsListIt->getName() == channel_name)
         {
             _channelsListIt->sendToUsers(message);
+        }
+        _channelsListIt++;
+    }
+}
+
+void                    Server::sendChanUsersExcept(std::string nick, std::string channel_name, std::string message)
+{
+    _channelsListIt = getChanList()->begin();
+    while (_channelsListIt != getChanList()->end()) // send to users of the channel
+    {
+        if (_channelsListIt->getName() == channel_name)
+        {
+            _channelsListIt->sendToUsersExcept(nick, message);
         }
         _channelsListIt++;
     }

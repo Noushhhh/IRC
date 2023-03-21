@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/21 13:35:32 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/21 17:02:18 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	Server::PrivMsg(User &user, Message &message)
                 return ;
             }
             priv_msg = user.getReplyName() + " PRIVMSG " + target + " " + priv_msg + "\n";
-            sendToChanUsers(target, priv_msg);
+            sendChanUsersExcept(user.getNickname(), target, priv_msg);
         }
 
         else

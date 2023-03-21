@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:59 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/20 14:29:26 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/21 15:06:44 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	Server::List(User &user, Message &message)
         {
             if (_channelsListIt->getSecrecyStatus() == true)
                 _channelsListIt++;
+            
             _rplMsg = RPL_LIST(user.getReplyName(), user.getNickname(), _channelsListIt->getName(), _channelsListIt->getTopic());
             reply(user, _rplMsg);
         }

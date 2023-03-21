@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:14 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/21 14:47:18 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/21 16:43:50 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	Server::Part(User &user, Message &message)
     for (size_t i = 0; !(channels_to_part[i].empty()); i++)
     {
         _rplMsg = user.getReplyName() + " PART " + channels_to_part[i] + "\n";
-        sendToChanUsers(channels_to_part[i], _rplMsg);
+        sendChanUsers(channels_to_part[i], _rplMsg);
         // remove user from channel
     }
     // free channels to part?
