@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/20 13:38:42 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/21 13:34:51 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ _errMsg("")
 	this->_ptrF[10] = (&Server::Kick);
 	this->_ptrF[11] = (&Server::PrivMsg);
 	this->_ptrF[12] = (&Server::Ping);
-    this->_ptrF[12] = (&Server::Cap);
+    this->_ptrF[13] = (&Server::Cap);
+    this->_ptrF[14] = (&Server::Who);
 
 	this->_handledCommands[0] = "PASS";
 	this->_handledCommands[1] = "NICK";
@@ -54,6 +55,7 @@ _errMsg("")
 	this->_handledCommands[11] = "PRIVMSG";
 	this->_handledCommands[12] = "PING";
     this->_handledCommands[13] = "CAP";
+    this->_handledCommands[14] = "WHO";
 
     // std::cerr << "Debug message: Server Default Constructor called" << std::endl;
 }
@@ -85,6 +87,7 @@ _errMsg("")
 	this->_ptrF[11] = (&Server::PrivMsg);
 	this->_ptrF[12] = (&Server::Ping);
     this->_ptrF[13] = (&Server::Cap);
+    this->_ptrF[14] = (&Server::Who);
 
 	this->_handledCommands[0] = "PASS";
 	this->_handledCommands[1] = "NICK";
@@ -100,6 +103,7 @@ _errMsg("")
 	this->_handledCommands[11] = "PRIVMSG";
 	this->_handledCommands[12] = "PING";
     this->_handledCommands[13] = "CAP";
+    this->_handledCommands[14] = "WHO";
 
     // std::cerr << "Debug message: Server Constructor called" << std::endl;
 }

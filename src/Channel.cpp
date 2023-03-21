@@ -192,9 +192,7 @@ void				Channel::setModerationMode(Server &serv, User &user, int &addOrRemove)
 		for (it = _usersList.begin(); it != end; it ++)
 		{
 			if (!userIsOp((*it)->getNickname()))
-			{
 				setMutedList(user, serv.getUserWithNickname((*it)->getNickname()), addOrRemove);
-			}
 		}
 		reply(user, this->getName().append(": Moderation mode successfully set\n"));
 	}
