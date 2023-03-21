@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/21 14:31:15 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/21 17:52:58 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ static void joinRPL(Channel &chan, User user)
 
     if (chan.getQuietStatus() == true)
         return ;
-    chan.sendToUsers(user.getReplyName() + " JOIN " +chan.getName() + "\r\n");
-    chan.sendToUsers(user.getReplyName() + " JOIN " +chan.getName() + "\r\n");
 
     if (chan.getTopic().empty())
         rpl_buff = RPL_NOTOPIC(user.getReplyName(), user.getNickname(), chan.getName());
@@ -47,6 +45,7 @@ static void joinRPL(Channel &chan, User user)
         it ++;
     }
     reply (user, RPL_ENDOFNAMES(user.getReplyName(), user.getNickname(),chan.getName()));
+    chan.sendToUsers(user.getReplyName() + " JOIN " + chan.getName() + "\n"); // TO DO : corriger ce problem qui empeche lq liste des users dqns les chqns de s,actualiser
 }
 
 void remove_from_all_channels(User &user, std::list< Channel > &channelList)
@@ -211,7 +210,7 @@ void	Server::Join(User &user, Message &message)
                         Channel *newChan = new Channel(chansSplit[i], keysSplit[i], user);
                         user.getJoinedChans().push_back(newChan);
                         _channelsList.push_back(*newChan);
-                        joinRPL(*newChan, user);
+                        joinRPL(*getChannelWithName(newChan->getName()), user);
 	                    // reply (user, RPL_CHANNELMODEIS(user.getReplyName(), newChan->getName(), user.getNickname(), newChan->modeIs()));
                     }
                     
@@ -221,7 +220,7 @@ void	Server::Join(User &user, Message &message)
                         Channel *newChan = new Channel(chansSplit[i], user);
                         user.getJoinedChans().push_back(newChan);
                         _channelsList.push_back(*newChan);
-                        joinRPL(*newChan, user);
+                        joinRPL(*getChannelWithName(newChan->getName()), user);
 	                    // reply (user, RPL_CHANNELMODEIS(user.getReplyName(), newChan->getName(), user.getNickname(), newChan->modeIs()));
                     }
                     

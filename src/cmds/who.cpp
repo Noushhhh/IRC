@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:05:55 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/21 13:47:47 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/21 17:44:02 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void    Server::Who(User &user, Message &message)
     //     reply (user, ERR_NEEDMOREPARAMS(user.getReplyName(), "WHO"));
     //     return ;
     // }
-    // std::cout << " IN WHO messag[0] = " << message.getArguments()[0] << " IN WHO messag[1] = " << message.getArguments()[1] << std::endl;
     // std::string chan_name = message.getArguments()[0];
     // if (!isChannel(message.getArguments()[0]))
     // {
@@ -36,5 +35,10 @@ void    Server::Who(User &user, Message &message)
     
     // if (chan->userIsOp(user.getNickname()))
     //     flags = "+o";
-    // reply (user, RPL_WHOREPLY(user.getReplyName(), chan_name, user.getUsername(), HOST, SERVER, user.getNickname(), flags, user.getRealname())); 
+    // std::list< User *>::iterator end = chan->getUsersList().end();
+    // for (std::list< User *>::iterator it = chan->getUsersList().begin(); it != end; it ++)
+    // {
+    //     sendToChanUsers(chan->getName() ,RPL_NAMEREPLY(user.getReplyName(), "@", chan->getName(), (*it)->getNickname()));
+    //     sendToChanUsers(chan->getName() ,RPL_WHOREPLY(user.getReplyName(), chan_name, (*it)->getUsername(), HOST, SERVER, (*it)->getNickname(), flags, user.getRealname())); 
+    // }
 }

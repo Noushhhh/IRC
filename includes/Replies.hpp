@@ -83,7 +83,7 @@
 
 //WHO 352
 
-#define RPL_WHOREPLY(rplname, channel, username, host, server, nick, flags, realname) rplname + " " + channel + " " + username + " " + host + " " + nick +  " " + flags + " :1 " + realname + "\n\r" 
+#define RPL_WHOREPLY(rplname, channel, username, host, server, nick, flags, realname) rplname + " 352 " + channel + " " + username + " " + host + " " + nick +  " " + flags + " :1 " + realname + "\n\r" 
 
 /************************************ ERRORS ************************************/
 

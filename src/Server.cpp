@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/21 13:34:51 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/21 16:16:18 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,7 +243,7 @@ bool                    Server::pollDispatch()
                     }
                 }
                 std::vector <std::string> cmd_array = split_cmd(msg);
-                std::cout << "Message received" << msg << std::endl;
+                std::cout << "Message received : " << msg;
                 for (std::vector<std::string>::iterator cmd_it = cmd_array.begin(); cmd_it != cmd_array.end(); cmd_it++)
                 {
                     handleMessage(*(getUserItWithFd(it->fd)), *cmd_it); // check if reference of uesr good
@@ -429,17 +429,10 @@ Channel    *Server::getChannelWithName(std::string channel_name)
 
 bool					Server::isUserOnChan(const std::string nickname, const std::string channel_name)
 {
-    std::list< Channel >::iterator it = _channelsList.begin();
-    for (; it != _channelsList.end(); it ++)
-    {
-        if (it->getName() == channel_name)
-        {
-            for(_usersListIt = _usersList.begin(); _usersListIt != _usersList.end(); _usersListIt++)
-                if (_usersListIt->getNickname() == nickname)
-                    return true ;
-            return false ;
-        }
-    }
+    Channel *chan = getChannelWithName(channel_name);
+
+    if (chan->isUserInChannel(*getUserWithNickname(nickname)))
+        return (true);
     return (false);
 }
 
