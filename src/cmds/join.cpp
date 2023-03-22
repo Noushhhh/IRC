@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/22 15:14:31 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/22 16:42:00 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void        namelistRPL(Channel &chan, User user)
     reply (user, RPL_ENDOFNAMES(user.getReplyName(), user.getNickname(),chan.getName()));
 }
 
-static void joinRPL(Channel &chan, User user)
+void joinRPL(Channel &chan, User user)
 {
     //TO DO : if channel mode is quiet only one username is sent (the activ user)
 

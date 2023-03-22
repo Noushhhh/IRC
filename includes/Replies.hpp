@@ -67,26 +67,26 @@
 
 #define	RPL_UMODIS(rplname, userModeStr)            rplname + " 221:" + userModeStr + "\n"
 #define RPL_CHANNELMODEIS(replynick, channel, nick, modestring)   replynick + " 324 :" + nick + " " + channel + " " + modestring
-#define RPL_MUTED(rplname, nick, channel)           rplname + nick + ":Was succesfully muted in " + channel + "\n"
-#define RPL_ALLRDYMUTED(rplname, nick, channel)     rplname + nick + ":Was allready muted in " + channel + "\n"
-#define RPL_UNMUTED(rplname, nick, channel)         rplname + nick + ":Was succesfully unmuted in " + channel + "\n"
-#define RPL_NOTMUTED(rplname, nick, channel)        rplname + nick + ":Was not unmuted in " + channel + "\n"
+#define RPL_MUTED(rplname, nick, channel)           rplname + nick + " :Was succesfully muted in " + channel + "\n"
+#define RPL_ALLRDYMUTED(rplname, nick, channel)     rplname + nick + " :Was allready muted in " + channel + "\n"
+#define RPL_UNMUTED(rplname, nick, channel)         rplname + nick + " :Was succesfully unmuted in " + channel + "\n"
+#define RPL_NOTMUTED(rplname, nick, channel)        rplname + nick + " :Was not unmuted in " + channel + "\n"
 
-#define RPL_BANNED(rplname, nick, channel)          rplname + nick + ":Was succesfully banned from " + channel + "\n"
-#define RPL_ALLRDYBANNED(rplname, nick, channel)    rplname + nick + ":Was allready banned in " + channel + "\n"
-#define RPL_UNBANNED(rplname, nick, channel)        rplname + nick + ":Was succesfully unbanned from " + channel + "\n"
-#define RPL_NOTBANNED(rplname, nick, channel)       rplname + nick + ":Was not banned in " + channel + "\n"
+#define RPL_BANNED(rplname, nick, channel)          rplname + nick + " :Was succesfully banned from " + channel + "\n"
+#define RPL_ALLRDYBANNED(rplname, nick, channel)    rplname + nick + " :Was allready banned in " + channel + "\n"
+#define RPL_UNBANNED(rplname, nick, channel)        rplname + nick + " :Was succesfully unbanned from " + channel + "\n"
+#define RPL_NOTBANNED(rplname, nick, channel)       rplname + nick + " :Was not banned in " + channel + "\n"
 
-#define RPL_OPED(rplname, nick, channel)            rplname + nick + ":Was succesfully made operator in " + channel + "\n"
-#define RPL_ALLRDYOP(rplname, nick, channel)        rplname + nick + ":Was allready chanop in " + channel + "\n"
-#define RPL_UNOPED(rplname, nick, channel)          rplname + nick + ":Was succesfully de-oped in " + channel + "\n"
-#define RPL_NOTOP(rplname, nick, channel)           rplname + nick + ":Was not chanop in " + channel + "\n"
+#define RPL_OPED(rplname, nick, channel)            rplname + nick + " :Was succesfully made operator in " + channel + "\n"
+#define RPL_ALLRDYOP(rplname, nick, channel)        rplname + nick + " :Was allready chanop in " + channel + "\n"
+#define RPL_UNOPED(rplname, nick, channel)          rplname + nick + " :Was succesfully de-oped in " + channel + "\n"
+#define RPL_NOTOP(rplname, nick, channel)           rplname + nick + " :Was not chanop in " + channel + "\n"
 
-#define RPL_USERLIMITSET(rplname, channel, nbr)     rplname + "  " + channel + ":Users limit was set to : " + nbr + "\n"
+#define RPL_USERLIMITSET(rplname, channel, nbr)     rplname + "  " + channel + " :Users limit was set to : " + nbr + "\n"
 
 //WHO 352
 
-#define RPL_WHOREPLY(rplname, channel, username, host, server, nick, flags, realname) rplname + " 352 " + channel + " " + username + " " + host + " " + nick +  " " + flags + " :1 " + realname + "\n\r" 
+#define RPL_WHOREPLY(rplname, channel, username, host, server, nick, flags, realname) rplname + " 352 " + channel + " " + username + " " + host + " " + nick +  " " + flags + " :1 " + realname + "\n" 
 
 /************************************ ERRORS ************************************/
 

@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:47 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/22 16:45:32 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/22 16:47:28 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,9 @@ void	Server::Invite(User &user, Message &message)
 
         // send(target->getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
         reply(user, RPL_INVITING(user.getReplyName(), channel, nickname));
-        reply(*target ,target->getReplyName() + " JOIN " + chan->getName() + "\r\n");
+        reply(*target, user.getReplyName() + " INVITE " + nickname + " " + chan->getName() + "\n");
+        joinRPL(*chan, *target);
+
         return ;
     }
 }

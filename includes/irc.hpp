@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 15:58:01 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/15 10:39:37 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/22 16:42:35 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,9 @@ std::string                         get_suffix(std::string *arguments);
 void                                reply(User &user, std::string reply);
 void                                remove_from_all_channels(User &user, std::list< Channel > &channelList);
 std::vector <std::string>           split_cmd(std::string cmd);
+void                                joinRPL(Channel &chan, User user);
+
+
 
 
 // crete a server with a socket. Listen entries in particular entry to get new msgs / clients
