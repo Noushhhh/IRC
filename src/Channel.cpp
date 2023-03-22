@@ -431,14 +431,11 @@ void				Channel::sendToUsers(std::string message)
 {
 	std::list < User *>::iterator it = _usersList.begin();
 	std::list< User *>::iterator end = _usersList.end();
-	std::cout << std::endl;
 	while (it != end)
 	{
-		std::cout << "PERSONNE DANS LE CHAN : " << (*it)->getNickname() << std::endl; 
 		reply(*(*it), message);
 		it++;
 	}
-	std::cout << std::endl;
 }
 
 void				Channel::sendToUsersExcept(std::string nick, std::string message)

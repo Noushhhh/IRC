@@ -6,49 +6,57 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/22 10:15:43 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/22 15:14:31 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
 #include "../../includes/Channel.hpp"
 
-static void joinRPL(Channel &chan, User user)
+void        namelistRPL(Channel &chan, User user)
 {
-    //TO DO : if channel mode is quiet only one username is sent (the activ user)
-
-    std::string                  rpl_buff = RPL_TOPIC(user.getReplyName(), user.getNickname(), chan.getName(), chan.getTopic());
+    std::string                  rpl_buff;
     std::list< User *>::iterator it = chan.getUsersList().begin();
-
-    if (chan.getQuietStatus() == true)
-        return ;
-
-    if (chan.getTopic().empty())
-        rpl_buff = RPL_NOTOPIC(user.getReplyName(), user.getNickname(), chan.getName());
-    reply(user, rpl_buff);
-
+    
     if (chan.getUsersList().size() == 0)
     {
         rpl_buff = RPL_NOUSERS(user.getReplyName());
         send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
         return ;
     }
-    rpl_buff = RPL_NAMEREPLY((*it)->getReplyName(), user.getNickname(), chan.getName(), "");
+    if (chan.getSecrecyStatus())
+        rpl_buff = RPL_NAMEREPLY((*it)->getReplyName(), (*it)->getNickname(), "@", chan.getName());
+    if (chan.getPrivacyStatus())
+        rpl_buff = RPL_NAMEREPLY((*it)->getReplyName(), (*it)->getNickname(), "*", chan.getName());
+    else
+        rpl_buff = RPL_NAMEREPLY((*it)->getReplyName(), (*it)->getNickname(), "=", chan.getName());
     while (it != chan.getUsersList().end())
     {
-        // if (chan.getSecrecyStatus())
-        //     reply(user, RPL_NAMEREPLY((*it)->getReplyName(), "@", chan.getName(), (*it)->getNickname()));
-        // if (chan.getPrivacyStatus())
-        //     reply(user, RPL_NAMEREPLY((*it)->getReplyName(), "*", chan.getName(), (*it)->getNickname()));
-        // else
-        //     reply(user, RPL_NAMEREPLY((*it)->getReplyName(), "=", chan.getName(), (*it)->getNickname()));
-        rpl_buff += " " + (*it)->getNickname();
+        if (chan.userIsOp((*it)->getNickname()) == true)
+            rpl_buff += "@" + (*it)->getNickname() += " ";
+        else if (chan.userIsMuted((*it)->getNickname()) == false)
+            rpl_buff += "+" + (*it)->getNickname() += " ";
         it ++;
     }
     rpl_buff += "\n";
     reply (user, rpl_buff);
     reply (user, RPL_ENDOFNAMES(user.getReplyName(), user.getNickname(),chan.getName()));
-    chan.sendToUsers(user.getReplyName() + " JOIN " + chan.getName() + "\n"); // TO DO : corriger ce problem qui empeche lq liste des users dqns les chqns de s,actualiser
+}
+
+static void joinRPL(Channel &chan, User user)
+{
+    //TO DO : if channel mode is quiet only one username is sent (the activ user)
+
+    std::string                  rpl_buff = RPL_TOPIC(user.getReplyName(), user.getNickname(), chan.getName(), chan.getTopic());
+
+    if (chan.getQuietStatus() == true)
+        return ;
+
+    if (chan.getTopic().empty())
+        rpl_buff = RPL_NOTOPIC(user.getReplyName(), user.getNickname(), chan.getName());
+    chan.sendToUsers(user.getReplyName() + " JOIN " + chan.getName() + "\n");
+    reply(user, rpl_buff);
+    namelistRPL(chan, user);
 }
 
 void remove_from_all_channels(User &user, std::list< Channel > &channelList)

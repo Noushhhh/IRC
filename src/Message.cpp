@@ -68,7 +68,6 @@ bool Message::parseMessage()
 {
 	if (_rawMessage.empty()) 
 	{
-		std::cout << "empty message." << std::endl;
 		return false;
 	}
 	return true ;
