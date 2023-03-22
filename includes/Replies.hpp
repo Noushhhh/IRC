@@ -34,8 +34,8 @@
 // #define	RPL_LIST(rplname, nickname, channel, topic)       rplname + " 322 " + nickname + " " + channel + ": " + topic + "\n"
 // #define RPL_LISTEND(rplname, nickname)				      rplname + " 323 " + nickname + ": end of LIST\n"
 
-#define	RPL_LIST(rplname, nickname, channel, topic)       rplname + " 322 " + channel + " :" + topic + "\n"
-#define RPL_LISTEND(rplname, nickname)				      rplname + " 323 " + nickname + " : end of LIST\n"
+#define	RPL_LIST(rplname, nick, channel, client_count, topic)       rplname + " 322 " + nick + " " + channel + " " + client_count + " :" + topic + "\n"
+#define RPL_LISTEND(rplname, nickname)				        rplname + " 323 " + nickname + " : end of LIST\n"
 
 // //JOIN
 
