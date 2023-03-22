@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/22 09:46:04 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/22 10:15:43 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void joinRPL(Channel &chan, User user)
         send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
         return ;
     }
-    rpl_buff = RPL_NAMEREPLY((*it)->getReplyName(), "@", chan.getName(), "");
+    rpl_buff = RPL_NAMEREPLY((*it)->getReplyName(), user.getNickname(), chan.getName(), "");
     while (it != chan.getUsersList().end())
     {
         // if (chan.getSecrecyStatus())
