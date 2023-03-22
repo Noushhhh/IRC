@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:14 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/21 17:39:45 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/22 10:27:50 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	Server::Part(User &user, Message &message)
 
     _rplMsg = user.getReplyName() + " PART " + chan_name + "\n";
     sendChanUsers(chan_name, _rplMsg);
+
     // remove user from channel
     
     // std::string *channels_to_part = cppsplit(message._arguments[0], ','); 
