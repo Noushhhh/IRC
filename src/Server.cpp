@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/22 16:25:34 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/22 16:49:35 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,12 +211,10 @@ bool                    Server::pollDispatch()
 
 	while (1)
     {
-            std::cout << "TEST\n";
 		if (!_channelsList.empty())
 			closeEmptyChans();
 		if (poll (_pollFds.begin().base(), _pollFds.size(), -1) < 0)
         {
-            std::cout << "poll is false\n"; 
             return (false);
         }
 		for (_pollFdsIt = _pollFds.begin(); _pollFdsIt != _pollFds.end(); _pollFdsIt ++)
@@ -239,8 +237,6 @@ bool                    Server::pollDispatch()
                 {
                     memset(buff, 0, MAX_CHAR);
                     r = recv(_pollFdsIt->fd, buff, MAX_CHAR - 1, MSG_DONTWAIT);
-                    std::cout << "after recv\n";
-                    std::cout << "errno = " << errno << std::endl;
                     msg.append(std::string(buff));
                     if (r == 0)
                     {
