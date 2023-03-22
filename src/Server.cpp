@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/22 09:45:04 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/22 14:49:02 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,7 +207,7 @@ bool                    Server::pollDispatch()
 {
     char                                    buff[MAX_CHAR];
     std::string                             msg;
-    std::vector< struct pollfd >::iterator  it;
+    // std::vector< struct pollfd >::iterator  _pollFdsIt;
 
 	while (1)
     {
@@ -215,13 +215,13 @@ bool                    Server::pollDispatch()
 			closeEmptyChans();
 		if (poll (_pollFds.begin().base(), _pollFds.size(), -1) < 0)
             return (false);
-		for (it = _pollFds.begin(); it != _pollFds.end(); it ++)
+		for (_pollFdsIt = _pollFds.begin(); _pollFdsIt != _pollFds.end(); _pollFdsIt ++)
 		{
-            if (it->events == 0)
+            if (_pollFdsIt->events == 0)
                 continue;
-            else if ((it->revents & POLLIN) == POLLIN)
+            else if ((_pollFdsIt->revents & POLLIN) == POLLIN)
             {
-                if (it->fd == _sock)
+                if (_pollFdsIt->fd == _sock)
                 {
                     if (this->addUser() == false)
                     {
@@ -234,11 +234,11 @@ bool                    Server::pollDispatch()
                 while (errno != EAGAIN && errno != EWOULDBLOCK)
                 {
                     memset(buff, 0, MAX_CHAR);
-                    r = recv(it->fd, buff, MAX_CHAR - 1, MSG_DONTWAIT);
+                    r = recv(_pollFdsIt->fd, buff, MAX_CHAR - 1, MSG_DONTWAIT);
                     msg.append(std::string(buff));
                     if (r == 0)
                     {
-                        if (!this->closeUser(it))
+                        if (!this->closeUser())
                         {
                             // close all sockets
                             return (false);
@@ -250,7 +250,7 @@ bool                    Server::pollDispatch()
                 std::cout << "Message received : " << msg;
                 for (std::vector<std::string>::iterator cmd_it = cmd_array.begin(); cmd_it != cmd_array.end(); cmd_it++)
                 {
-                    handleMessage(*(getUserItWithFd(it->fd)), *cmd_it); // check if reference of uesr good
+                    handleMessage(*(getUserItWithFd(_pollFdsIt->fd)), *cmd_it); // check if reference of uesr good
                 }
                 msg = "";
                 errno = 0;
@@ -301,23 +301,46 @@ bool                    Server::addUser()
 
 
 
-bool                    Server::closeUser(std::vector< struct pollfd >::iterator &it)
+// bool                    Server::closeUser(std::vector< struct pollfd >::iterator &it)
+// {
+//     //supress from all channels he belongs to
+	
+//     remove_from_all_channels(*getUserItWithFd(it->fd), _channelsList);
+//     it = _pollFds.begin();
+//     for (std::list< User >::iterator lit = _usersList.begin(); lit != _usersList.end(); lit ++)
+//     {
+//         if (lit->getSockfd() == it->fd)
+//         {
+//             _usersList.erase(lit);
+//             break;
+//         }
+//     }
+//     if (close(it->fd) < 0)
+//         return (false);
+//     _pollFds.erase(it);
+//     it = _pollFds.begin();
+//     return (true) ;
+// }
+
+
+bool                    Server::closeUser()
 {
     //supress from all channels he belongs to
-	
-    remove_from_all_channels(*getUserItWithFd(it->fd), _channelsList);
+    
+    remove_from_all_channels(*getUserItWithFd(_pollFdsIt->fd), _channelsList);
+    _pollFdsIt = _pollFds.begin();
     for (std::list< User >::iterator lit = _usersList.begin(); lit != _usersList.end(); lit ++)
     {
-        if (lit->getSockfd() == it->fd)
+        if (lit->getSockfd() == _pollFdsIt->fd)
         {
             _usersList.erase(lit);
             break;
         }
     }
-    if (close(it->fd) < 0)
+    if (close(_pollFdsIt->fd) < 0)
         return (false);
-    _pollFds.erase(it);
-    it = _pollFds.begin();
+    _pollFds.erase(_pollFdsIt);
+    _pollFdsIt = _pollFds.begin();
     return (true) ;
 }
 

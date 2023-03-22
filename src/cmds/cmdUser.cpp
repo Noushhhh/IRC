@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:38 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/21 11:42:35 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/22 14:47:18 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,12 @@
 
 std::vector< struct pollfd >::iterator &Server::findPollFd(int fd)
 {
+    
     std::vector< struct pollfd >::iterator *it = NULL; 
     std::vector< struct pollfd >::iterator end = _pollFds.end();
 
     *it = _pollFds.begin();
+    std::cout << "yo" << std::endl;
 
     while ((*it) != end)
     {
@@ -62,7 +64,8 @@ void	Server::cmdUser(User &user, Message &message)
     else
     {
         reply(user, ERR_PASSWDMISMATCH(user.getReplyName()));
-        closeUser(findPollFd(user.getSockfd()));
+        // closeUser(findPollFd(user.getSockfd()));
+        closeUser();
         return ;
     }
 }
