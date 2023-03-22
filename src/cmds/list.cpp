@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:59 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/22 10:20:30 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/22 13:30:51 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,32 +21,32 @@ void	Server::List(User &user, Message &message)
         reply(user, RPL_LISTEND(user.getReplyName(), user.getNickname()));
         return ;
     }
-    std::stringstream ss1;
+    std::stringstream chan_size;
     if (message._argsNb == 1)
     {
         for (_channelsListIt = _channelsList.begin(); _channelsListIt != _channelsList.end(); _channelsListIt++)
         {
             if (_channelsListIt->getSecrecyStatus() == true)
                 _channelsListIt++;
-             ss1 << _channelsListIt->getUsersList().size();
-            _rplMsg = RPL_LIST(user.getReplyName(), user.getNickname(), _channelsListIt->getName(), ss1.str(), _channelsListIt->getTopic());
+             chan_size << _channelsListIt->getUsersList().size();
+            _rplMsg = RPL_LIST(user.getReplyName(), user.getNickname(), _channelsListIt->getName(), chan_size.str(), _channelsListIt->getTopic());
             reply(user, _rplMsg);
-            ss1.str("");
+            chan_size.str("");
         }
         reply(user, RPL_LISTEND(user.getReplyName(), user.getNickname()));
         return ;
     }
     
-    std::stringstream ss2;
+    // std::stringstream ss2;
     for (size_t i = 0; i != (message._argsNb - 1); i++)
     {
         _channelsListIt = getChanItWithName(message._arguments[i]);
         if (_channelsListIt->getSecrecyStatus() == true)
             _channelsListIt++;
-        ss2 << _channelsListIt->getUsersList().size();
-        _rplMsg = RPL_LIST(user.getReplyName(), user.getNickname(), _channelsListIt->getName(), ss2.str(), _channelsListIt->getTopic());
+        chan_size << _channelsListIt->getUsersList().size();
+        _rplMsg = RPL_LIST(user.getReplyName(), user.getNickname(), _channelsListIt->getName(), chan_size.str(), _channelsListIt->getTopic());
         send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
-        ss2.str("");
+        chan_size.str("");
         
     }
     reply(user, RPL_LISTEND(user.getReplyName(), user.getNickname()));
