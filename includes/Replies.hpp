@@ -20,8 +20,8 @@
 //001 to 003, welcome rpl 
 
 #define RPL_WELCOME(rplname, nickname)              rplname + " 001 " + nickname + " :welcome to IRC NOUSHMAKS " + nickname + " ! \n"
-#define RPL_YOURHOST(rplname, servername)           rplname + " 002 :your host is " + servername ".\n"
-#define RPL_CREATED                                 rplname + " 003 :This server was created, in the 6th year of the 6th decade of the 6th century.\n"
+#define RPL_YOURHOST(rplname, servername)           rplname + " 002:your host is " + servername ".\n"
+#define RPL_CREATED                                 rplname + " 003:This server was created, in the 6th year of the 6th decade of the 6th century.\n"
 
 // //AWAY 301 / 305 / 306
 
@@ -31,8 +31,11 @@
 
 //LIST 322 / 323
 
-#define	RPL_LIST(rplname, nickname, channel, topic)       rplname + " 322 " + nickname + " " + channel + ": " + topic + "\n"
-#define RPL_LISTEND(rplname, nickname)				      rplname + " 323 " + nickname + ": end of LIST\n"
+// #define	RPL_LIST(rplname, nickname, channel, topic)       rplname + " 322 " + nickname + " " + channel + ": " + topic + "\n"
+// #define RPL_LISTEND(rplname, nickname)				      rplname + " 323 " + nickname + ": end of LIST\n"
+
+#define	RPL_LIST(rplname, nickname, channel, topic)       rplname + " 322 " + channel + " :" + topic + "\n"
+#define RPL_LISTEND(rplname, nickname)				      rplname + " 323 " + nickname + " : end of LIST\n"
 
 // //JOIN
 

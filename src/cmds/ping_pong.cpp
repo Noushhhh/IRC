@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:18 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/17 11:08:04 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/21 17:27:04 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,34 @@
 
 void	Server::Ping(User &user, Message &message)
 {
-    // if (message._argsNb < 2)
-    // {
-    //     reply(user, ERR_NEEDMOREPARAMS(message._cmd));
-    //     return ;
-    // }
-    user.setPing(message._arguments[0]);
-    reply(user, user.getPing() + "\n");
+    if (message._argsNb < 2)
+    {
+        reply(user, ERR_NOORIGIN(user.getReplyName(), user.getNickname()));
+        return ;
+    }
+    if (message._arguments[0].empty())
+    {
+        reply(user, ERR_NOORIGIN(user.getReplyName(), user.getNickname()));
+        return ;
+    }
+
+    reply(user, "PING :IRC_NOUSHMAKS");
+}
+
+void	Server::Pong(User &user, Message &message)
+{
+    if (message._argsNb < 2)
+    {
+        reply(user, ERR_NOORIGIN(user.getReplyName(), user.getNickname()));
+        return ;
+    }
+    if (message._arguments[0].empty())
+    {
+        reply(user, ERR_NOORIGIN(user.getReplyName(), user.getNickname()));
+        return ;
+    }
+    
+    user.setPong(message._arguments[0]);
 }
 
 

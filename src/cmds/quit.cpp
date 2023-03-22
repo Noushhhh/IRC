@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:23 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/20 13:47:51 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/21 17:30:39 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,14 @@ void	Server::Quit(User &user, Message &message)
         reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd));
         return ;
     }
-    quit_msg = quit_msg = user.getNickname() + "@IRC_NOUSHMAKS QUIT :Quit ";
+    quit_msg = user.getReplyName() + " QUIT :Quit ";
     if (message._argsNb > 1)
-         quit_msg = quit_msg + get_suffix(&message._arguments[0]) + "\n";
+         quit_msg = quit_msg + get_suffix(&message._arguments[0]);
+    quit_msg += "\n";
     for (std::list <Channel *>::iterator cit = user.getJoinedChans().begin(); cit != user.getJoinedChans().end(); cit++)
     {
-        std::cout << "Name channel" << (*cit)->getName() << std::endl;
-        (*cit)->sendToUsers(quit_msg); // send to all users of chans
+        // std::cout << "Name channel" << (*cit)->getName() << std::endl;
+        (*cit)->sendToUsersExcept(user.getNickname(), quit_msg); // send to all users of chans
     }
     // function to close user
 }

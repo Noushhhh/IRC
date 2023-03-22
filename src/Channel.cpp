@@ -438,6 +438,18 @@ void				Channel::sendToUsers(std::string message)
 	}
 }
 
+void				Channel::sendToUsersExcept(std::string nick, std::string message)
+{
+	std::list < User *>::iterator it = _usersList.begin();
+	std::list< User *>::iterator end = _usersList.end();
+	while (it != end)
+	{
+		if ((*it)->getNickname() != nick)
+			send((*it)->getSockfd(), message.c_str(), message.length(), 0);
+		it++;
+	}
+}
+
 bool				Channel::isUserInChannel(User &user)
 {
 	std::list < User *>::iterator user_it = getUsersList().begin();

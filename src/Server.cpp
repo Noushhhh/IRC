@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/21 14:35:42 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/22 09:42:10 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ _errMsg("")
 	this->_ptrF[12] = (&Server::Ping);
     this->_ptrF[13] = (&Server::Cap);
     this->_ptrF[14] = (&Server::Who);
+    this->_ptrF[15] = (&Server::Pong);
 
 	this->_handledCommands[0] = "PASS";
 	this->_handledCommands[1] = "NICK";
@@ -56,6 +57,7 @@ _errMsg("")
 	this->_handledCommands[12] = "PING";
     this->_handledCommands[13] = "CAP";
     this->_handledCommands[14] = "WHO";
+    this->_handledCommands[15] = "PONG";
 
     // std::cerr << "Debug message: Server Default Constructor called" << std::endl;
 }
@@ -88,6 +90,7 @@ _errMsg("")
 	this->_ptrF[12] = (&Server::Ping);
     this->_ptrF[13] = (&Server::Cap);
     this->_ptrF[14] = (&Server::Who);
+    this->_ptrF[15] = (&Server::Pong);
 
 	this->_handledCommands[0] = "PASS";
 	this->_handledCommands[1] = "NICK";
@@ -104,6 +107,7 @@ _errMsg("")
 	this->_handledCommands[12] = "PING";
     this->_handledCommands[13] = "CAP";
     this->_handledCommands[14] = "WHO";
+    this->_handledCommands[15] = "PONG";
 
     // std::cerr << "Debug message: Server Constructor called" << std::endl;
 }
@@ -443,7 +447,7 @@ bool					Server::isUserOnChan(const std::string nickname, const std::string chan
     return (false);
 }
 
-void                    Server::sendToChanUsers(std::string channel_name, std::string message)
+void                    Server::sendChanUsers(std::string channel_name, std::string message)
 {
     _channelsListIt = getChanList()->begin();
     while (_channelsListIt != getChanList()->end()) // send to users of the channel
@@ -451,6 +455,19 @@ void                    Server::sendToChanUsers(std::string channel_name, std::s
         if (_channelsListIt->getName() == channel_name)
         {
             _channelsListIt->sendToUsers(message);
+        }
+        _channelsListIt++;
+    }
+}
+
+void                    Server::sendChanUsersExcept(std::string nick, std::string channel_name, std::string message)
+{
+    _channelsListIt = getChanList()->begin();
+    while (_channelsListIt != getChanList()->end()) // send to users of the channel
+    {
+        if (_channelsListIt->getName() == channel_name)
+        {
+            _channelsListIt->sendToUsersExcept(nick, message);
         }
         _channelsListIt++;
     }

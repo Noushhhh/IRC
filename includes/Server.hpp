@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/21 14:26:00 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/21 17:32:41 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #define PROTOCOL 0
 #define BIND 1
 #define LISTEN 2
-#define HANDLEDCOMMANDSNB 15
+#define HANDLEDCOMMANDSNB 16
 #define SERVER "@NOUSHMAKSIRC"
 #define HOST "127.0.0.1"
 
@@ -70,7 +70,8 @@ class Server
         std::list< User >::iterator             getUserItWithFd(int fd);
         std::list< Channel >::iterator          getChanItWithName(std::string name);
         std::vector< struct pollfd >::iterator  &findPollFd(int fd);
-        void                                    sendToChanUsers(std::string channel_name, std::string message);
+        void                                    sendChanUsers(std::string channel_name, std::string message);
+        void                                    sendChanUsersExcept(std::string nick, std::string channel_name, std::string message);
 
 // commands
 
@@ -90,7 +91,7 @@ class Server
 	void	Ping(User &user, Message &message);
     void	Cap(User &user, Message &message);
     void	Who(User &user, Message &message);
-	//void	Pong(User &user, Message &message);
+	void	Pong(User &user, Message &message);
 
     class ServerException : public std::exception
     {

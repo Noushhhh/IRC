@@ -107,6 +107,7 @@ class Channel
 		
 		//functions
 		void						sendToUsers(std::string message);
+		void						sendToUsersExcept(std::string nick, std::string message);
 		bool						isUserInChannel(User &user);
 		bool						isUserInChannelNickname(std::string nickname);
 		bool						isNameValid(std::string nickname);
