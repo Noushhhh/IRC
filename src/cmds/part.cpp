@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:14 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/22 10:27:50 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/22 13:19:26 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,47 +25,18 @@ void	Server::Part(User &user, Message &message)
         reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), chan_name));
         return ;
     }
-    else
+    Channel *channel = getChannelWithName(chan_name);
+    if (!channel->isUserInChannel(user)) // check if user in channel
     {
-        Channel *channel = getChannelWithName(chan_name);
-        if (!channel->isUserInChannel(user)) // check if user in channel
-        {
-            reply(user, ERR_NOTONCHANNEL(user.getReplyName(), chan_name));
-            return ;
-        }
+        reply(user, ERR_NOTONCHANNEL(user.getReplyName(), chan_name));
+        return ;
     }
-
     _rplMsg = user.getReplyName() + " PART " + chan_name + "\n";
     sendChanUsers(chan_name, _rplMsg);
-
-    // remove user from channel
-    
-    // std::string *channels_to_part = cppsplit(message._arguments[0], ','); 
-    // for (size_t i = 0; !(channels_to_part[i].empty()); i++)
-    // {
-    //     if (!isChannel(channels_to_part[i]))
-    //     {
-    //         reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), channels_to_part[i]));
-    //         return ;
-    //     }
-    //     else
-    //     {
-    //         Channel *channel = getChannelWithName(channels_to_part[i]);
-    //         if (!channel->isUserInChannel(user)) // check if user in channel
-    //         {
-    //             reply(user, ERR_NOTONCHANNEL(user.getReplyName(), channels_to_part[i]));
-    //             return ;
-    //         }
-    //     }
-    // }
-    // for (size_t i = 0; !(channels_to_part[i].empty()); i++)
-    // {
-    //     _rplMsg = user.getReplyName() + " PART " + channels_to_part[i] + "\n";
-    //     sendChanUsers(channels_to_part[i], _rplMsg);
-    //     // remove user from channel
-    // }
-    // free channels to part?
+    channel->kickUser(&user);
+    // free channel ?
 }
+
 // PART message
 //      Command: PART
 //   Parameters: <channel>{,<channel>} [<reason>]
