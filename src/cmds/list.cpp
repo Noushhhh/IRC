@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:59 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/22 13:30:51 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/22 13:32:33 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@ void	Server::List(User &user, Message &message)
         reply(user, RPL_LISTEND(user.getReplyName(), user.getNickname()));
         return ;
     }
-    
-    // std::stringstream ss2;
+
     for (size_t i = 0; i != (message._argsNb - 1); i++)
     {
         _channelsListIt = getChanItWithName(message._arguments[i]);
