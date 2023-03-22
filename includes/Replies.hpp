@@ -56,7 +56,7 @@
 
 //USER 392 / 393 / 394 / 395
 
-#define RPL_NAMEREPLY(rplname, symbol, channel, nick)                       rplname + " 353 " + symbol + " " + channel + " :@" + nick + "\n"
+#define RPL_NAMEREPLY(rplname, symbol, channel, nick)                       rplname + " 353 " + symbol + " " + channel + " :@" + nick
 #define RPL_ENDOFNAMES(rplname, nick, channel)                              rplname + " 366 " + nick + " " + channel +" :end of /NAMES list\n"     
 #define	RPL_USERSTART(rplname)			                                    rplname + " 392:UserID Terminal Host\n" //sent first
 #define	RPL_USERS(rplname, username, ttyline /*jsp cque c*/, hostname)      rplname + " 393:" + username + " " + ttyline + " " + hostname + "\n"
@@ -86,7 +86,7 @@
 
 //WHO 352
 
-#define RPL_WHOREPLY(rplname, channel, username, host, server, nick, flags, realname) rplname + " " + channel + " " + username + " " + host + " " + nick +  " " + flags + " :1 " + realname + "\n\r" 
+#define RPL_WHOREPLY(rplname, channel, username, host, server, nick, flags, realname) rplname + " 352 " + channel + " " + username + " " + host + " " + nick +  " " + flags + " :1 " + realname + "\n\r" 
 
 /************************************ ERRORS ************************************/
 

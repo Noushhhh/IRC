@@ -431,11 +431,14 @@ void				Channel::sendToUsers(std::string message)
 {
 	std::list < User *>::iterator it = _usersList.begin();
 	std::list< User *>::iterator end = _usersList.end();
+	std::cout << std::endl;
 	while (it != end)
 	{
-		send((*it)->getSockfd(), message.c_str(), message.length(), 0);
+		std::cout << "PERSONNE DANS LE CHAN : " << (*it)->getNickname() << std::endl; 
+		reply(*(*it), message);
 		it++;
 	}
+	std::cout << std::endl;
 }
 
 void				Channel::sendToUsersExcept(std::string nick, std::string message)
@@ -552,10 +555,21 @@ std::string   		Channel::modeIs()
 
 void				Channel::kickUser(User *target)
 {
+	std::list< Channel *>::iterator it = target->getJoinedChans().begin();
+	std::list< Channel *>::iterator end = target->getJoinedChans().end();
+
 	if (this->getUserItInList(_opList, target->getNickname()) != _opList.end())
 		this->_opList.erase(this->getUserItInList(_opList, target->getNickname()));
 	if (this->getUserItInList(_mutedUsersList, target->getNickname()) != _mutedUsersList.end())
 		this->_mutedUsersList.erase(this->getUserItInList(_mutedUsersList, target->getNickname()));
+	for (;it != end; it++)
+	{
+		if ((*it)->getName() == this->_name)
+		{
+			target->getJoinedChans().erase(it);
+			break ;
+		}
+	}
 	this->_usersList.erase(this->getUserItInList(_usersList, target->getNickname()));
 }
 

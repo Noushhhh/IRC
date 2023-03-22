@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:55 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/21 17:17:52 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/22 09:47:35 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,6 @@ void	Server::Kick(User &user, Message &message)
     }
     std::string channel_name = message._arguments[0];
     Channel *chan = getChannelWithName(channel_name);
-    if (!chan->userIsOp(user.getNickname()))
-    {
-        reply(user, ERR_NOPRIVILEGES(user.getReplyName()));
-        return ;
-    }
     if (!isChannel(channel_name))
     {
         reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), channel_name));
@@ -36,6 +31,11 @@ void	Server::Kick(User &user, Message &message)
         reply(user, ERR_NOTONCHANNEL(user.getReplyName(), channel_name));
         return ;
     }
+    if (!chan->userIsOp(user.getNickname()))
+    {
+        reply(user, ERR_NOPRIVILEGES(user.getReplyName()));
+        return ;
+    }
     std::string nickname = message._arguments[1];
     if (!isUserWNickname(nickname))
     {
@@ -44,7 +44,7 @@ void	Server::Kick(User &user, Message &message)
     }
     if (!isUserOnChan(nickname, channel_name))
     {
-        reply(user, ERR_NOTONCHANNEL(user.getReplyName(), channel_name));
+        reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), nickname, channel_name));
         return ;
     }
     User    *target = getUserWithNickname(nickname);

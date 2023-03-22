@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/22 09:42:10 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/22 09:45:04 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -433,17 +433,10 @@ Channel    *Server::getChannelWithName(std::string channel_name)
 
 bool					Server::isUserOnChan(const std::string nickname, const std::string channel_name)
 {
-    std::list< Channel >::iterator it = _channelsList.begin();
-    for (; it != _channelsList.end(); it ++)
-    {
-        if (it->getName() == channel_name)
-        {
-            for(_usersListIt = _usersList.begin(); _usersListIt != _usersList.end(); _usersListIt++)
-                if (_usersListIt->getNickname() == nickname)
-                    return true ;
-            return false ;
-        }
-    }
+    Channel *chan = getChannelWithName(channel_name);
+
+    if (chan->isUserInChannel(*getUserWithNickname(nickname)))
+        return (true);
     return (false);
 }
 
