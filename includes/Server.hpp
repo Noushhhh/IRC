@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/21 17:32:41 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/22 14:47:49 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ class Server
 		
         bool                                    pollDispatch();
         bool                                    addUser();
-        bool                                    closeUser(std::vector< struct pollfd >::iterator &it);
+        // bool                                    closeUser(std::vector< struct pollfd >::iterator &it);
+        bool                                    closeUser();
 
         bool                                    handleMessage(User &user, std::string raw_message);
         bool                                    isChannel(std::string channel_name);
@@ -108,6 +109,7 @@ class Server
         const std::string                       _password;
         struct sockaddr_in                      _addr;
         std::vector< struct pollfd >            _pollFds; //element new a delete
+        std::vector< struct pollfd >::iterator  _pollFdsIt;
         std::list< User >                       _usersList; //List d'utilisateurs du serveur
         std::list< User >::iterator             _usersListIt;
         std::list< Channel >                    _channelsList;

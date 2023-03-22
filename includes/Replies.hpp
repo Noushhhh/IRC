@@ -19,7 +19,7 @@
 
 //001 to 003, welcome rpl 
 
-#define RPL_WELCOME(rplname, nickname)              rplname + " 001 " + nickname + " :welcome to IRC NOUSHMAKS " + nickname + " ! \n"
+#define RPL_WELCOME(rplname, nickname)              rplname + " 001 " + nickname + " :welcome to IRC_NOUSHMAKS " + nickname + " ! \n"
 #define RPL_YOURHOST(rplname, servername)           rplname + " 002:your host is " + servername ".\n"
 #define RPL_CREATED                                 rplname + " 003:This server was created, in the 6th year of the 6th decade of the 6th century.\n"
 
@@ -56,7 +56,7 @@
 
 //USER 392 / 393 / 394 / 395
 
-#define RPL_NAMEREPLY(rplname, symbol, channel, nick)                       rplname + " 353 " + symbol + " " + channel + " :@" + nick
+#define RPL_NAMEREPLY(rplname, symbol, channel, nick)                       rplname + " 353 " + nick + " " + symbol + " " + channel + " :@" + nick
 #define RPL_ENDOFNAMES(rplname, nick, channel)                              rplname + " 366 " + nick + " " + channel +" :end of /NAMES list\n"     
 #define	RPL_USERSTART(rplname)			                                    rplname + " 392:UserID Terminal Host\n" //sent first
 #define	RPL_USERS(rplname, username, ttyline /*jsp cque c*/, hostname)      rplname + " 393:" + username + " " + ttyline + " " + hostname + "\n"

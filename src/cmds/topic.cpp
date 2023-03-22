@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:25 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/21 14:31:32 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/22 13:21:10 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,20 +51,20 @@ void	Server::Topic(User &user, Message &message)
     if (message._argsNb > 2) // if user wants to set new topic 
     {
         std::string new_topic = get_suffix(&message._arguments[1]);
-        if (new_topic.find(":") != 0)
-        {
-            reply(user, "Wrong arguments, must be ':' before topic name \n");
-            return ;
-        }
-        if (new_topic.size() == 1) // if empty string for topic (after ":""), topic cleared
-        {
-            channel->setTopic("");
-            _rplMsg = "Topic unset on " + channel_name;
-            channel->sendToUsers(_rplMsg); // all  users notified on channel that topic cleared
-            return ;
-        }
-        else
-        {
+        // if (new_topic.find(":") != 0)
+        // {
+        //     reply(user, "Wrong arguments, must be ':' before topic name \n");
+        //     return ;
+        // }
+        // if (new_topic.size() == 1) // if empty string for topic (after ":""), topic cleared
+        // {
+        //     channel->setTopic("");
+        //     _rplMsg = "Topic unset on " + channel_name;
+        //     channel->sendToUsers(_rplMsg); // all  users notified on channel that topic cleared
+        //     return ;
+        // }
+        // else
+        // {
             if (channel->getTopicStatus() == false || channel->userIsOp(user.getNickname()) == true) // check if user has the rights to set new topic
             {
                 getChannelWithName(channel_name)->setTopic(new_topic);
@@ -76,7 +76,7 @@ void	Server::Topic(User &user, Message &message)
                 reply(user, ERR_CHANOPRIVSNEEDED(user.getReplyName(), channel_name));
                 return ;
             }
-        }
+        // }
     }
 }
 
