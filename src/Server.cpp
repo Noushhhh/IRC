@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/22 16:25:34 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/22 16:48:40 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,7 +211,6 @@ bool                    Server::pollDispatch()
 
 	while (1)
     {
-            std::cout << "TEST\n";
 		if (!_channelsList.empty())
 			closeEmptyChans();
 		if (poll (_pollFds.begin().base(), _pollFds.size(), -1) < 0)
