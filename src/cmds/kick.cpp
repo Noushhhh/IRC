@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:55 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 15:25:49 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/24 16:03:16 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ void	Server::Kick(User &user, Message &message)
         chan->kickUser(target);
         return ;
     }
-
     else
     {
         _rplMsg = "";
