@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 13:24:01 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/24 13:27:35 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void	Server::PrivMsg(User &user, Message &message)
         }
         return ;
     }
-
     else if (isUserWNickname(target)) // else check if message to user
     {
         priv_msg = user.getReplyName() + " PRIVMSG " + target + " " + priv_msg + "\n";

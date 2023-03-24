@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:09 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 13:19:14 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/24 13:55:08 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,20 @@ void	Server::Nick(User &user, Message &message)
 
     if (isUserWNickname(nickname))
     {
-        reply(user, ERR_NICKNAMEINUSE(user.getReplyName(), user.getNickname(), nickname));
+        std::string try_nickname; 
+        for (int i = 0; isUserWNickname(nickname); i++)
+        {
+            std::stringstream ss;
+            ss << i;
+            try_nickname = nickname + ss.str();
+            ss << "";
+            if (!isUserWNickname(try_nickname))
+            {
+                message._arguments[0] = try_nickname;
+                break ;
+            }
+        }
+        Nick(user, message);
         return ;
     }
 

@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:14 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 13:19:26 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/24 13:27:15 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void	Server::Part(User &user, Message &message)
     _rplMsg = user.getReplyName() + " PART " + chan_name + "\n";
     sendChanUsers(chan_name, _rplMsg);
     channel->kickUser(&user);
-    // free channel ?
 }
 
 // PART message

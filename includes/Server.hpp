@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/22 14:47:49 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/24 13:47:27 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ class Server
         std::list< User >                       _usersList; //List d'utilisateurs du serveur
         std::list< User >::iterator             _usersListIt;
         std::list< Channel >                    _channelsList;
-        std::list< Channel >::iterator         _channelsListIt;
+        std::list< Channel >::iterator          _channelsListIt;
         std::string                             _rplMsg;
         std::string                             _errMsg;
 

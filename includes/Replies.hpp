@@ -40,7 +40,7 @@
 //TOPIC / 331 / 332
 
 #define	RPL_NOTOPIC(rplname, nickname, channel)           rplname + " 331 " + nickname + " " + channel + " :No topic is set\n"
-#define	RPL_TOPIC(rplname, nickname, channel, topic)      rplname + " 332 " + nickname + " " + channel + " :" + topic + "\n"
+#define	RPL_TOPIC(rplname, nickname, channel, topic)      rplname + " 332 " + nickname + " " + channel + " " + topic + "\n"
 
 //INVITE / 341
 

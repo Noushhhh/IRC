@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:47 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 13:23:15 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/24 13:26:31 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	Server::Invite(User &user, Message &message)
 {
-
     if (!user.getRegistered())
     {
         reply(user, ERR_NOTREGISTERED(user.getReplyName(), user.getNickname()));
@@ -26,8 +25,9 @@ void	Server::Invite(User &user, Message &message)
         reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), user.getNickname(), message._cmd));
         return ;
     }
+
     std::string nickname = message._arguments[0];
-    std::string channel = message._arguments[1]; // check if possible tomake a function that does 3 checks below code cleaner
+    std::string channel = message._arguments[1];
     if (message._arguments[1].find("#") != 0) // check if right channel format
     {
         reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), user.getNickname(), channel));
@@ -56,14 +56,13 @@ void	Server::Invite(User &user, Message &message)
     else
     {
         Channel *chan = getChannelWithName(channel);
-        User *target = getUserWithNickname(nickname); // update when merge with max function list user
+        User *target = getUserWithNickname(nickname);
 
         chan->getUsersList().push_back(target);
 
         reply(user, RPL_INVITING(user.getReplyName(), channel, nickname));
         reply(*target, user.getReplyName() + " INVITE " + nickname + " " + chan->getName() + "\n");
         joinRPL(*chan, *target);
-
         return ;
     }
 }
