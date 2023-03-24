@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:01 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 10:38:02 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/24 13:21:26 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,13 @@ std::list< Channel >::iterator &channel)
 
 void	Server::Mode(User &user, Message &message)
 {
-    (void) user;
+    if (!user.getRegistered())
+    {
+        reply(user, ERR_NOTREGISTERED(user.getReplyName(), user.getNickname()));
+        return ;
+    }   
+    
+    // (void) user;
     (void) message;
     int                                     i = 0;
     ssize_t                                 argsNB = 0;

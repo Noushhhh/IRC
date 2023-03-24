@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 10:37:42 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/24 13:20:59 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 void        namelistRPL(Channel &chan, User user)
 {
     std::string                  rpl_buff;
-    std::list< User *>::iterator it = chan.getUsersList().begin();
-    
+    std::list< User *>::iterator it = chan.getUsersList().begin(); 
+
     if (chan.getUsersList().size() == 0)
     {
         rpl_buff = RPL_NOUSERS(user.getReplyName());
@@ -123,6 +123,12 @@ static bool pswdMatch(const std::string &chanPswd, std::string givenPswd)
 
 void	Server::Join(User &user, Message &message)
 {
+    if (!user.getRegistered())
+    {
+        reply(user, ERR_NOTREGISTERED(user.getReplyName(), user.getNickname()));
+        return ;
+    }   
+    
 	std::string err_buff;
     std::string *chansSplit = NULL;
     std::string *keysSplit = NULL;

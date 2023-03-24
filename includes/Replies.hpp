@@ -102,6 +102,7 @@
 //USER
 
 #define ERR_ALREADYREGISTERED(rplname, nick)	        rplname + " 462 " + nick + " : Unauthorized command (already registered)\n" // 462, send as a response to a second USER call trying to overide user info 
+#define ERR_NOTREGISTERED(rplname, nick)                rplname + " 451 " + nick + " :You have not registered\n" // 451 
 
 //MODE
 
