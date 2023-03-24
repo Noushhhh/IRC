@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:01 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/22 09:48:12 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/24 11:37:46 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ std::list< Channel >::iterator &channel)
                 if(addOrRemoveMode == ADD && channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]) == channel->getUsersList().end())
                     reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), modesparams[paramCt], channel->getName()));
                 else if(addOrRemoveMode == REMOVE && channel->getUserItInList(channel->getBanList(), modesparams[paramCt]) == channel->getBanList().end())
-                    reply(user, RPL_NOTBANNED(user.getReplyName(), modesparams[paramCt], channel->getName())); //TO DO
+                    reply (user, ERR_NOSUCHNICK(user.getReplyName(), user.getNickname()));
                 else
                 {
                     if (paramCt < modesparams_size && addOrRemoveMode == REMOVE)
@@ -192,16 +192,15 @@ void	Server::Mode(User &user, Message &message)
         message._it ++;
         argsNB ++;
     }
-    modeparams = new std::string[argsNB];
 
     // if no args
 
     if (argsNB == 1) // if (argsNB < 2)
     {
-        err_buff = ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd);
-        send(user.getSockfd(), &err_buff, err_buff.length(), 0);
+        reply (user, ERR_NEEDMOREPARAMS(user.getReplyName(), user.getNickname(), message._cmd));
         return ;
     }
+
     try
     {
         message._it = (message._splitMessage).begin(); // delete
@@ -235,7 +234,10 @@ void	Server::Mode(User &user, Message &message)
         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
         return ;
     }
-    else if (argsNB == 3)
+
+    modeparams = new std::string[argsNB];
+    
+    if (argsNB == 3)
     {
         message._it ++; // 3rd arg is supposed to be modes
         modes = *(message._it);
@@ -252,8 +254,6 @@ void	Server::Mode(User &user, Message &message)
         }
         modesSet(user, modes, modeparams, channel);
     }
-    //message.
-    // else send mod info
-
+    delete[] modeparams;
     return ;
 }

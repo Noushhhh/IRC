@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/22 14:47:49 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/24 11:30:00 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ class Server
         std::vector< struct pollfd >::iterator  &findPollFd(int fd);
         void                                    sendChanUsers(std::string channel_name, std::string message);
         void                                    sendChanUsersExcept(std::string nick, std::string channel_name, std::string message);
+        static void                             signalHandler(int sig);
 
 // commands
 
@@ -108,14 +109,15 @@ class Server
         const int                               _port;
         const std::string                       _password;
         struct sockaddr_in                      _addr;
-        std::vector< struct pollfd >            _pollFds; //element new a delete
+        std::vector< struct pollfd >            _pollFds;
         std::vector< struct pollfd >::iterator  _pollFdsIt;
-        std::list< User >                       _usersList; //List d'utilisateurs du serveur
+        std::list< User >                       _usersList;
         std::list< User >::iterator             _usersListIt;
         std::list< Channel >                    _channelsList;
         std::list< Channel >::iterator         _channelsListIt;
         std::string                             _rplMsg;
         std::string                             _errMsg;
+        static Server                           *_servInstance;
 
     //message
         std::string						        _handledCommands[HANDLEDCOMMANDSNB];

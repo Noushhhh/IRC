@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   invite.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:47 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/22 16:47:28 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/24 09:26:14 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	Server::Invite(User &user, Message &message)
 {
     if (message._argsNb != 3)
     {
-        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd));
+        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), user.getNickname(), message._cmd));
         return ;
     }
     std::string nickname = message._arguments[0];

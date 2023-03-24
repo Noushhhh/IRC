@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quit.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:23 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/22 14:49:55 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/24 09:29:20 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	Server::Quit(User &user, Message &message)
     std::string quit_msg;
     if (message._argsNb < 2)
     {
-        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd));
+        reply (user, ERR_NEEDMOREPARAMS(user.getReplyName(), user.getNickname(), message._cmd));
         return ;
     }
     quit_msg = user.getReplyName() + " QUIT :Quit ";

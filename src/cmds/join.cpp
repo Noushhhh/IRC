@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 09:17:08 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/24 11:14:24 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ void        namelistRPL(Channel &chan, User user)
             rpl_buff += "@" + (*it)->getNickname() += " ";
         else if (chan.userIsMuted((*it)->getNickname()) == false)
             rpl_buff += "+" + (*it)->getNickname() += " ";
+        else
+            rpl_buff += (*it)->getNickname() += " ";
         it ++;
     }
     rpl_buff += "\n";
@@ -133,7 +135,7 @@ void	Server::Join(User &user, Message &message)
 
     if (message._splitMessage.size() == 1)
     {
-        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd));
+        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), user.getNickname(), message._cmd));
         return ;
     }
     if (message._splitMessage.size() == 2 || message._splitMessage.size() == 3)
@@ -181,7 +183,7 @@ void	Server::Join(User &user, Message &message)
                     }
                     else if (_channelsListIt->userIsBanned(user.getNickname()) == true)
                     {
-                        reply (user, ERR_ISBANNED(user.getReplyName(), user.getNickname(), _channelsListIt->getName()));
+                        reply (user, ERR_BANNEDFROMCHAN(user.getReplyName(), user.getNickname(), _channelsListIt->getName()));
                         chanExist = true;
                         break ;
                     }

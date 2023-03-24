@@ -296,24 +296,15 @@ void				Channel::setMutedList(User &user, User *target, int &addOrRemove)
 		reply(user, ERR_ISCHANOP(user.getReplyName(), target->getNickname()));
 	else if (addOrRemove == REMOVE) // here remove = remove voice privilege, so -v is muting, +v is giving voice priv
 	{
-		if (this->getUserItInList(_mutedUsersList, target->getNickname()) != _mutedUsersList.end())
-			reply(user, RPL_ALLRDYMUTED(user.getReplyName(), target->getNickname(), this->getName())); // reply TO DO
-		else
-		{
+		if (this->getUserItInList(_mutedUsersList, target->getNickname()) == _mutedUsersList.end())
 			this->_mutedUsersList.push_back(target);
-			sendToUsers(RPL_MUTED(user.getReplyName(), target->getNickname(), this->getName()));
-		}
 	}
 	else
 	{
 		if (this->getUserItInList(_mutedUsersList, target->getNickname()) != _mutedUsersList.end())
-		{
 			this->_mutedUsersList.erase(getUserItInList(_mutedUsersList, target->getNickname()));
-			sendToUsers(RPL_UNMUTED(user.getReplyName(), target->getNickname(), this->getName()));
-		}
-		else
-			reply(user, RPL_NOTMUTED(user.getReplyName(), target->getNickname(), this->getName()));
 	}
+	namelistRPL(*this, user);
 }
 
 void				Channel::setBanList(Server &serv, User &user, User *target, int &addOrRemove)
@@ -322,11 +313,9 @@ void				Channel::setBanList(Server &serv, User &user, User *target, int &addOrRe
 		reply(user, ERR_ISCHANOP(user.getReplyName(), target->getNickname()));
 	else if (addOrRemove == ADD)
 	{
-		if (this->getUserItInList(_banUsersList, target->getNickname()) != _banUsersList.end())
-			reply(user, RPL_ALLRDYBANNED(user.getReplyName(), target->getNickname(), this->getName()));
-		else
+		if (this->getUserItInList(_banUsersList, target->getNickname()) == _banUsersList.end())
 		{
-			sendToUsers(RPL_BANNED(user.getReplyName(), target->getNickname(), this->getName()));
+        	this->sendToUsers(target->getReplyName() + " PART " + this->getName() + "\n");
 			if (this->getUserItInList(_opList, target->getNickname()) != _opList.end())
 				this->_opList.erase(this->getUserItInList(_opList, target->getNickname()));
 			if (this->getUserItInList(_mutedUsersList, target->getNickname()) != _mutedUsersList.end())
@@ -334,18 +323,15 @@ void				Channel::setBanList(Server &serv, User &user, User *target, int &addOrRe
 			
 			this->_banUsersList.push_back(serv.getUserWithNickname(target->getNickname()));
 			this->_usersList.erase(this->getUserItInList(_usersList, target->getNickname()));
+			//TO DO : UPDATE BANLIST
 		}
 	}
 	else
 	{
 		if (this->getUserItInList(_banUsersList, target->getNickname()) != _banUsersList.end())
-		{
 			this->_banUsersList.erase(getUserItInList(_banUsersList, target->getNickname()));
-			sendToUsers(RPL_UNBANNED(user.getReplyName(), target->getNickname(), this->getName()));
-		}
-		else
-			reply(user, RPL_NOTBANNED(user.getReplyName(), target->getNickname(), this->getName()));
 	}
+	namelistRPL(*this, user);
 }
 
 void				Channel::setOpList(User &user, User *target, int &addOrRemove)
@@ -355,23 +341,16 @@ void				Channel::setOpList(User &user, User *target, int &addOrRemove)
 	else if (addOrRemove == ADD)
 	{
 		if (this->getUserItInList(_opList, target->getNickname()) != _opList.end())
-			reply(user, RPL_ALLRDYOP(user.getReplyName(), target->getNickname(), this->getName()));
+			reply(user, ERR_ISCHANOP(user.getReplyName(), target->getNickname()));
 		else
-		{
 			this->_opList.push_back(target);
-			sendToUsers(RPL_OPED(user.getReplyName(), target->getNickname(), this->getName()));
-		}
 	}
 	else
 	{
 		if (this->getUserItInList(_opList, target->getNickname()) != _opList.end())
-		{
 			this->_opList.erase(getUserItInList(_opList, target->getNickname()));
-			sendToUsers(RPL_UNOPED(user.getReplyName(), target->getNickname(), this->getName()));
-		}
-		else
-			reply(user, RPL_NOTOP(user.getReplyName(), target->getNickname(), this->getName()));
 	}
+	namelistRPL(*this, user);
 }
 
 void				Channel::setTopic(std::string topic)

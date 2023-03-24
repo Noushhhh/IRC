@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pass.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:16 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/20 13:46:49 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/24 09:29:06 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	Server::Pass(User &user, Message &message)
 {
 	if (message._argsNb < 2)
 	{
-		reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd));
+        reply (user, ERR_NEEDMOREPARAMS(user.getReplyName(), user.getNickname(), message._cmd));
 		return ;
 	}
 	if (user.getRegistered() == true)

@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 15:58:01 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/22 16:42:35 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/24 10:43:22 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@
 #include <iterator>
 #include <sstream>
 #include <string.h>
+#include <csignal>
 
 #include "User.hpp"
 #include "Message.hpp"
@@ -66,6 +67,8 @@ void                                reply(User &user, std::string reply);
 void                                remove_from_all_channels(User &user, std::list< Channel > &channelList);
 std::vector <std::string>           split_cmd(std::string cmd);
 void                                joinRPL(Channel &chan, User user);
+void                                namelistRPL(Channel &chan, User user);
+
 
 
 

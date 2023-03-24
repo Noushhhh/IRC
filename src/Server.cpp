@@ -6,11 +6,13 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 08:51:06 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/24 11:30:20 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/irc.hpp"
+
+Server* Server::_servInstance = NULL;
 
 Server::Server() :
 _sock(0),
@@ -21,6 +23,7 @@ _channelsListIt(_channelsList.begin()),
 _rplMsg(""),
 _errMsg("")
 {
+    _servInstance = this;
     _addr.sin_family = AF_INET;
     _addr.sin_port = htons(_port);
     std::memset(_addr.sin_zero, 0, sizeof( _addr.sin_zero));
@@ -71,6 +74,7 @@ _channelsListIt(_channelsList.begin()),
 _rplMsg(""),
 _errMsg("")
 {
+    _servInstance = this;
     _addr.sin_family = AF_INET;
     _addr.sin_port = htons(_port);
     std::memset(_addr.sin_zero, 0, sizeof( _addr.sin_zero));
@@ -124,6 +128,7 @@ Server &Server::operator=(const Server &src)
 {
     this->_sock = src._sock;
     this->_addr = src._addr;
+    this->_servInstance = src._servInstance;
     return (*this);
 }
 
@@ -290,7 +295,7 @@ bool                    Server::addUser()
     if (newFd < 0)
         return (false);
     struct pollfd tmp;
-    struct pollfd *tmpfd = &tmp; /*= new struct pollfd*/;
+    struct pollfd *tmpfd = &tmp;
     tmpfd->fd = newFd;
     tmpfd->events = POLLIN|POLLHUP;
     tmpfd->revents = 0;
@@ -405,7 +410,7 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 		i++;
 	if (i >= HANDLEDCOMMANDSNB)
 	{
-		err_buff = ERR_UNKNOWNNCOMMAND(user.getReplyName(), *message._splitMessage.begin());
+		err_buff = ERR_UNKNOWNNCOMMAND(user.getReplyName(), user.getNickname(),*message._splitMessage.begin());
 		send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
 		return false;
 	}

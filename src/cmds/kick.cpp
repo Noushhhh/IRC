@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:55 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/22 11:25:39 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/24 09:27:34 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	Server::Kick(User &user, Message &message)
 {
     if (message._argsNb < 3)
     {
-        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd));
+        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), user.getNickname(), message._cmd));
         return ;
     }
 
@@ -26,7 +26,7 @@ void	Server::Kick(User &user, Message &message)
     {
         if (message._argsNb < 4)
         {
-            reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd));
+            reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), user.getNickname(), message._cmd));
             return ;
         }
         channel_name = message._arguments[1];
