@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/22 16:54:43 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/24 08:51:11 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,9 @@ void        namelistRPL(Channel &chan, User user)
     }
     rpl_buff += "\n";
     reply (user, rpl_buff);
+    chan.sendToUsers(rpl_buff);
     reply (user, RPL_ENDOFNAMES(user.getReplyName(), user.getNickname(),chan.getName()));
+    chan.sendToUsers(RPL_ENDOFNAMES(user.getReplyName(), user.getNickname(),chan.getName()));
 }
 
 void joinRPL(Channel &chan, User user)
@@ -55,6 +57,7 @@ void joinRPL(Channel &chan, User user)
     if (chan.getTopic().empty())
         rpl_buff = RPL_NOTOPIC(user.getReplyName(), user.getNickname(), chan.getName());
     chan.sendToUsers(user.getReplyName() + " JOIN " + chan.getName() + "\n");
+    // chan.sendToUsers(rpl_buff);
     reply(user, rpl_buff);
     namelistRPL(chan, user);
 }
