@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 08:51:11 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/24 09:17:08 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void remove_from_all_channels(User &user, std::list< Channel > &channelList)
         {
             if (user.getNickname() == (*uIt)->getNickname())
             {
+                cIt->sendToUsers(user.getReplyName() + " PART " + cIt->getName() + "\n");
                 cIt->getUsersList().erase(uIt);
                 break ;
             }
@@ -148,10 +149,8 @@ void	Server::Join(User &user, Message &message)
     // if passed arg is 0, remove user from all chans
     
     if (message._splitMessage.size() == 2 && *(message._it) == "0")
-    {
         remove_from_all_channels(user, _channelsList);
-        reply(user, RPL_JOINZERO(user.getReplyName(), user.getNickname()));
-    }
+        
     else
     {    
         // look for the channel to join
@@ -205,7 +204,7 @@ void	Server::Join(User &user, Message &message)
                         chanExist = true;
                         break ;
                     }
-                    reply (user, ERR_BADCHANNELKEY(user.getReplyName(), _channelsListIt->getName()));
+                    reply (user, ERR_BADCHANNELKEY(user.getReplyName(), user.getNickname(), _channelsListIt->getName()));
                     chanExist = true;
                     break ;
                 }

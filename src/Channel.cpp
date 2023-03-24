@@ -56,7 +56,7 @@ _topic("")
 	// else 
 	// 	_creator = NULL;
 	_password = pswd;
-	this->_isPswdProtected = false;
+	this->_isPswdProtected = true;
 	this->_isInviteOnly		= false;	
 	this->_isModerated		= false;		
 	this->_isQuiet			= false;	

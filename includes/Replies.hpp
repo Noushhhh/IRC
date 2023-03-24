@@ -37,10 +37,6 @@
 #define	RPL_LIST(rplname, nick, channel, client_count, topic)       rplname + " 322 " + nick + " " + channel + " " + client_count + " :" + topic + "\n"
 #define RPL_LISTEND(rplname, nickname)				        rplname + " 323 " + nickname + " : end of LIST\n"
 
-// //JOIN
-
-#define RPL_JOINZERO(rplname, nick)                         rplname + " " + nick + " :succesfully removed from all channels\n"
-
 //TOPIC / 331 / 332
 
 #define	RPL_NOTOPIC(rplname, nickname, channel)           rplname + " 331 " + nickname + " " + channel + " :No topic is set\n"
@@ -128,7 +124,7 @@
 #define ERR_USERONCHANNEL(rplname, chan, user)      rplname + " 443 " + user + " :Is already on channel " + chan + "\n" // 443
 #define ERR_USERNOTINCHANNEL(rplname, nick, chan)   rplname + " 451 " + nick + " :is not on channel " + chan + "\n" // 441
 #define ERR_ISCHANOP(rplname, nick)                 rplname + nick + " :is chanop and cannot be muted, banned or unoped\n"
-#define ERR_BADCHANNELKEY(rplname, chan)            rplname + " 475 " + chan + " :Cannot join channel (+k)\n" // 475
+#define ERR_BADCHANNELKEY(rplname, nick ,chan)      rplname + " 475 " + nick + " " + chan + " :cannot join channel (+k)\n" // 475
 #define ERR_CHANOPRIVSNEEDED(rplname, chan)         rplname + " 482 " + chan + " :You're not channel operator\n" // 482
 #define ERR_ISBANNED(rplname, nick, chan)           rplname + nick + " :is banned from " + chan + "\n"
 #define ERR_USERLIMITREACHED(rplname, chan)         rplname + chan + " :users limit reached\n"
