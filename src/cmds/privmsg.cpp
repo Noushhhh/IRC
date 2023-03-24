@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 09:45:28 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/24 10:34:41 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	Server::PrivMsg(User &user, Message &message)
 {
     if (message._argsNb < 2)
     {
-        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd));
+        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), user.getNickname(), message._cmd));
         return ;
     }
     if (message._argsNb < 3)
@@ -51,7 +51,7 @@ void	Server::PrivMsg(User &user, Message &message)
 
         else
         {
-            reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), target));
+            reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), user.getNickname(), target));
             return ;
         }
         return ;
@@ -66,7 +66,7 @@ void	Server::PrivMsg(User &user, Message &message)
 
     else
     {
-        reply(user, ERR_NOSUCHNICK(user.getReplyName(), target));
+        reply(user, ERR_NOSUCHNICK(user.getReplyName(), user.getNickname(), target));
     }
 }
 

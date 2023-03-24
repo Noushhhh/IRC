@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:55 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/22 11:25:39 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/24 10:40:53 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	Server::Kick(User &user, Message &message)
 {
     if (message._argsNb < 3)
     {
-        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd));
+        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), user.getNickname(), message._cmd));
         return ;
     }
 
@@ -26,7 +26,7 @@ void	Server::Kick(User &user, Message &message)
     {
         if (message._argsNb < 4)
         {
-            reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd));
+            reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), user.getNickname(), message._cmd));
             return ;
         }
         channel_name = message._arguments[1];
@@ -36,12 +36,12 @@ void	Server::Kick(User &user, Message &message)
     Channel *chan = getChannelWithName(channel_name);
     if (!isChannel(channel_name))
     {
-        reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), channel_name));
+        reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), user.getNickname(), channel_name));
         return ;
     }
     if (!user.isOnChan(channel_name))
     {
-        reply(user, ERR_NOTONCHANNEL(user.getReplyName(), channel_name));
+        reply(user, ERR_NOTONCHANNEL(user.getReplyName(), user.getNickname(), channel_name));
         return ;
     }
     if (!chan->userIsOp(user.getNickname()))

@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:14 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/22 13:19:26 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/24 10:27:01 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,19 @@ void	Server::Part(User &user, Message &message)
 {
     if (message._argsNb < 2)
      {
-        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd));
+        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), user.getNickname(), message._cmd));
         return ;
 	}
     std::string chan_name = message._arguments[0];
     if (!isChannel(chan_name))
     {
-        reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), chan_name));
+        reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), user.getNickname(), chan_name));
         return ;
     }
     Channel *channel = getChannelWithName(chan_name);
     if (!channel->isUserInChannel(user)) // check if user in channel
     {
-        reply(user, ERR_NOTONCHANNEL(user.getReplyName(), chan_name));
+        reply(user, ERR_NOTONCHANNEL(user.getReplyName(), user.getNickname(), chan_name));
         return ;
     }
     _rplMsg = user.getReplyName() + " PART " + chan_name + "\n";

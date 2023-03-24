@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:16 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/20 13:46:49 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/24 10:30:44 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ void	Server::Pass(User &user, Message &message)
 {
 	if (message._argsNb < 2)
 	{
-		reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd));
+		reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), user.getNickname(), message._cmd));
 		return ;
 	}
 	if (user.getRegistered() == true)
 	{
-		reply(user, ERR_ALREADYREGISTERED(user.getReplyName()));
+		reply(user, ERR_ALREADYREGISTERED(user.getReplyName(), user.getNickname()));
 		return ;
 	}
 	else

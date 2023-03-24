@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:25 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/22 15:17:27 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/24 10:36:15 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,19 @@ void	Server::Topic(User &user, Message &message)
 {
     if (message._argsNb < 2)
     {
-        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd));
+        reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), user.getNickname(), message._cmd));
         return ;
     }
     std::string channel_name = message._arguments[0];
     if (!isChannel(channel_name))
     {
-        reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), channel_name));
+        reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), user.getNickname(), channel_name));
         return ;
     }
     Channel *channel = getChannelWithName(channel_name);
     if (!channel->isUserInChannel(user))
     {
-        reply(user, ERR_NOTONCHANNEL(user.getReplyName(), channel_name));
+        reply(user, ERR_NOTONCHANNEL(user.getReplyName(), user.getNickname(), channel_name));
         return ;
     }
 

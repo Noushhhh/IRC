@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:01 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/22 09:48:12 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/24 10:38:02 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,7 +198,7 @@ void	Server::Mode(User &user, Message &message)
 
     if (argsNB == 1) // if (argsNB < 2)
     {
-        err_buff = ERR_NEEDMOREPARAMS(user.getReplyName(), message._cmd);
+        err_buff = ERR_NEEDMOREPARAMS(user.getReplyName(), user.getNickname(), message._cmd);
         send(user.getSockfd(), &err_buff, err_buff.length(), 0);
         return ;
     }
