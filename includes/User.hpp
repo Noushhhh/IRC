@@ -59,6 +59,7 @@ class User
 		std::string				getPing() const;
 		std::string				getPong() const;
 		std::list< Channel *>	&getJoinedChans();
+		void                    freeJoinedChans();
 
 //members functions
 

@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 11:30:20 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/24 15:26:06 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ _port(9999),
 _password("0000"),
 _usersListIt(_usersList.begin()),
 _channelsListIt(_channelsList.begin()),
+_clientMsg(""),
 _rplMsg(""),
 _errMsg("")
 {
@@ -71,6 +72,7 @@ _port(port),
 _password(password),
 _usersListIt(_usersList.begin()),
 _channelsListIt(_channelsList.begin()),
+_clientMsg(""),
 _rplMsg(""),
 _errMsg("")
 {
@@ -128,12 +130,15 @@ Server &Server::operator=(const Server &src)
 {
     this->_sock = src._sock;
     this->_addr = src._addr;
+    this->_clientMsg = src._clientMsg;
     this->_servInstance = src._servInstance;
+
     return (*this);
 }
 
 Server::~Server()
 {
+    _clientMsg.clear();
     // std::cerr << "Debug message: Server Destructor called" << std::endl;
 }
 
@@ -211,7 +216,6 @@ bool                    Server::init()
 bool                    Server::pollDispatch()
 {
     char                                    buff[MAX_CHAR];
-    std::string                             msg;
     // std::vector< struct pollfd >::iterator  _pollFdsIt;
 
 	while (1)
@@ -242,7 +246,7 @@ bool                    Server::pollDispatch()
                 {
                     memset(buff, 0, MAX_CHAR);
                     r = recv(_pollFdsIt->fd, buff, MAX_CHAR - 1, MSG_DONTWAIT);
-                    msg.append(std::string(buff));
+                    _clientMsg.append(std::string(buff));
                     if (r == 0)
                     {
                         if (!this->closeUser())
@@ -253,13 +257,11 @@ bool                    Server::pollDispatch()
                         break ;
                     }
                 }
-                std::vector <std::string> cmd_array = split_cmd(msg);
-                std::cout << "Message received : " << msg;
+                std::vector <std::string> cmd_array = split_cmd(_clientMsg);
+                std::cout << "Message received : " << _clientMsg;
+                _clientMsg.clear();
                 for (std::vector<std::string>::iterator cmd_it = cmd_array.begin(); cmd_it != cmd_array.end(); cmd_it++)
-                {
                     handleMessage(*(getUserItWithFd(_pollFdsIt->fd)), *cmd_it); // check if reference of uesr good
-                }
-                msg = "";
                 errno = 0;
             }
 		}
@@ -300,7 +302,7 @@ bool                    Server::addUser()
     tmpfd->events = POLLIN|POLLHUP;
     tmpfd->revents = 0;
     _pollFds.push_back(*tmpfd);
-
+    
     User newUser(newFd, newAddr);
     this->_usersList.push_back(newUser);
     return (true);

@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/24 11:30:00 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/24 14:41:47 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ class Server
         std::vector< struct pollfd >::iterator  &findPollFd(int fd);
         void                                    sendChanUsers(std::string channel_name, std::string message);
         void                                    sendChanUsersExcept(std::string nick, std::string channel_name, std::string message);
+        static void	                            freeChans();
         static void                             signalHandler(int sig);
 
 // commands
@@ -114,7 +115,8 @@ class Server
         std::list< User >                       _usersList;
         std::list< User >::iterator             _usersListIt;
         std::list< Channel >                    _channelsList;
-        std::list< Channel >::iterator         _channelsListIt;
+        std::list< Channel >::iterator          _channelsListIt;
+        std::string                             _clientMsg;
         std::string                             _rplMsg;
         std::string                             _errMsg;
         static Server                           *_servInstance;

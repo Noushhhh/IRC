@@ -122,3 +122,18 @@ bool					User::isOnChan(const std::string &cName)
     return (false);
 }
 
+void                    User::freeJoinedChans()
+{
+    std::list< Channel *>::iterator it = _joinedChannels.begin();
+    std::list< Channel *>::iterator end = _joinedChannels.end();
+
+    while (it != end)
+    {
+		std::cout << (*it)->getName() << " was deleted" << std::endl;
+        (*it)->getBanList().erase((*it)->getBanList().begin(), (*it)->getBanList().end());
+        (*it)->getOpList().erase((*it)->getOpList().begin(), (*it)->getOpList().end());
+        (*it)->getMutedList().erase((*it)->getMutedList().begin(), (*it)->getMutedList().end());
+        it ++;
+    }
+    _joinedChannels.erase(_joinedChannels.begin(), _joinedChannels.end());
+}
