@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:55 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 09:27:34 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/24 16:10:23 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 
 void	Server::Kick(User &user, Message &message)
 {
+    if (!user.getRegistered())
+    {
+        reply(user, ERR_NOTREGISTERED(user.getReplyName(), user.getNickname()));
+        return ;
+    } 
+    
     if (message._argsNb < 3)
     {
         reply(user, ERR_NEEDMOREPARAMS(user.getReplyName(), user.getNickname(), message._cmd));
@@ -36,12 +42,12 @@ void	Server::Kick(User &user, Message &message)
     Channel *chan = getChannelWithName(channel_name);
     if (!isChannel(channel_name))
     {
-        reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), channel_name));
+        reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), user.getNickname(), channel_name));
         return ;
     }
     if (!user.isOnChan(channel_name))
     {
-        reply(user, ERR_NOTONCHANNEL(user.getReplyName(), channel_name));
+        reply(user, ERR_NOTONCHANNEL(user.getReplyName(), user.getNickname(), channel_name));
         return ;
     }
     if (!chan->userIsOp(user.getNickname()))
@@ -52,12 +58,12 @@ void	Server::Kick(User &user, Message &message)
     
     if (!isUserWNickname(nickname))
     {
-        reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), nickname, channel_name));
+        reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), user.getNickname(), nickname, channel_name));
         return ;
     }
     if (!isUserOnChan(nickname, channel_name))
     {
-        reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), nickname, channel_name));
+        reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), user.getNickname(), nickname, channel_name));
         return ;
     }
     User    *target = getUserWithNickname(nickname);
@@ -76,7 +82,6 @@ void	Server::Kick(User &user, Message &message)
         chan->kickUser(target);
         return ;
     }
-
     else
     {
         _rplMsg = "";

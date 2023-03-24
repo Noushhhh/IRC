@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:38 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 09:31:47 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/24 16:10:03 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ std::vector< struct pollfd >::iterator &Server::findPollFd(int fd)
     return (*it);
 }
 
-
 void	Server::cmdUser(User &user, Message &message)
 {
     if (message._argsNb < 5)
@@ -40,7 +39,7 @@ void	Server::cmdUser(User &user, Message &message)
 	}
     if (user.getRegistered() == true)
     {
-        reply(user, ERR_ALREADYREGISTERED(user.getReplyName()));
+        reply(user, ERR_ALREADYREGISTERED(user.getReplyName(), user.getNickname()));
         return ;
     }
     user.setUsername(message._arguments[0]);

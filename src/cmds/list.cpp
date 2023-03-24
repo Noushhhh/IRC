@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:59 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/22 13:32:33 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/24 13:26:55 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 
 void	Server::List(User &user, Message &message)
 {
+    if (!user.getRegistered())
+    {
+        reply(user, ERR_NOTREGISTERED(user.getReplyName(), user.getNickname()));
+        return ;
+    } 
+    
     if (message._argsNb < 1)
         return ;
     if (getChanList()->empty())

@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:18 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/22 13:26:52 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/24 13:27:24 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 
 void	Server::Ping(User &user, Message &message)
 {
+    if (!user.getRegistered())
+    {
+        reply(user, ERR_NOTREGISTERED(user.getReplyName(), user.getNickname()));
+        return ;
+    } 
+
     if (message._argsNb < 2)
     {
         reply(user, ERR_NOORIGIN(user.getReplyName(), user.getNickname()));
@@ -30,6 +36,12 @@ void	Server::Ping(User &user, Message &message)
 
 void	Server::Pong(User &user, Message &message)
 {
+    if (!user.getRegistered())
+    {
+        reply(user, ERR_NOTREGISTERED(user.getReplyName(), user.getNickname()));
+        return ;
+    }
+
     if (message._argsNb < 2)
     {
         reply(user, ERR_NOORIGIN(user.getReplyName(), user.getNickname()));

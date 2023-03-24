@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:16 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 09:29:06 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/24 16:11:34 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	Server::Pass(User &user, Message &message)
 	}
 	if (user.getRegistered() == true)
 	{
-		reply(user, ERR_ALREADYREGISTERED(user.getReplyName()));
+		reply(user, ERR_ALREADYREGISTERED(user.getReplyName(), user.getNickname()));
 		return ;
 	}
 	else

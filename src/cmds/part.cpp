@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:14 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 09:28:59 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/24 16:11:25 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,13 @@
 
 void	Server::Part(User &user, Message &message)
 {
+    
+    if (!user.getRegistered())
+    {
+        reply(user, ERR_NOTREGISTERED(user.getReplyName(), user.getNickname()));
+        return ;
+    } 
+    
     if (message._argsNb < 2)
      {
         reply (user, ERR_NEEDMOREPARAMS(user.getReplyName(), user.getNickname(), message._cmd));
@@ -22,19 +29,18 @@ void	Server::Part(User &user, Message &message)
     std::string chan_name = message._arguments[0];
     if (!isChannel(chan_name))
     {
-        reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), chan_name));
+        reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), user.getNickname(), chan_name));
         return ;
     }
     Channel *channel = getChannelWithName(chan_name);
     if (!channel->isUserInChannel(user)) // check if user in channel
     {
-        reply(user, ERR_NOTONCHANNEL(user.getReplyName(), chan_name));
+        reply(user, ERR_NOTONCHANNEL(user.getReplyName(), user.getNickname(), chan_name));
         return ;
     }
     _rplMsg = user.getReplyName() + " PART " + chan_name + "\n";
     sendChanUsers(chan_name, _rplMsg);
     channel->kickUser(&user);
-    // free channel ?
 }
 
 // PART message

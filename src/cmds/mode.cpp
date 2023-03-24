@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:01 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 11:37:46 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/24 16:11:02 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,8 @@ std::list< Channel >::iterator &channel)
 
             case    'v': // add/remove from muted user list
                 if(channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]) == channel->getUsersList().end())
-                    reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), modesparams[paramCt], channel->getName())); //TO DO
+                    reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), user.getNickname(), modesparams[paramCt], channel->getName()));
+                    // reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), modesparams[paramCt], channel->getName())); //TO DO
                 else if (paramCt < modesparams_size)
                 {
                     channel->setMutedList(user, *channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]), addOrRemoveMode);
@@ -134,7 +135,8 @@ std::list< Channel >::iterator &channel)
 
             case    'b': // add/remove from banned userlist
                 if(addOrRemoveMode == ADD && channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]) == channel->getUsersList().end())
-                    reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), modesparams[paramCt], channel->getName()));
+                    reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), user.getNickname(), modesparams[paramCt], channel->getName()));
+                    // reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), modesparams[paramCt], channel->getName()));
                 else if(addOrRemoveMode == REMOVE && channel->getUserItInList(channel->getBanList(), modesparams[paramCt]) == channel->getBanList().end())
                     reply (user, ERR_NOSUCHNICK(user.getReplyName(), user.getNickname()));
                 else
@@ -156,7 +158,8 @@ std::list< Channel >::iterator &channel)
 
             case    'o': // add/remove from op list
                 if(channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]) == channel->getUsersList().end())
-                    reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), modesparams[paramCt], channel->getName())); //TO DO
+                    reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), user.getNickname(), modesparams[paramCt], channel->getName()));
+                    // reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), modesparams[paramCt], channel->getName())); //TO DO
                 else if (paramCt < modesparams_size)
                 {
                     channel->setOpList(user, *channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]), addOrRemoveMode);
@@ -176,7 +179,13 @@ std::list< Channel >::iterator &channel)
 
 void	Server::Mode(User &user, Message &message)
 {
-    (void) user;
+    if (!user.getRegistered())
+    {
+        reply(user, ERR_NOTREGISTERED(user.getReplyName(), user.getNickname()));
+        return ;
+    }   
+    
+    // (void) user;
     (void) message;
     int                                     i = 0;
     ssize_t                                 argsNB = 0;
@@ -217,7 +226,8 @@ void	Server::Mode(User &user, Message &message)
     }
     if (user.isOnChan(channel->getName()) == false)
     {
-        err_buff = ERR_USERNOTINCHANNEL(user.getReplyName(), user.getNickname(), channel->getName());
+        err_buff = ERR_NOTONCHANNEL(user.getReplyName(), user.getNickname(), channel->getName());
+        // err_buff = ERR_USERNOTINCHANNEL(user.getReplyName(), user.getNickname(), channel->getName());
         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
         return ;
     }

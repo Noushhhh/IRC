@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 09:29:14 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/24 16:11:40 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 
 void	Server::PrivMsg(User &user, Message &message)
 {
+    if (!user.getRegistered())
+    {
+        reply(user, ERR_NOTREGISTERED(user.getReplyName(), user.getNickname()));
+        return ;
+    }
+    
     if (message._argsNb < 2)
     {
         reply (user, ERR_NEEDMOREPARAMS(user.getReplyName(), user.getNickname(), message._cmd));
@@ -40,7 +46,7 @@ void	Server::PrivMsg(User &user, Message &message)
                 return ;
             else if (chan->userIsMuted(user.getNickname()))
                 return ;
-            else if (chan->getOutsideMsgStatus() == true && user.isOnChan(chan->getName()))
+            else if (chan->getOutsideMsgStatus() == true && user.isOnChan(chan->getName()) == false)
             {
                 reply(user, ERR_CANNOTSENDTOCHAN(user.getReplyName(), target));
                 return ;
@@ -51,12 +57,11 @@ void	Server::PrivMsg(User &user, Message &message)
 
         else
         {
-            reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), target));
+            reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), user.getNickname(), target));
             return ;
         }
         return ;
     }
-
     else if (isUserWNickname(target)) // else check if message to user
     {
         priv_msg = user.getReplyName() + " PRIVMSG " + target + " " + priv_msg + "\n";
@@ -66,7 +71,7 @@ void	Server::PrivMsg(User &user, Message &message)
 
     else
     {
-        reply(user, ERR_NOSUCHNICK(user.getReplyName(), target));
+        reply(user, ERR_NOSUCHNICK(user.getReplyName(), user.getNickname(), target));
     }
 }
 

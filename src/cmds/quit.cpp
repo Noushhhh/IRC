@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:23 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 09:29:20 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/24 16:11:47 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,7 @@ void	Server::Quit(User &user, Message &message)
          quit_msg = quit_msg + get_suffix(&message._arguments[0]);
     quit_msg += "\n";
     for (std::list <Channel *>::iterator cit = user.getJoinedChans().begin(); cit != user.getJoinedChans().end(); cit++)
-    {
-        // std::cout << "Name channel" << (*cit)->getName() << std::endl;
         (*cit)->sendToUsersExcept(user.getNickname(), quit_msg); // send to all users of chans
-    }
-    
-    // closeUser(findPollFd(user.getSockfd()));
     closeUser();
 }
 
