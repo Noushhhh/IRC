@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/22 15:13:33 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/24 09:45:28 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	Server::PrivMsg(User &user, Message &message)
                 return ;
             else if (chan->userIsMuted(user.getNickname()))
                 return ;
-            else if (chan->getOutsideMsgStatus() == true && user.isOnChan(chan->getName()))
+            else if (chan->getOutsideMsgStatus() == true && user.isOnChan(chan->getName()) == false)
             {
                 reply(user, ERR_CANNOTSENDTOCHAN(user.getReplyName(), target));
                 return ;
