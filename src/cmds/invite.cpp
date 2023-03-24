@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:47 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 15:18:44 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/24 15:22:09 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,10 @@ void	Server::Invite(User &user, Message &message)
         return ;
     }
     else if (!_channelsListIt->isUserInChannel(user))  // check if user is on channel 
-    // else if (!(getChannelWithName(channel)->isUserInChannel(user)))
     {
         reply(user, ERR_NOTONCHANNEL(user.getReplyName(), user.getNickname(), channel));
         return ;
     }
-    // else if (!(getChannelWithName(channel)->isUserInChannelNickname(nickname)))
     else if (_channelsListIt->isUserInChannelNickname(nickname)) // check if user already on channel 
     {
         reply(user, ERR_USERONCHANNEL(user.getReplyName(), channel, nickname));

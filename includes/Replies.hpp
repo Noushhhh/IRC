@@ -123,7 +123,7 @@
 #define ERR_UNAVAILRESOURCE(rplname, nickOrChan)    rplname + nickOrChan + " :is temporarily unavailable\n" //437 pas sur du bail
 #define ERR_NOTONCHANNEL(rplname, nick, chan)       rplname + " 442 " + nick + " " + chan + " :You are not on that channel\n" // 442
 #define ERR_USERONCHANNEL(rplname, chan, user)      rplname + " 443 " + user + " :Is already on channel " + chan + "\n" // 443
-#define ERR_USERNOTINCHANNEL(rplname, nick, chan)   rplname + " 441 " + nick + " :is not on channel " + chan + "\n" // 441
+#define ERR_USERNOTINCHANNEL(rplname, nick, target, chan)   rplname + " 441 " + nick + " " + target + ":is not on channel " + chan + "\n" // 441
 #define ERR_ISCHANOP(rplname, nick)                 rplname + nick + " :is chanop and cannot be muted, banned or unoped\n"
 #define ERR_BADCHANNELKEY(rplname, nick ,chan)      rplname + " 475 " + nick + " " + chan + " :cannot join channel (+k)\n" // 475
 #define ERR_CHANOPRIVSNEEDED(rplname, chan)         rplname + " 482 " + chan + " :You're not channel operator\n" // 482

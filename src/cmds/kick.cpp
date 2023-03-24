@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:55 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 13:18:59 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/24 15:25:49 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,12 @@ void	Server::Kick(User &user, Message &message)
     
     if (!isUserWNickname(nickname))
     {
-        reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), nickname, channel_name));
+        reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), user.getNickname(), nickname, channel_name));
         return ;
     }
     if (!isUserOnChan(nickname, channel_name))
     {
-        reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), nickname, channel_name));
+        reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), user.getNickname(), nickname, channel_name));
         return ;
     }
     User    *target = getUserWithNickname(nickname);
