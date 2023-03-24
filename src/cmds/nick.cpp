@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:09 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/22 13:38:32 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/24 11:35:49 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,8 @@ void	Server::Nick(User &user, Message &message)
         reply(user, ERR_NONICKNAMEGIVEN(user.getReplyName(), user.getNickname()));
 		return ;
 	}
+    
     std::string nickname = message._arguments[0];
-	for (_usersListIt = _usersList.begin(); _usersListIt != _usersList.end(); _usersListIt++)
-	{
-		if (isUserWNickname(nickname))
-        {
-            reply(user, ERR_NICKNAMEINUSE(user.getReplyName(), nickname));
-            return ;
-        }
-	}
     for (size_t i = 0; i < nickname.length(); i++)
     {
         if (nickname == "anonymous")
@@ -42,14 +35,14 @@ void	Server::Nick(User &user, Message &message)
             return ;
         }
     }
-    if (user.getRegistered() == false)
+
+    if (isUserWNickname(nickname))
     {
-        _rplMsg = user.getReplyName() + " NICK " + nickname + "\n";
-        user.setNickname(nickname);
-        reply(user, _rplMsg);
+        reply(user, ERR_NICKNAMEINUSE(user.getReplyName(), user.getNickname(), nickname));
         return ;
     }
-    else
+
+    if (user.getRegistered() == true)
     {
         _rplMsg = user.getReplyName() + " NICK " + nickname + "\n";
         user.setNickname(nickname);
@@ -62,6 +55,14 @@ void	Server::Nick(User &user, Message &message)
         reply(user, _rplMsg);
         return ;
     }
+    else
+    {
+        _rplMsg = user.getReplyName() + " NICK " + nickname + "\n";
+        user.setNickname(nickname);
+        reply(user, _rplMsg);
+        return ;
+    }
+
 }
 
 // NICK message

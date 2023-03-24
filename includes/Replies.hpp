@@ -96,7 +96,7 @@
 #define	ERR_NOSUCHNICK(rplname, nick, target)           rplname + " 401 " + nick + " " + target + " :No such nick\n" // 401
 #define ERR_NONICKNAMEGIVEN(rplname, nick)		    rplname + " 431 " + nick + ":No nickname given\n" //431
 #define ERR_ERRONEUSNICKNAME(rplname, nick)     rplname + " 432 " + nick + ":Erroneous nickname\n" //432 when a nick contains invalid char
-#define ERR_NICKNAMEINUSE(rplname, nick)        rplname + " 433 " + nick + ":Nickname is in use\n" // 433
+#define ERR_NICKNAMEINUSE(rplname, nick, newnick)        rplname + " 433 " + nick + " " + newnick + ":Nickname is in use\n" // 433
 //#define CMD_NICK()
 
 //USER
