@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 15:58:01 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/22 16:42:35 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/24 14:53:44 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,7 @@ std::vector <std::string>           split_cmd(std::string cmd);
 void                                joinRPL(Channel &chan, User user);
 
 
-
-
-// crete a server with a socket. Listen entries in particular entry to get new msgs / clients
+// create a server with a socket. Listen entries in particular entry to get new msgs / clients
 // In server >> Chanel, users, state
 // 
 

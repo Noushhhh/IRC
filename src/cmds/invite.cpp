@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:47 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 13:26:31 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/24 15:18:44 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,14 @@ void	Server::Invite(User &user, Message &message)
 
     std::string nickname = message._arguments[0];
     std::string channel = message._arguments[1];
-    if (message._arguments[1].find("#") != 0) // check if right channel format
+    if (channel.find("#") != 0) // check if right channel format
     {
         reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), user.getNickname(), channel));
         return ;
     }
     if (!isUserWNickname(nickname)) // check if nickname exists
     {
-        reply(user, ERR_NOTONCHANNEL(user.getReplyName(), user.getNickname(), nickname));
+        reply(user, ERR_NOSUCHNICK(user.getReplyName(), user.getNickname(), nickname));
         return ;
     }
     if (!isChannel(channel)) // check if channel exists
@@ -44,10 +44,12 @@ void	Server::Invite(User &user, Message &message)
         return ;
     }
     else if (!_channelsListIt->isUserInChannel(user))  // check if user is on channel 
+    // else if (!(getChannelWithName(channel)->isUserInChannel(user)))
     {
-        reply(user, ERR_NOTONCHANNEL(user.getReplyName(), user.getNickname(), user.getNickname()));
+        reply(user, ERR_NOTONCHANNEL(user.getReplyName(), user.getNickname(), channel));
         return ;
     }
+    // else if (!(getChannelWithName(channel)->isUserInChannelNickname(nickname)))
     else if (_channelsListIt->isUserInChannelNickname(nickname)) // check if user already on channel 
     {
         reply(user, ERR_USERONCHANNEL(user.getReplyName(), channel, nickname));
@@ -58,14 +60,16 @@ void	Server::Invite(User &user, Message &message)
         Channel *chan = getChannelWithName(channel);
         User *target = getUserWithNickname(nickname);
 
+        target->getJoinedChans().push_back(chan);
         chan->getUsersList().push_back(target);
 
-        reply(user, RPL_INVITING(user.getReplyName(), channel, nickname));
-        reply(*target, user.getReplyName() + " INVITE " + nickname + " " + chan->getName() + "\n");
+        reply(user, RPL_INVITING(user.getReplyName(), user.getNickname(), nickname, channel));
+        reply(*target, user.getReplyName() + " INVITE " + nickname + " " + channel + "\n");
         joinRPL(*chan, *target);
         return ;
     }
 }
+
 // INVITE message
 //      Command: INVITE
 //   Parameters: <nickname> <channel>

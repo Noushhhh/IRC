@@ -44,7 +44,7 @@
 
 //INVITE / 341
 
-#define	RPL_INVITING(rplname, channel, nick)            rplname + " 341 " + nick + " " + channel + ": Was succesfully invited to " + channel + "\n"
+#define	RPL_INVITING(rplname, nick, invite_nick, chan) rplname + " 341 " + nick + " " + invite_nick + " " + chan + "\n" //+ ": Was succesfully invited to " + chan + "\n"
 
 // //OPER / 381
 
