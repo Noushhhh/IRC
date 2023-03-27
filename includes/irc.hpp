@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 15:58:01 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/24 16:08:19 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/27 09:24:56 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@
 #include <string.h>
 #include <csignal>
 
+#include "Replies.hpp"
 #include "User.hpp"
 #include "Message.hpp"
-#include "Replies.hpp"
 #include "Channel.hpp"
 #include "Server.hpp"
 

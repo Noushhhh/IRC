@@ -77,6 +77,7 @@ Channel::Channel(const Channel &src)
 
 Channel::~Channel()
 {
+	std::cout << "CHANNEL DESTRUCTORE, CHAN ADD : " << &(*this) << std::endl;
 	;
 }
 
