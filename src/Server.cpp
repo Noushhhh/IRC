@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/27 16:42:38 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/27 16:43:33 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,7 +253,6 @@ bool                    Server::pollDispatch()
                     }
                 }
                 std::vector <std::string> cmd_array = split_cmd(_clientMsg);
-                std::cout << "Message received : " << _clientMsg;
                 _clientMsg.clear();
                 for (std::vector<std::string>::iterator cmd_it = cmd_array.begin(); cmd_it != cmd_array.end(); cmd_it++)
                     handleMessage(*(getUserItWithFd(_pollFdsIt->fd)), *cmd_it); // check if reference of uesr good
