@@ -78,7 +78,7 @@
 
 //NICK
 
-#define	ERR_NOSUCHNICK(rplname, nick)           rplname + " 406 " + nick + ":No such nick\n" // 401
+#define	ERR_NOSUCHNICK(rplname, nick, target)   rplname + " 406 " + nick + " " + target + ":No such nick\n" // 401
 #define ERR_NONICKNAMEGIVEN(rplname, nick)		rplname + " 431 " + nick + ":No nickname given\n" //431
 #define ERR_ERRONEUSNICKNAME(rplname, nick)     rplname + " 432 " + nick + ":Erroneous nickname\n" //432 when a nick contains invalid char
 #define ERR_NICKNAMEINUSE(rplname, nick)        rplname + " 433 " + nick + ":Nickname is in use\n" // 433
@@ -86,11 +86,12 @@
 
 //USER
 
-#define ERR_ALREADYREGISTERED(rplname)	        rplname + " 462: Unauthorized command (already registered)\n" // 462, send as a response to a second USER call trying to overide user info 
+#define ERR_ALREADYREGISTERED(rplname, nick)	rplname + " 462 " + nick + " : Unauthorized command (already registered)\n" // 462, send as a response to a second USER call trying to overide user info 
+#define ERR_NOTREGISTERED(rplname, nick)        rplname + " 451 " + nick + " :You have not registered\n"
 
 //MODE
 
-#define ERR_UMODEUNKNOWNFLAG(rplname)	        rplname + " 501: Unknown MODE flag\n" // 501
+#define ERR_UMODEUNKNOWNFLAG(rplname, nick)	        rplname + " 501: Unknown MODE flag\n" // 501
 #define ERR_USERSDONTMATCH(rplname)		        rplname + " 502: Cannot change mode for other users\n" // 502
 #define ERR_INVITEONLYCHAN(rplname, chan)       rplname + " 473 " + chan + ":is invite only\n"
 
@@ -102,12 +103,12 @@
 
 //CHANNEL RELATED
 
-#define	ERR_NOSUCHCHANNEL(rplname, channel)         rplname + " 402 " + channel + " :No such channel\n" // 403
+#define	ERR_NOSUCHCHANNEL(rplname, nick, channel)         rplname + " 402 " + nick + " " + channel + " :No such channel\n" // 403
 #define ERR_CANNOTSENDTOCHAN(rplname, channel)      rplname + " 404 " + channel + " :Cannot send to channel\n" // 404
 #define ERR_UNAVAILRESOURCE(rplname, nickOrChan)    rplname + nickOrChan + " :is temporarily unavailable\n" //437 pas sur du bail
-#define ERR_NOTONCHANNEL(rplname, chan)             rplname + " 442 " + chan + " :You are not on that channel\n" // 442
+#define ERR_NOTONCHANNEL(rplname, nick, chan)       rplname + " 442 " + nick + " " + chan + " :You are not on that channel\n" // 442
 #define ERR_USERONCHANNEL(rplname, chan, user)      rplname + " 443 " + user + " :Is already on channel " + chan + "\n" // 443
-#define ERR_USERNOTINCHANNEL(rplname, nick, chan)   rplname + " 441 " + nick + " :is not on channel " + chan + "\n" // 441
+#define ERR_USERNOTINCHANNEL(rplname, nick, target, chan)   rplname + " 441 " + nick + " " + target + " " + chan +" :is not on channel\n" // 441
 #define ERR_ISCHANOP(rplname, nick)                 rplname + nick + " :is chanop and cannot be muted, banned or unoped\n"
 #define ERR_BADCHANNELKEY(rplname, nick ,chan)      rplname + " 475 " + nick + " " + chan + " :cannot join channel (+k)\n" // 475
 #define ERR_CHANOPRIVSNEEDED(rplname, chan)         rplname + " 482 " + chan + " :You're not channel operator\n" // 482
