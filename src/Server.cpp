@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/27 11:41:44 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/27 15:11:55 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ _errMsg("")
     this->_handledCommands[13] = "CAP";
     this->_handledCommands[14] = "WHO";
     this->_handledCommands[15] = "PONG";
-
-    // std::cerr << "Debug message: Server Default Constructor called" << std::endl;
 }
 
 Server::Server(int port, std::string password) :
@@ -114,8 +112,6 @@ _errMsg("")
     this->_handledCommands[13] = "CAP";
     this->_handledCommands[14] = "WHO";
     this->_handledCommands[15] = "PONG";
-
-    // std::cerr << "Debug message: Server Constructor called" << std::endl;
 }
 
 Server::Server(const Server &src) :
@@ -132,14 +128,15 @@ Server &Server::operator=(const Server &src)
     this->_addr = src._addr;
     this->_clientMsg = src._clientMsg;
     this->_servInstance = src._servInstance;
+    _pollFds.clear();
+    this->_pollFds = src._pollFds;
 
     return (*this);
 }
 
 Server::~Server()
 {
-    _clientMsg.clear();
-    // std::cerr << "Debug message: Server Destructor called" << std::endl;
+    ;
 }
 
 /**************************************************************/
@@ -224,6 +221,7 @@ bool                    Server::pollDispatch()
 			closeEmptyChans();
 		if (poll (_pollFds.begin().base(), _pollFds.size(), -1) < 0)
         {
+            serverShutdown();
             return (false);
         }
 		for (_pollFdsIt = _pollFds.begin(); _pollFdsIt != _pollFds.end(); _pollFdsIt ++)
@@ -236,7 +234,7 @@ bool                    Server::pollDispatch()
                 {
                     if (this->addUser() == false)
                     {
-                        //close all sockets
+                        serverShutdown();
                         return (false);
                     }
                     break ;
@@ -251,7 +249,7 @@ bool                    Server::pollDispatch()
                     {
                         if (!this->closeUser())
                         {
-                            // close all sockets
+                            serverShutdown();
                             return (false);
                         }
                         break ;
@@ -266,7 +264,6 @@ bool                    Server::pollDispatch()
             }
 		}
 	}
-    //free all except 1 and close all sockets
     return (true);
 }
 
@@ -296,46 +293,19 @@ bool                    Server::addUser()
     newFd = accept(_sock, (struct sockaddr *)&newAddr, &nSize);
     if (newFd < 0)
         return (false);
-    struct pollfd tmp;
-    struct pollfd *tmpfd = &tmp;
-    tmpfd->fd = newFd;
-    tmpfd->events = POLLIN|POLLHUP;
-    tmpfd->revents = 0;
-    _pollFds.push_back(*tmpfd);
+    struct pollfd tmpfd;
+    tmpfd.fd = newFd;
+    tmpfd.events = POLLIN|POLLHUP;
+    tmpfd.revents = 0;
+    _pollFds.push_back(tmpfd);
     
     User newUser(newFd, newAddr);
     this->_usersList.push_back(newUser);
     return (true);
 }
 
-
-
-// bool                    Server::closeUser(std::vector< struct pollfd >::iterator &it)
-// {
-//     //supress from all channels he belongs to
-	
-//     remove_from_all_channels(*getUserItWithFd(it->fd), _channelsList);
-//     it = _pollFds.begin();
-//     for (std::list< User >::iterator lit = _usersList.begin(); lit != _usersList.end(); lit ++)
-//     {
-//         if (lit->getSockfd() == it->fd)
-//         {
-//             _usersList.erase(lit);
-//             break;
-//         }
-//     }
-//     if (close(it->fd) < 0)
-//         return (false);
-//     _pollFds.erase(it);
-//     it = _pollFds.begin();
-//     return (true) ;
-// }
-
-
 bool                    Server::closeUser()
 {
-    //supress from all channels he belongs to
-    
     remove_from_all_channels(*getUserItWithFd(_pollFdsIt->fd), _channelsList);
     std::list< User >::iterator lit = _usersList.begin();
     for (; lit != _usersList.end(); lit ++)
@@ -346,8 +316,6 @@ bool                    Server::closeUser()
             break;
         }
     }
-    // if (lit == _usersList.end())
-    //     return (true);
     if (close(_pollFdsIt->fd) < 0)
         return (true);
     _pollFds.erase(_pollFdsIt);

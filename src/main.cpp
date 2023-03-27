@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 17:01:07 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/27 14:10:25 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/27 15:20:12 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,21 +33,39 @@ void	Server::freeChans()
 	// _servInstance->getChanList()->erase(_servInstance->getChanList()->begin(),_servInstance->getChanList()->end());
 }
 
-void	Server::signalHandler(int sig)
+void	Server::freeUsers()
 {
-	_servInstance->freeChans();
-	_servInstance->_pollFds.clear();
-
-
-	std::list< User >::iterator it = _servInstance->getUserList()->begin();
-	std::list< User >::iterator end = _servInstance->getUserList()->end();
+	std::list< User >::iterator it = _usersList.begin();
+	std::list< User >::iterator end = _usersList.end();
 
 	while (it != end)
 	{
 		it->getJoinedChans().clear();
 		it ++;
 	}
-	_servInstance->getUserList()->erase(_servInstance->getUserList()->begin(), _servInstance->getUserList()->end());
+	_usersList.clear();
+}
+
+#include <algorithm>
+
+void print(pollfd obj)
+{
+	std::cout << obj.fd <<std::endl;
+}
+
+void	Server::serverShutdown()
+{
+	freeChans();
+	freeUsers();
+	std::cout << _pollFds.size() << " : SIZE\n";
+	for_each(_pollFds.begin(), _pollFds.end(), print);
+	_pollFds.clear();
+	for_each(_pollFds.begin(), _pollFds.end(), print);
+}
+
+void	Server::signalHandler(int sig)
+{
+	_servInstance->serverShutdown();
 	std::exit (sig);
 }
 
@@ -57,10 +75,6 @@ int main(int ac, char **av)
 		return 0;
 
 	Server Serv(std::atoi(av[1]), std::string(av[2]));
-
-	std::cout << "SIZE OF CHAN " << sizeof(Channel) << std::endl;
-	std::cout << "SIZE OF POLLFD " << sizeof(pollfd) << std::endl;
-	std::cout << "SIZE OF USER " << sizeof(User) << std::endl;
 
 	std::signal(SIGINT, &Server::signalHandler);
 	Serv.init();

@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/27 14:00:25 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/27 14:29:37 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ class Server
         void                                    sendChanUsers(std::string channel_name, std::string message);
         void                                    sendChanUsersExcept(std::string nick, std::string channel_name, std::string message);
         void	                                freeChans();
+        void	                                freeUsers();
+        void	                                serverShutdown();
         static void                             signalHandler(int sig);
 
 // commands
