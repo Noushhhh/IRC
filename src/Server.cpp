@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 15:26:06 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/27 11:52:50 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,8 +308,6 @@ bool                    Server::addUser()
     return (true);
 }
 
-
-
 // bool                    Server::closeUser(std::vector< struct pollfd >::iterator &it)
 // {
 //     //supress from all channels he belongs to
@@ -422,6 +420,7 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 		(void)(this->*_ptrF[i])(user, message);
         return true;
 	}
+
 }
 
 bool        Server::isChannel(std::string channel_name)
