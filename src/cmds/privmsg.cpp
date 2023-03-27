@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/27 15:42:39 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/27 16:29:58 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,7 @@ void	Server::PrivMsg(User &user, Message &message)
                 reply(user, ERR_CANNOTSENDTOCHAN(user.getReplyName(), target));
                 return ;
             }
-            priv_msg = user.getReplyName() + " PRIVMSG " + target + " " + priv_msg + "\n";
-            sendChanUsersExcept(user.getNickname(), target, priv_msg);
+            sendChanUsersExcept(user.getNickname(), target, user.getReplyName() + " PRIVMSG " + target + " " + priv_msg + "\n");
         }
 
         else
@@ -64,8 +63,7 @@ void	Server::PrivMsg(User &user, Message &message)
     }
     else if (isUserWNickname(target)) // else check if message to user
     {
-        priv_msg = user.getReplyName() + " PRIVMSG " + target + " " + priv_msg + "\n";
-		send(getUserWithNickname(target)->getSockfd(), priv_msg.c_str(), priv_msg.length(), 0); // send priv message to the target
+        reply(*getUserWithNickname(target), user.getReplyName() + " PRIVMSG " + target + " " + priv_msg + "\n");
         return ;
     }
 
