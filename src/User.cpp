@@ -13,31 +13,25 @@
 #include "../includes/irc.hpp"
 
 User::User() : _nickname("no_nickname"), _isRegistered(false)
-{
-    // std::cerr << "Debug message: User Default Constructor called" << std::endl;
-}
+{}
 
 User::User(int sockfd, sockaddr_in addr) : _sockfd(sockfd), _addr(addr), _isRegistered(false)
 {
     _nickname = "no_nickname";
-    // std::cerr << "Debug message: User Default Constructor called" << std::endl;
 }
 
 User::User(const User &src) : _nickname("no_nickname")
 {
     *this = src;
-    // std::cerr << "Debug message: User Default Copy Constructor called" << std::endl;
 }
 
 User::~User()
-{
-    // std::cerr << "Debug message: User Default Destructor called" << std::endl;
-}
+{}
 
 User &User::operator=(const User &src)
 {
-  //  this->_addr = src._addr; // new
-    //this->_givenPassword = src._givenPassword;
+    this->_addr = src._addr; // new
+    this->_givenPassword = src._givenPassword;
     this->_isRegistered = src._isRegistered;
     this->_sockfd = src._sockfd;
     this->_username = src._username;

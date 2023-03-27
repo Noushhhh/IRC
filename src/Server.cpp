@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 08:51:06 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/27 15:25:05 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,7 +205,7 @@ bool                    Server::init()
 
 bool                    Server::pollDispatch()
 {
-    char                                    buff[MAX_CHAR];
+    char *buff = new char[MAX_CHAR];
     std::string                             msg;
     // std::vector< struct pollfd >::iterator  _pollFdsIt;
 
@@ -215,6 +215,7 @@ bool                    Server::pollDispatch()
 			closeEmptyChans();
 		if (poll (_pollFds.begin().base(), _pollFds.size(), -1) < 0)
         {
+            delete[] buff;
             return (false);
         }
 		for (_pollFdsIt = _pollFds.begin(); _pollFdsIt != _pollFds.end(); _pollFdsIt ++)
@@ -227,9 +228,10 @@ bool                    Server::pollDispatch()
                 {
                     if (this->addUser() == false)
                     {
-                        //close all sockets
+                        delete[] buff;    //close all sockets
                         return (false);
                     }
+                    // delete[] buff;
                     break ;
                 }
                 ssize_t r = 0;
@@ -237,14 +239,17 @@ bool                    Server::pollDispatch()
                 {
                     memset(buff, 0, MAX_CHAR);
                     r = recv(_pollFdsIt->fd, buff, MAX_CHAR - 1, MSG_DONTWAIT);
-                    msg.append(std::string(buff));
+                    msg.append(buff);
+                    // msg += buff;
                     if (r == 0)
                     {
                         if (!this->closeUser())
                         {
+                            delete[] buff;
                             // close all sockets
                             return (false);
                         }
+                        delete[] buff;
                         break ;
                     }
                 }
@@ -259,6 +264,7 @@ bool                    Server::pollDispatch()
             }
 		}
 	}
+    delete[] buff;
     //free all except 1 and close all sockets
     return (true);
 }
@@ -301,30 +307,6 @@ bool                    Server::addUser()
     return (true);
 }
 
-
-
-// bool                    Server::closeUser(std::vector< struct pollfd >::iterator &it)
-// {
-//     //supress from all channels he belongs to
-	
-//     remove_from_all_channels(*getUserItWithFd(it->fd), _channelsList);
-//     it = _pollFds.begin();
-//     for (std::list< User >::iterator lit = _usersList.begin(); lit != _usersList.end(); lit ++)
-//     {
-//         if (lit->getSockfd() == it->fd)
-//         {
-//             _usersList.erase(lit);
-//             break;
-//         }
-//     }
-//     if (close(it->fd) < 0)
-//         return (false);
-//     _pollFds.erase(it);
-//     it = _pollFds.begin();
-//     return (true) ;
-// }
-
-
 bool                    Server::closeUser()
 {
     //supress from all channels he belongs to
@@ -347,7 +329,6 @@ bool                    Server::closeUser()
     _pollFdsIt = _pollFds.begin();
     return (true) ;
 }
-
 
 std::list< User >::iterator			Server::getUserItWithFd(int fd)
 {
