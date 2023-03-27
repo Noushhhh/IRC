@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:09 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 18:07:52 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/27 16:14:11 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,6 @@ void	Server::Nick(User &user, Message &message)
     }
 
 }
-
-// TO DO : reachable leaks on : _rplMsg = user.getReplyName() + " NICK " + nickname + "\n";
 
 // NICK message
 //      Command: NICK

@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:38 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 16:10:03 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/27 16:21:18 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ std::vector< struct pollfd >::iterator &Server::findPollFd(int fd)
     std::vector< struct pollfd >::iterator end = _pollFds.end();
 
     *it = _pollFds.begin();
-    std::cout << "yo" << std::endl;
 
     while ((*it) != end)
     {

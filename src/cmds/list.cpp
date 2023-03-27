@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:59 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 18:07:00 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/27 16:14:01 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,7 @@ void	Server::List(User &user, Message &message)
             if (_channelsListIt->getSecrecyStatus() == true)
                 _channelsListIt++;
              chan_size << _channelsListIt->getUsersList().size();
-            _rplMsg = RPL_LIST(user.getReplyName(), user.getNickname(), _channelsListIt->getName(), chan_size.str(), _channelsListIt->getTopic());
-            reply(user, _rplMsg);
+            reply(user, RPL_LIST(user.getReplyName(), user.getNickname(), _channelsListIt->getName(), chan_size.str(), _channelsListIt->getTopic()));
             chan_size.str("");
         }
         reply(user, RPL_LISTEND(user.getReplyName(), user.getNickname()));
@@ -49,13 +48,12 @@ void	Server::List(User &user, Message &message)
         if (_channelsListIt->getSecrecyStatus() == true)
             _channelsListIt++;
         chan_size << _channelsListIt->getUsersList().size();
-        _rplMsg = RPL_LIST(user.getReplyName(), user.getNickname(), _channelsListIt->getName(), chan_size.str(), _channelsListIt->getTopic());
-        send(user.getSockfd(), _rplMsg.c_str(), _rplMsg.length(), 0);
+        reply(user, RPL_LIST(user.getReplyName(), user.getNickname(), _channelsListIt->getName(), chan_size.str(), _channelsListIt->getTopic()));
         chan_size.str("");
         
     }
     reply(user, RPL_LISTEND(user.getReplyName(), user.getNickname()));
-    reply(user, _rplMsg);
+    reply(user, RPL_LIST(user.getReplyName(), user.getNickname(), _channelsListIt->getName(), chan_size.str(), _channelsListIt->getTopic()));
     return ;
 }
 

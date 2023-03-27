@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:55 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 16:10:23 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/27 16:10:04 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,24 +69,19 @@ void	Server::Kick(User &user, Message &message)
     User    *target = getUserWithNickname(nickname);
     if (message._argsNb == 3)
     {
-        _rplMsg = user.getReplyName() + " KICK " + channel_name + " " + nickname + "\n";
-        sendChanUsers(channel_name, _rplMsg);
+        sendChanUsers(channel_name, user.getReplyName() + " KICK " + channel_name + " " + nickname + "\n");
         chan->kickUser(target);
         return ;
     }
     if (message._argsNb > 3 && message._arguments[0] != "IRC_NOUSHMAKS")
     {
-        _rplMsg = "";
-        _rplMsg = user.getReplyName() + " KICK " + channel_name + " " + nickname + " :" + get_suffix(&message._arguments[2]) + "\n";
-        sendChanUsers(channel_name, _rplMsg);
+        sendChanUsers(channel_name, user.getReplyName() + " KICK " + channel_name + " " + nickname + " :" + get_suffix(&message._arguments[2]) + "\n");
         chan->kickUser(target);
         return ;
     }
     else
     {
-        _rplMsg = "";
-        _rplMsg = user.getReplyName() + " KICK " + channel_name + " " + nickname + " :" + get_suffix(&message._arguments[3]) + "\n";
-        sendChanUsers(channel_name, _rplMsg);
+        sendChanUsers(channel_name,  user.getReplyName() + " KICK " + channel_name + " " + nickname + " :" + get_suffix(&message._arguments[3]) + "\n");
         chan->kickUser(target);
         return ;
     }
