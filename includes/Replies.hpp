@@ -44,7 +44,7 @@
 
 //INVITE / 341
 
-#define	RPL_INVITING(rplname, nick, invite_nick, chan) rplname + " 341 " + nick + " " + invite_nick + " " + chan + "\n" //+ ": Was succesfully invited to " + chan + "\n"
+#define	RPL_INVITING(rplname, nick, invite_nick, chan) rplname + " 341 " + nick + " " + invite_nick + " " + chan + "\n"
 
 // //OPER / 381
 
@@ -87,26 +87,26 @@
 /************************************ ERRORS ************************************/
 
 #define ERR_NEEDMOREPARAMS(rplname, nick, cmd)        rplname + " 461 " + nick + " " + cmd + ":Not enough parameters\n" // 461
-#define ERR_UNKNOWNNCOMMAND(rplname, cmd)       rplname + " 421 " + cmd + ":Unknown command\n" // 421
+#define ERR_UNKNOWNNCOMMAND(rplname, nick, cmd)       rplname + " 421 " + nick + " " + cmd + ":Unknown command\n" // 421
 #define ERR_PASSWDMISMATCH(rplname)		        rplname + " 464 : Password incorrect\n" // 464
-#define ERR_NOPRIVILEGES(rplname)		        rplname + " 481: Permission Denied- You're not an IRC operator\n" // 481
+#define ERR_NOPRIVILEGES(rplname)		        rplname + " 481 :Permission Denied- You're not an IRC operator\n" // 481
 
 //NICK
 
-#define	ERR_NOSUCHNICK(rplname, nick, target)           rplname + " 401 " + nick + " " + target + " :No such nick\n" // 401
-#define ERR_NONICKNAMEGIVEN(rplname, nick)		    rplname + " 431 " + nick + ":No nickname given\n" //431
+#define	ERR_NOSUCHNICK(rplname, nick, target)   rplname + " 406 " + nick + " " + target + ":No such nick\n" // 401
+#define ERR_NONICKNAMEGIVEN(rplname, nick)		rplname + " 431 " + nick + ":No nickname given\n" //431
 #define ERR_ERRONEUSNICKNAME(rplname, nick)     rplname + " 432 " + nick + ":Erroneous nickname\n" //432 when a nick contains invalid char
 #define ERR_NICKNAMEINUSE(rplname, nick, newnick)        rplname + " 433 " + nick + " " + newnick + ":Nickname is in use\n" // 433
 //#define CMD_NICK()
 
 //USER
 
-#define ERR_ALREADYREGISTERED(rplname, nick)	        rplname + " 462 " + nick + " : Unauthorized command (already registered)\n" // 462, send as a response to a second USER call trying to overide user info 
-#define ERR_NOTREGISTERED(rplname, nick)                rplname + " 451 " + nick + " :You have not registered\n" // 451 
+#define ERR_ALREADYREGISTERED(rplname, nick)	rplname + " 462 " + nick + " : Unauthorized command (already registered)\n" // 462, send as a response to a second USER call trying to overide user info 
+#define ERR_NOTREGISTERED(rplname, nick)        rplname + " 451 " + nick + " :You have not registered\n"
 
 //MODE
 
-#define ERR_UMODEUNKNOWNFLAG(rplname)	        rplname + " 501: Unknown MODE flag\n" // 501
+#define ERR_UMODEUNKNOWNFLAG(rplname, nick)	        rplname + " 501: Unknown MODE flag\n" // 501
 #define ERR_USERSDONTMATCH(rplname)		        rplname + " 502: Cannot change mode for other users\n" // 502
 #define ERR_INVITEONLYCHAN(rplname, chan)       rplname + " 473 " + chan + ":is invite only\n"
 
@@ -118,16 +118,16 @@
 
 //CHANNEL RELATED
 
-#define	ERR_NOSUCHCHANNEL(rplname, nick, channel)   rplname + " 402 " + nick + " " + channel + " :No such channel\n" // 403
+#define	ERR_NOSUCHCHANNEL(rplname, nick, channel)         rplname + " 402 " + nick + " " + channel + " :No such channel\n" // 403
 #define ERR_CANNOTSENDTOCHAN(rplname, channel)      rplname + " 404 " + channel + " :Cannot send to channel\n" // 404
 #define ERR_UNAVAILRESOURCE(rplname, nickOrChan)    rplname + nickOrChan + " :is temporarily unavailable\n" //437 pas sur du bail
 #define ERR_NOTONCHANNEL(rplname, nick, chan)       rplname + " 442 " + nick + " " + chan + " :You are not on that channel\n" // 442
 #define ERR_USERONCHANNEL(rplname, chan, user)      rplname + " 443 " + user + " :Is already on channel " + chan + "\n" // 443
-#define ERR_USERNOTINCHANNEL(rplname, nick, target, chan)   rplname + " 441 " + nick + " " + target + ":is not on channel " + chan + "\n" // 441
+#define ERR_USERNOTINCHANNEL(rplname, nick, target, chan)   rplname + " 441 " + nick + " " + target + " " + chan +" :is not on channel\n" // 441
 #define ERR_ISCHANOP(rplname, nick)                 rplname + nick + " :is chanop and cannot be muted, banned or unoped\n"
 #define ERR_BADCHANNELKEY(rplname, nick ,chan)      rplname + " 475 " + nick + " " + chan + " :cannot join channel (+k)\n" // 475
 #define ERR_CHANOPRIVSNEEDED(rplname, chan)         rplname + " 482 " + chan + " :You're not channel operator\n" // 482
-#define ERR_ISBANNED(rplname, nick, chan)           rplname + nick + " :is banned from " + chan + "\n"
+#define ERR_BANNEDFROMCHAN(rplname, nick, chan)     rplname + + "474 " + nick + " " + chan + " :Cannot join channel (+b)\n"
 #define ERR_USERLIMITREACHED(rplname, chan)         rplname + chan + " :users limit reached\n"
 
 // PING & PONG
