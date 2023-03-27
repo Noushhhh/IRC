@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:09 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 16:11:11 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/24 18:07:52 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,22 +57,20 @@ void	Server::Nick(User &user, Message &message)
 
     if (user.getRegistered() == true)
     {
-        _rplMsg = user.getReplyName() + " NICK " + nickname + "\n";
         user.setNickname(nickname);
         for (_channelsListIt = _channelsList.begin(); _channelsListIt != _channelsList.end(); _channelsListIt++)
         {
             if (_channelsListIt->getQuietStatus())
                 _channelsListIt++;
-            sendChanUsers(_channelsListIt->getName(), _rplMsg);
+            sendChanUsers(_channelsListIt->getName(), user.getReplyName() + " NICK " + nickname + "\n");
         }
-        reply(user, _rplMsg);
+        reply(user, user.getReplyName() + " NICK " + nickname + "\n");
         return ;
     }
     else
     {
-        _rplMsg = user.getReplyName() + " NICK " + nickname + "\n";
         user.setNickname(nickname);
-        reply(user, _rplMsg);
+        reply(user, user.getReplyName() + " NICK " + nickname + "\n");
         return ;
     }
 

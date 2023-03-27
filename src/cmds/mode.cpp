@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:01 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/24 16:11:02 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/24 18:06:24 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ std::list< Channel >::iterator &channel)
                     reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), user.getNickname(), modesparams[paramCt], channel->getName()));
                     // reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), modesparams[paramCt], channel->getName()));
                 else if(addOrRemoveMode == REMOVE && channel->getUserItInList(channel->getBanList(), modesparams[paramCt]) == channel->getBanList().end())
-                    reply (user, ERR_NOSUCHNICK(user.getReplyName(), user.getNickname()));
+                    reply (user, ERR_NOSUCHNICK(user.getReplyName(), user.getNickname(), modesparams[paramCt]));
                 else
                 {
                     if (paramCt < modesparams_size && addOrRemoveMode == REMOVE)
