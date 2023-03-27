@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/03/27 15:11:55 by mgolinva         ###   ########.fr       */
+=======
+/*   Updated: 2023/03/27 11:55:09 by aandric          ###   ########.fr       */
+>>>>>>> 0e66dba99a74ff8168443d04dc030030ba332368
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -390,6 +394,7 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 		(void)(this->*_ptrF[i])(user, message);
         return true;
 	}
+
 }
 
 bool        Server::isChannel(std::string channel_name)
