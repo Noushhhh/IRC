@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/27 09:20:38 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/27 14:08:51 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,6 +219,7 @@ void	Server::Join(User &user, Message &message)
             }
 
             // if chan doesn't already exist it is created, upon the condition his name is valid
+
             if (!chanExist)
             {
                 try
@@ -227,22 +228,22 @@ void	Server::Join(User &user, Message &message)
                     
                     if (message._splitMessage.size() > 2 && i < ft_arraySize(keysSplit) && keysSplit[i][0] != 0)
                     {
-                        // if (i > keysSplit->size())
                         Channel *newChan = new Channel(chansSplit[i], keysSplit[i], user);
-                        user.getJoinedChans().push_back(newChan);
+                        user.getJoinedChans().push_back(&(*(_channelsList).begin()));
                         _channelsList.push_back(*newChan);
                         joinRPL(*getChannelWithName(newChan->getName()), user);
-	                    // reply (user, RPL_CHANNELMODEIS(user.getReplyName(), newChan->getName(), user.getNickname(), newChan->modeIs()));
+                        delete newChan;
                     }
                     
                     //if none is
+
                     else
                     {
                         Channel *newChan = new Channel(chansSplit[i], user);
-                        user.getJoinedChans().push_back(newChan);
                         _channelsList.push_back(*newChan);
+                        user.getJoinedChans().push_back(&(*(_channelsList).begin())); // sicne JoinedChaned is a Channel Ptr array we must pushback the instance in _channelList and not the newed ptr
                         joinRPL(*getChannelWithName(newChan->getName()), user);
-	                    // reply (user, RPL_CHANNELMODEIS(user.getReplyName(), newChan->getName(), user.getNickname(), newChan->modeIs()));
+                        delete newChan;
                     }
                     
                 }
