@@ -28,7 +28,31 @@ User::User(const User &src) : _nickname("no_nickname")
 User::~User()
 {}
 
-User &User::operator=(const User &src)
+User &User::operator=(const User &src)    // Channel     *chan = NULL;
+    // std::string flags = "";
+
+    // if (message.getArgsNb() != 2)
+    // {
+    //     reply (user, ERR_NEEDMOREPARAMS(user.getReplyName(), "WHO"));
+    //     return ;
+    // }
+    // std::string chan_name = message.getArguments()[0];
+    // if (!isChannel(message.getArguments()[0]))
+    // {
+    //     reply (user, ERR_NOSUCHCHANNEL(user.getReplyName(), chan_name));
+    //     return ;
+    // }
+    
+    // chan = getChannelWithName(chan_name);
+    
+    // if (chan->userIsOp(user.getNickname()))
+    //     flags = "+o";
+    // std::list< User *>::iterator end = chan->getUsersList().end();
+    // for (std::list< User *>::iterator it = chan->getUsersList().begin(); it != end; it ++)
+    // {
+    //     sendToChanUsers(chan->getName() ,RPL_NAMEREPLY(user.getReplyName(), "@", chan->getName(), (*it)->getNickname()));
+    //     sendToChanUsers(chan->getName() ,RPL_WHOREPLY(user.getReplyName(), chan_name, (*it)->getUsername(), HOST, SERVER, (*it)->getNickname(), flags, user.getRealname())); 
+    // }
 {
     this->_addr = src._addr; // new
     this->_givenPassword = src._givenPassword;
