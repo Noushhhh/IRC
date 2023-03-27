@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/27 15:44:33 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/27 15:55:15 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,7 +213,7 @@ bool                    Server::init()
 bool                    Server::pollDispatch()
 {
     char *buff = new char[MAX_CHAR];
-    std::string                             msg;
+    // char                                    buff[MAX_CHAR];
     // std::vector< struct pollfd >::iterator  _pollFdsIt;
 
 	while (1)
@@ -236,11 +236,10 @@ bool                    Server::pollDispatch()
                 {
                     if (this->addUser() == false)
                     {
-                        delete[] buff;    //close all sockets
+                        delete[] buff;
                         serverShutdown();
                         return (false);
                     }
-                    // delete[] buff;
                     break ;
                 }
                 ssize_t r = 0;
@@ -248,18 +247,15 @@ bool                    Server::pollDispatch()
                 {
                     memset(buff, 0, MAX_CHAR);
                     r = recv(_pollFdsIt->fd, buff, MAX_CHAR - 1, MSG_DONTWAIT);
-                    msg.append(buff);
-                    // msg += buff;
+                    _clientMsg.append(std::string(buff));
                     if (r == 0)
                     {
                         if (!this->closeUser())
                         {
                             delete[] buff;
-                            // close all sockets
                             serverShutdown();
                             return (false);
                         }
-                        delete[] buff;
                         break ;
                     }
                 }
@@ -273,9 +269,9 @@ bool                    Server::pollDispatch()
 		}
 	}
     delete[] buff;
-    //free all except 1 and close all sockets
     return (true);
 }
+
 
 void					Server::closeEmptyChans()
 {
