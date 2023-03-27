@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/27 16:28:29 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/27 16:42:38 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ _password("0000"),
 _usersListIt(_usersList.begin()),
 _channelsListIt(_channelsList.begin()),
 _clientMsg(""),
-_rplMsg(""),
 _errMsg("")
 {
     _servInstance = this;
@@ -71,7 +70,6 @@ _password(password),
 _usersListIt(_usersList.begin()),
 _channelsListIt(_channelsList.begin()),
 _clientMsg(""),
-_rplMsg(""),
 _errMsg("")
 {
     _servInstance = this;
@@ -212,9 +210,7 @@ bool                    Server::init()
 
 bool                    Server::pollDispatch()
 {
-    char *buff = new char[MAX_CHAR];
-    // char                                    buff[MAX_CHAR];
-    // std::vector< struct pollfd >::iterator  _pollFdsIt;
+    char buff[MAX_CHAR];
 
 	while (1)
     {
@@ -222,7 +218,6 @@ bool                    Server::pollDispatch()
 			closeEmptyChans();
 		if (poll (_pollFds.begin().base(), _pollFds.size(), -1) < 0)
         {
-            // delete[] buff;
             serverShutdown();
             return (false);
         }
@@ -236,7 +231,6 @@ bool                    Server::pollDispatch()
                 {
                     if (this->addUser() == false)
                     {
-                        delete[] buff;
                         serverShutdown();
                         return (false);
                     }
@@ -252,7 +246,6 @@ bool                    Server::pollDispatch()
                     {
                         if (!this->closeUser())
                         {
-                            delete[] buff;
                             serverShutdown();
                             return (false);
                         }
@@ -268,7 +261,6 @@ bool                    Server::pollDispatch()
             }
 		}
 	}
-    delete[] buff;
     return (true);
 }
 
