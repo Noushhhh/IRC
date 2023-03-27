@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/27 09:21:31 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/27 14:29:37 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,9 @@ class Server
         std::vector< struct pollfd >::iterator  &findPollFd(int fd);
         void                                    sendChanUsers(std::string channel_name, std::string message);
         void                                    sendChanUsersExcept(std::string nick, std::string channel_name, std::string message);
-        static void	                            freeChans();
+        void	                                freeChans();
+        void	                                freeUsers();
+        void	                                serverShutdown();
         static void                             signalHandler(int sig);
 
 // commands

@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:14 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/27 15:42:22 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/27 15:44:56 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	Server::Part(User &user, Message &message)
         reply(user, ERR_NOTONCHANNEL(user.getReplyName(), user.getNickname(), chan_name));
         return ;
     }
-    _rplMsg = user.getReplyName() + " PART " + chan_name + "\n";
-    sendChanUsers(chan_name, _rplMsg);
+    sendChanUsers(chan_name, user.getReplyName() + " PART " + chan_name + "\n");
     channel->kickUser(&user);
 }

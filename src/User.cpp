@@ -37,7 +37,8 @@ User &User::operator=(const User &src)
     this->_username = src._username;
     this->_nickname = src._nickname;
     this->_realname = src._realname;
-    //this->_joinedChannels = src._joinedChannels;
+    _joinedChannels.clear();
+    this->_joinedChannels = src._joinedChannels;
     return (*this);
 }
 

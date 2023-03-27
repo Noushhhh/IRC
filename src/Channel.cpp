@@ -77,22 +77,31 @@ Channel::Channel(const Channel &src)
 
 Channel::~Channel()
 {
-	std::cout << "CHANNEL DESTRUCTORE, CHAN ADD : " << &(*this) << std::endl;
 	;
 }
 
 Channel &Channel::operator=(const Channel &src)
 {
+	std::cout << "SAUCISSE SAUCISSE \n \n ";
 	this->_name				= src._name;
-	this->_password			= src._password;
 	this->_nameErrorSrc		= src._nameErrorSrc;
+	this->_password			= src._password;
 	this->_topic			= src._topic;
-	this->_isPswdProtected	= src._isPswdProtected;
+
 	this->_creator			= src._creator;
+
+	_usersList.clear();
 	this->_usersList		= src._usersList;
+
+	_opList.clear();
 	this->_opList			= src._opList;
+
+	_mutedUsersList.clear();
 	this->_mutedUsersList	= src._mutedUsersList;
+
+	_banUsersList.clear();
 	this->_banUsersList		= src._banUsersList;
+
 	this->_type				= src._type;
 	this->_isPswdProtected	= src._isPswdProtected;
 	this->_isInviteOnly		= src._isInviteOnly;	
