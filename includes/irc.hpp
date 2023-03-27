@@ -1,12 +1,13 @@
+
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   irc.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 15:58:01 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/27 09:24:56 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/24 14:53:44 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +42,9 @@
 #include <string.h>
 #include <csignal>
 
-#include "Replies.hpp"
 #include "User.hpp"
 #include "Message.hpp"
+#include "Replies.hpp"
 #include "Channel.hpp"
 #include "Server.hpp"
 
@@ -67,8 +68,6 @@ void                                reply(User &user, std::string reply);
 void                                remove_from_all_channels(User &user, std::list< Channel > &channelList);
 std::vector <std::string>           split_cmd(std::string cmd);
 void                                joinRPL(Channel &chan, User user);
-void                                namelistRPL(Channel &chan, User user);
-
 
 
 // create a server with a socket. Listen entries in particular entry to get new msgs / clients
