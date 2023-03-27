@@ -44,7 +44,7 @@
 
 //INVITE / 341
 
-#define	RPL_INVITING(rplname, channel, nick)            rplname + " 341 " + nick + " " + channel + ": Was succesfully invited to " + channel + "\n"
+#define	RPL_INVITING(rplname, nick, invite_nick, chan) rplname + " 341 " + nick + " " + invite_nick + " " + chan + "\n"
 
 // //OPER / 381
 
@@ -74,7 +74,7 @@
 #define ERR_NEEDMOREPARAMS(rplname, nick,cmd)   rplname + " 461 " + nick + " " + cmd + ":Not enough parameters\n" // 461
 #define ERR_UNKNOWNNCOMMAND(rplname, nick, cmd) rplname + " 421 " + nick + " " + cmd + ":Unknown command\n" // 421
 #define ERR_PASSWDMISMATCH(rplname)		        rplname + " 464 : Password incorrect\n" // 464
-#define ERR_NOPRIVILEGES(rplname)		        rplname + " 481: Permission Denied- You're not an IRC operator\n" // 481
+#define ERR_NOPRIVILEGES(rplname)		        rplname + " 481 :Permission Denied- You're not an IRC operator\n" // 481
 
 //NICK
 
