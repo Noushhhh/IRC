@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/27 15:44:33 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/27 15:50:27 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,7 +222,7 @@ bool                    Server::pollDispatch()
 			closeEmptyChans();
 		if (poll (_pollFds.begin().base(), _pollFds.size(), -1) < 0)
         {
-            delete[] buff;
+            // delete[] buff;
             serverShutdown();
             return (false);
         }
@@ -236,7 +236,7 @@ bool                    Server::pollDispatch()
                 {
                     if (this->addUser() == false)
                     {
-                        delete[] buff;    //close all sockets
+                        // delete[] buff;    //close all sockets
                         serverShutdown();
                         return (false);
                     }
@@ -254,12 +254,12 @@ bool                    Server::pollDispatch()
                     {
                         if (!this->closeUser())
                         {
-                            delete[] buff;
+                            // delete[] buff;
                             // close all sockets
                             serverShutdown();
                             return (false);
                         }
-                        delete[] buff;
+                        // delete[] buff;
                         break ;
                     }
                 }
@@ -272,7 +272,7 @@ bool                    Server::pollDispatch()
             }
 		}
 	}
-    delete[] buff;
+    // delete[] buff;
     //free all except 1 and close all sockets
     return (true);
 }
