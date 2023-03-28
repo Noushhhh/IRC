@@ -41,6 +41,7 @@
 #include <sstream>
 #include <string.h>
 #include <csignal>
+#include <sys/select.h>
 
 #include "User.hpp"
 #include "Message.hpp"

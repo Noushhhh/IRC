@@ -425,7 +425,8 @@ void				Channel::sendToUsersExcept(std::string nick, std::string message)
 	while (it != end)
 	{
 		if ((*it)->getNickname() != nick)
-			send((*it)->getSockfd(), message.c_str(), message.length(), 0);
+			reply(*(*it), message);
+		// send((*it)->getSockfd(), message.c_str(), message.length(), 0);
 		it++;
 	}
 }

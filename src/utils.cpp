@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 14:27:34 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/28 14:14:40 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/28 17:18:31 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,19 @@ std::string get_suffix(std::string *arguments)
     return (full_argument);
 }
 
+// void    reply(User &user, std::string reply)
+// {
+//     send (user.getSockfd(), reply.c_str(), reply.length(), 0);
+//     std::cout << "message sent : " << reply;
+// }
+
 void    reply(User &user, std::string reply)
 {
-    (void)user;
-    send (user.getSockfd(), reply.c_str(), reply.length(), 0);
+    // user._messageBuffer.append(reply);
+    user._messageBuffer.push_back(reply);
+    // user._messageBuffer += reply;
     std::cout << "message sent : " << reply;
+    // std::cout << "buffer : " << user._messageBuffer;
 }
 
 std::vector<std::string>    split_cmd(std::string cmd)

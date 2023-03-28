@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/27 15:35:28 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/28 16:59:12 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ void        namelistRPL(Channel &chan, User user)
     if (chan.getUsersList().size() == 0)
     {
         rpl_buff = RPL_NOUSERS(user.getReplyName());
-        send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
+        reply(user, rpl_buff);
+        // send (user.getSockfd(), rpl_buff.c_str(), rpl_buff.length(), 0);
         return ;
     }
     if (chan.getSecrecyStatus())
@@ -59,8 +60,8 @@ void joinRPL(Channel &chan, User user)
     if (chan.getTopic().empty())
         rpl_buff = RPL_NOTOPIC(user.getReplyName(), user.getNickname(), chan.getName());
     chan.sendToUsers(user.getReplyName() + " JOIN " + chan.getName() + "\n");
-    // chan.sendToUsers(rpl_buff);
-    reply(user, rpl_buff);
+    chan.sendToUsers(rpl_buff);
+    // reply(user, rpl_buff);
     namelistRPL(chan, user);
 }
 
@@ -251,7 +252,8 @@ void	Server::Join(User &user, Message &message)
                 {
                     err_buff = chansSplit[i];
                     err_buff.append(e.badName());
-                    send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+                    reply(user, err_buff);
+                    // send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
                 }
             }
         }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:01 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/28 11:20:48 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/28 16:56:04 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,7 +219,8 @@ void	Server::Mode(User &user, Message &message)
     {
         err_buff = ERR_NOTONCHANNEL(user.getReplyName(), user.getNickname(), channel->getName());
         // err_buff = ERR_USERNOTINCHANNEL(user.getReplyName(), user.getNickname(), channel->getName());
-        send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+        reply(user, err_buff);
+        // send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
         return ;
     }
     
@@ -232,7 +233,8 @@ void	Server::Mode(User &user, Message &message)
     if (channel->userIsOp(user.getNickname()) == false)
     {
         err_buff = ERR_CHANOPRIVSNEEDED(user.getReplyName(), channel->getName());
-        send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+        reply(user, err_buff);
+        // send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
         return ;
     }
 

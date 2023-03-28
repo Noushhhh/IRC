@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/28 14:14:31 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/28 18:04:31 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,12 +212,30 @@ bool                    Server::init()
 	return true ;
 }
 
+
+// void    Server::reply(User &user, std::string reply)
+// {
+//     // if (!FD_ISSET(i, &writeSockets))
+//     user._messageBuffer.append(reply);
+//     // send (user.getSockfd(), reply.c_str(), reply.length(), 0);
+//     std::cout << "message sent : " << reply;
+// }
+
 bool                    Server::pollDispatch()
 {
     char buff[MAX_CHAR];
-
+    
+    // fd_set currentSockets;
+	// fd_set readSockets;
+	// fd_set writeSockets;
+	// // INITIALIZE CURRENT SET
+	// FD_ZERO(&currentSockets);
+	// FD_SET(getSock(), &currentSockets);
+    
 	while (1)
     {
+        // readSockets = currentSockets; // because select is destructive, it keeps only the sockets ready for reading/writing but we want to keep tracks of all sockets we are watching
+		// writeSockets = currentSockets;
 		if (!_channelsList.empty())
 			closeEmptyChans();
 		if (poll (_pollFds.begin().base(), _pollFds.size(), -1) < 0)
@@ -260,9 +278,32 @@ bool                    Server::pollDispatch()
                 _clientMsg.clear();
                 for (std::vector<std::string>::iterator cmd_it = cmd_array.begin(); cmd_it != cmd_array.end(); cmd_it++)
                     handleMessage(*(getUserItWithFd(_pollFdsIt->fd)), *cmd_it); // check if reference of uesr good
-               // if ()
+                // std::string message_to_send = getUserItWithFd(_pollFdsIt->fd)->_messageBuffer;
+                // std::cout << " YO " << message_to_send << std::endl;
+                if(!((_pollFdsIt->revents & POLLOUT) == POLLOUT) && !getUserItWithFd(_pollFdsIt->fd)->_messageBuffer.empty())
+                {
+                    // std::cout << " YO " << message_to_send << std::endl;
+                    std::vector<std::string>::iterator it = getUserItWithFd(_pollFdsIt->fd)->_messageBuffer.begin();
+                    std::vector<std::string>::iterator ite = getUserItWithFd(_pollFdsIt->fd)->_messageBuffer.end();
+                    while (it != ite)
+                    {
+                        std::cout << "YO" << std::endl;
+                        // send (_pollFdsIt->fd, message_to_send.c_str(), message_to_send.length(), 0);
+                        send (_pollFdsIt->fd, it->c_str(), it->length(), 0);
+                        it++;
+                    }
+                    it = getUserItWithFd(_pollFdsIt->fd)->_messageBuffer.begin();
+                    it->erase();
+                    // while (it != ite)
+                    // {
+                    //     it->erase();
+                    //     it++;
+                    // }
+                    // getUserItWithFd(_pollFdsIt->fd)->_messageBuffer.clear();
+                }
                 errno = 0;
             }
+            
 		}
 	}
     return (true);
@@ -382,7 +423,8 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 	if (i >= HANDLEDCOMMANDSNB)
 	{
 		err_buff = ERR_UNKNOWNNCOMMAND(user.getReplyName(), user.getNickname(),*message._splitMessage.begin());
-		send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+        reply(user, err_buff);
+		// send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
 		return false;
 	}
 	else

@@ -30,7 +30,7 @@ class User
 		std::string				_ping;
 		std::string				_pong;
 		std::list < Channel *>	_joinedChannels;
-		//std::string				_messageBuffer;
+		
 
 
 	public	:
@@ -39,6 +39,9 @@ class User
 		User(const User &src);
         User &operator=(const User &src);
 		~User();
+
+		// std::string				_messageBuffer;
+		std::vector <std::string>	_messageBuffer;
 		
 //setter
 		void					setPassword(std::string given_password);
