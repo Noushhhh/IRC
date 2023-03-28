@@ -42,7 +42,11 @@ User &User::operator=(const User &src)
     return (*this);
 }
 
-// setters
+/**************************************************************/
+/*                                                            */
+/*                         SETTERS                            */
+/*                                                            */
+/**************************************************************/
 
 void    User::setPassword(std::string given_password)
 {
@@ -124,7 +128,6 @@ void                    User::freeJoinedChans()
 
     while (it != end)
     {
-		std::cout << (*it)->getName() << " was deleted" << std::endl;
         (*it)->getBanList().erase((*it)->getBanList().begin(), (*it)->getBanList().end());
         (*it)->getOpList().erase((*it)->getOpList().begin(), (*it)->getOpList().end());
         (*it)->getMutedList().erase((*it)->getMutedList().begin(), (*it)->getMutedList().end());

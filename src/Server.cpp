@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/28 10:33:30 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/28 14:14:31 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ _password("0000"),
 _usersListIt(_usersList.begin()),
 _channelsListIt(_channelsList.begin()),
 _clientMsg(""),
-_rplMsg(""),
 _errMsg("")
 {
     _servInstance = this;
@@ -45,6 +44,7 @@ _errMsg("")
     this->_ptrF[13] = (&Server::Cap);
     this->_ptrF[14] = (&Server::Who);
     this->_ptrF[15] = (&Server::Pong);
+    this->_ptrF[16] = (&Server::Notice);
 
 	this->_handledCommands[0] = "PASS";
 	this->_handledCommands[1] = "NICK";
@@ -62,6 +62,7 @@ _errMsg("")
     this->_handledCommands[13] = "CAP";
     this->_handledCommands[14] = "WHO";
     this->_handledCommands[15] = "PONG";
+    this->_handledCommands[16] = "NOTICE";
 }
 
 Server::Server(int port, std::string password) :
@@ -71,7 +72,6 @@ _password(password),
 _usersListIt(_usersList.begin()),
 _channelsListIt(_channelsList.begin()),
 _clientMsg(""),
-_rplMsg(""),
 _errMsg("")
 {
     _servInstance = this;
@@ -95,6 +95,7 @@ _errMsg("")
     this->_ptrF[13] = (&Server::Cap);
     this->_ptrF[14] = (&Server::Who);
     this->_ptrF[15] = (&Server::Pong);
+    this->_ptrF[16] = (&Server::Notice);
 
 	this->_handledCommands[0] = "PASS";
 	this->_handledCommands[1] = "NICK";
@@ -112,6 +113,7 @@ _errMsg("")
     this->_handledCommands[13] = "CAP";
     this->_handledCommands[14] = "WHO";
     this->_handledCommands[15] = "PONG";
+    this->_handledCommands[16] = "NOTICE";
 }
 
 Server::Server(const Server &src) :
@@ -212,9 +214,7 @@ bool                    Server::init()
 
 bool                    Server::pollDispatch()
 {
-    char *buff = new char[MAX_CHAR];
-    // char                                    buff[MAX_CHAR];
-    // std::vector< struct pollfd >::iterator  _pollFdsIt;
+    char buff[MAX_CHAR];
 
 	while (1)
     {
@@ -222,7 +222,6 @@ bool                    Server::pollDispatch()
 			closeEmptyChans();
 		if (poll (_pollFds.begin().base(), _pollFds.size(), -1) < 0)
         {
-            delete[] buff;
             serverShutdown();
             return (false);
         }
@@ -236,7 +235,6 @@ bool                    Server::pollDispatch()
                 {
                     if (this->addUser() == false)
                     {
-                        delete[] buff;
                         serverShutdown();
                         return (false);
                     }
@@ -252,7 +250,6 @@ bool                    Server::pollDispatch()
                     {
                         if (!this->closeUser())
                         {
-                            delete[] buff;
                             serverShutdown();
                             return (false);
                         }
@@ -260,7 +257,6 @@ bool                    Server::pollDispatch()
                     }
                 }
                 std::vector <std::string> cmd_array = split_cmd(_clientMsg);
-                std::cout << "Message received : " << _clientMsg;
                 _clientMsg.clear();
                 for (std::vector<std::string>::iterator cmd_it = cmd_array.begin(); cmd_it != cmd_array.end(); cmd_it++)
                     handleMessage(*(getUserItWithFd(_pollFdsIt->fd)), *cmd_it); // check if reference of uesr good
@@ -269,7 +265,6 @@ bool                    Server::pollDispatch()
             }
 		}
 	}
-    delete[] buff;
     return (true);
 }
 
