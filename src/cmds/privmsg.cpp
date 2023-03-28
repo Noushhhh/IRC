@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/27 16:19:11 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/28 10:43:20 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,40 +25,38 @@ void	Server::PrivMsg(User &user, Message &message)
         reply (user, ERR_NEEDMOREPARAMS(user.getReplyName(), user.getNickname(), message._cmd));
         return ;
     }
+
+    std::string target = message._arguments[0];
+    
     if (message._argsNb < 3)
     {
-        reply(user, ERR_NOTEXTTOSEND(user.getReplyName()));
+        reply(user, ERR_NOTEXTTOSEND(user.getReplyName(), target));
         return ;
     }
-    std::string target = message._arguments[0];
+    
     std::string priv_msg = get_suffix(&message._arguments[1]);
-    if (priv_msg[0] != ':')
-    {
-        reply(user, ERR_NOTEXTTOSEND(user.getReplyName()));
-        return ;
-    }
-    Channel *chan = getChannelWithName(target);
+    Channel *chan = NULL;
+
     if ((target.find("#") == 0)) // supposed to be channel
     {
-        if (isChannel(target)) // check that channel name valid
+        std::string *channels = cppsplit(target, ',');
+        for (size_t i = 0; i < ft_arraySize(channels); i ++)
         {
-            if (chan->userIsBanned(user.getNickname()))
-                return ;
-            else if (chan->userIsMuted(user.getNickname()))
-                return ;
-            else if (chan->getOutsideMsgStatus() == true && user.isOnChan(chan->getName()) == false)
+            chan = getChannelWithName(channels[i]);
+            if (isChannel(channels[i])) // check that channel name valid
             {
-                reply(user, ERR_CANNOTSENDTOCHAN(user.getReplyName(), target));
-                return ;
+                if (chan->userIsBanned(user.getNickname()))
+                    ;
+                else if (chan->userIsMuted(user.getNickname()))
+                    ;
+                else if (chan->getOutsideMsgStatus() == true && user.isOnChan(chan->getName()) == false)
+                    reply(user, ERR_CANNOTSENDTOCHAN(user.getReplyName(), channels[i]));
+                sendChanUsersExcept(user.getNickname(), channels[i], user.getReplyName() + " PRIVMSG " + channels[i] + " " + priv_msg + "\n");
             }
-            sendChanUsersExcept(user.getNickname(), target, user.getReplyName() + " PRIVMSG " + target + " " + priv_msg + "\n");
+            else
+                reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), user.getNickname(), target));
         }
-
-        else
-        {
-            reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), user.getNickname(), target));
-            return ;
-        }
+        delete[] channels;
         return ;
     }
     else if (isUserWNickname(target)) // else check if message to user
