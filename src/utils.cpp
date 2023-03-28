@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 14:27:34 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/21 14:46:08 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/28 14:12:42 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ std::string get_suffix(std::string *arguments)
 
 void    reply(User &user, std::string reply)
 {
+    (void)user;
     send (user.getSockfd(), reply.c_str(), reply.length(), 0);
     std::cout << "message sent : " << reply;
 }

@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/27 16:02:15 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/28 10:33:30 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,6 +264,7 @@ bool                    Server::pollDispatch()
                 _clientMsg.clear();
                 for (std::vector<std::string>::iterator cmd_it = cmd_array.begin(); cmd_it != cmd_array.end(); cmd_it++)
                     handleMessage(*(getUserItWithFd(_pollFdsIt->fd)), *cmd_it); // check if reference of uesr good
+               // if ()
                 errno = 0;
             }
 		}

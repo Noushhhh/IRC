@@ -30,6 +30,8 @@ class User
 		std::string				_ping;
 		std::string				_pong;
 		std::list < Channel *>	_joinedChannels;
+		//std::string				_messageBuffer;
+
 
 	public	:
 		User();
