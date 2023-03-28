@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/27 16:43:33 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/28 11:20:28 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ _errMsg("")
     this->_ptrF[13] = (&Server::Cap);
     this->_ptrF[14] = (&Server::Who);
     this->_ptrF[15] = (&Server::Pong);
+    this->_ptrF[16] = (&Server::Notice);
 
 	this->_handledCommands[0] = "PASS";
 	this->_handledCommands[1] = "NICK";
@@ -61,6 +62,7 @@ _errMsg("")
     this->_handledCommands[13] = "CAP";
     this->_handledCommands[14] = "WHO";
     this->_handledCommands[15] = "PONG";
+    this->_handledCommands[16] = "NOTICE";
 }
 
 Server::Server(int port, std::string password) :
@@ -93,6 +95,7 @@ _errMsg("")
     this->_ptrF[13] = (&Server::Cap);
     this->_ptrF[14] = (&Server::Who);
     this->_ptrF[15] = (&Server::Pong);
+    this->_ptrF[16] = (&Server::Notice);
 
 	this->_handledCommands[0] = "PASS";
 	this->_handledCommands[1] = "NICK";
@@ -110,6 +113,7 @@ _errMsg("")
     this->_handledCommands[13] = "CAP";
     this->_handledCommands[14] = "WHO";
     this->_handledCommands[15] = "PONG";
+    this->_handledCommands[16] = "NOTICE";
 }
 
 Server::Server(const Server &src) :

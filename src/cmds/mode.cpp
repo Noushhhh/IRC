@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:01 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/27 16:33:10 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/28 11:20:48 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,8 +129,6 @@ std::list< Channel >::iterator &channel)
                     channel->setMutedList(user, *channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]), addOrRemoveMode);
                     paramCt ++;
                 }
-                else
-                    reply(user, ": MODE +-v: needs an argument defining the user to add or remove from the muted users list\n");
                 break;
 
             case    'b': // add/remove from banned userlist
@@ -151,8 +149,6 @@ std::list< Channel >::iterator &channel)
                         channel->setBanList(*this, user, *channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]), addOrRemoveMode);
                         paramCt ++;
                     }
-                    else
-                        reply(user, ": MODE +-b: needs an argument defining the user to add or remove from the banned users list\n");
                 }
                 break;
 
@@ -165,8 +161,6 @@ std::list< Channel >::iterator &channel)
                     channel->setOpList(user, *channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]), addOrRemoveMode);
                     paramCt ++;
                 }
-                else
-                    reply(user, "MODE +-b: needs an argument defining the user to add or remove from the banned users list\n");
                 break;          
             default:
                 break;
@@ -210,21 +204,18 @@ void	Server::Mode(User &user, Message &message)
         return ;
     }
 
-    try
+
+    message._it = (message._splitMessage).begin(); // delete
+    message._it ++; // 2nd arg is supposed to be chan name // delete
+    channel = getChanItWithName((*message._it)); // delete
+    
+    if (channel == _channelsList.end())
     {
-        message._it = (message._splitMessage).begin(); // delete
-        message._it ++; // 2nd arg is supposed to be chan name // delete
-        channel = getChanItWithName((*message._it)); // delete
-        // channel = getChanItWithName(message._arguments[1]); // 2nd arg is supposed to be chan name // | and delete the 3 lines above
-    }
-    catch(const Channel::BadNameException& e)
-    {
-        err_buff = (*message._it); //  err_buff = message._arguments[1];
-        err_buff.append(e.badName()); // delete 
-        send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
+        reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), user.getNickname(), *message._it));
         return ;
     }
-    if (user.isOnChan(channel->getName()) == false)
+
+    if (channel->isUserInChannel(user) == false)
     {
         err_buff = ERR_NOTONCHANNEL(user.getReplyName(), user.getNickname(), channel->getName());
         // err_buff = ERR_USERNOTINCHANNEL(user.getReplyName(), user.getNickname(), channel->getName());

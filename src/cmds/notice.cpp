@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   privmsg.cpp                                        :+:      :+:    :+:   */
+/*   notice.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/14 14:58:21 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/28 11:20:53 by mgolinva         ###   ########.fr       */
+/*   Created: 2023/03/28 09:23:12 by mgolinva          #+#    #+#             */
+/*   Updated: 2023/03/28 10:39:16 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/irc.hpp"
 
-void	Server::PrivMsg(User &user, Message &message)
+void    Server::Notice(User &user, Message &message)
 {
     if (!user.getRegistered())
     {
@@ -51,7 +51,7 @@ void	Server::PrivMsg(User &user, Message &message)
                     ;
                 else if (chan->getOutsideMsgStatus() == true && user.isOnChan(chan->getName()) == false)
                     reply(user, ERR_CANNOTSENDTOCHAN(user.getReplyName(), channels[i]));
-                sendChanUsersExcept(user.getNickname(), channels[i], user.getReplyName() + " PRIVMSG " + channels[i] + " " + priv_msg + "\n");
+                sendChanUsersExcept(user.getNickname(), channels[i], user.getReplyName() + " NOTICE " + channels[i] + " " + priv_msg + "\n");
             }
             else
                 reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), user.getNickname(), target));
@@ -61,7 +61,7 @@ void	Server::PrivMsg(User &user, Message &message)
     }
     else if (isUserWNickname(target)) // else check if message to user
     {
-        reply(*getUserWithNickname(target), user.getReplyName() + " PRIVMSG " + target + " " + priv_msg + "\n");
+        reply(*getUserWithNickname(target), user.getReplyName() + " NOTICE " + target + " " + priv_msg + "\n");
         return ;
     }
 
@@ -70,4 +70,3 @@ void	Server::PrivMsg(User &user, Message &message)
         reply(user, ERR_NOSUCHNICK(user.getReplyName(), user.getNickname(), target));
     }
 }
-

@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 17:01:07 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/27 16:46:32 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/28 11:20:20 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,6 @@ void	Server::freeUsers()
 		it ++;
 	}
 	_usersList.clear();
-}
-
-void print(pollfd obj)
-{
-	std::cout << obj.fd <<std::endl;
 }
 
 void	Server::serverShutdown()
