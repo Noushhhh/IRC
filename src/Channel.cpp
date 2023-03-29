@@ -167,21 +167,27 @@ void				Channel::setPswd(User &user, std::string pswd, int &addOrRemove)
 	{
 		_password = pswd;
 		_isPswdProtected = true;
+		this->sendToUsers(user.getReplyName() + " MODE " + _name + " +k " + _password + "\n");
 	}
 	else
 	{
 		_password = "";
 		_isPswdProtected = false;
+		this->sendToUsers(user.getReplyName() + " MODE " + _name + " -k " + _password + "\n");
 	}
-	sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
 }
 void				Channel::setInviteMode(User &user, int &addOrRemove)
 {	
 	if (addOrRemove == ADD)
+	{
 		_isInviteOnly = true;
+		this->sendToUsers(user.getReplyName() + " MODE " + _name + " +i \n");
+	}
 	else
+	{
 		_isInviteOnly = false;
-	sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
+		this->sendToUsers(user.getReplyName() + " MODE " + _name + " -i \n");
+	}
 }
 
 void				Channel::setModerationMode(Server &serv, User &user, int &addOrRemove)
@@ -195,58 +201,92 @@ void				Channel::setModerationMode(Server &serv, User &user, int &addOrRemove)
 		for (it = _usersList.begin(); it != end; it ++)
 		{
 			if (!userIsOp((*it)->getNickname()))
-				setMutedList(user, serv.getUserWithNickname((*it)->getNickname()), addOrRemove);
+				setMutedList(user, serv.getUserWithNickname((*it)->getNickname()), addOrRemove = REMOVE);
 		}
+		this->sendToUsers(user.getReplyName() + " MODE " + _name + " +m \n");
 	}
 	else
+	{
 		_isModerated = false;
-	sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
+		for (it = _usersList.begin(); it != end; it ++)
+		{
+			if (!userIsOp((*it)->getNickname()))
+				setMutedList(user, serv.getUserWithNickname((*it)->getNickname()), addOrRemove = ADD);
+		}
+		this->sendToUsers(user.getReplyName() + " MODE " + _name + " -m \n");
+	}
 }
 
 void				Channel::setQuietMode(User &user, int &addOrRemove)
 {
 	// mute/unmute all standard user TO DO
 	if (addOrRemove == ADD)
+	{
 		_isQuiet = true;
+		this->sendToUsers(user.getReplyName() + " MODE " + _name + " +q \n");
+	}
 	else
+	{
 		_isQuiet = false;
-	sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
+		this->sendToUsers(user.getReplyName() + " MODE " + _name + " -q \n");
+	}
 }
 
 void				Channel::setOutsideMsgMode(User &user, int &addOrRemove)
 {
 	if (addOrRemove == ADD)
+	{
 		_isNoOutsideMsg = true;
+		this->sendToUsers(user.getReplyName() + " MODE " + _name + " +n \n");
+	}
 	else
+	{
 		_isNoOutsideMsg = false;
-	sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
+		this->sendToUsers(user.getReplyName() + " MODE " + _name + " -n \n");
+
+	}
 }
 
 void				Channel::setPrivateMode(User &user, int &addOrRemove)
 {
 	if (addOrRemove == ADD)
+	{
 		_isPrivate = true;
+		this->sendToUsers(user.getReplyName() + " MODE " + _name + " +p \n");
+	}
 	else
+	{
 		_isPrivate = false;
-	sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
+		this->sendToUsers(user.getReplyName() + " MODE " + _name + " -p \n");
+	}
 }
 
 void				Channel::setSecretMode(User &user, int &addOrRemove)
 {
 	if (addOrRemove == ADD)
+	{
 		_isSecret = true;
+		this->sendToUsers(user.getReplyName() + " MODE " + _name + " +s \n");
+	}
 	else
+	{
 		_isSecret = false;
-	sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
+		this->sendToUsers(user.getReplyName() + " MODE " + _name + " -s \n");
+	}
 }
 
 void				Channel::setTopicMode(User &user, int &addOrRemove)
 {
 	if (addOrRemove == ADD)
+	{
 		_isTopicOPOnly = true;
+		this->sendToUsers(user.getReplyName() + " MODE " + _name + " +t \n");
+	}
 	else
+	{
 		_isTopicOPOnly = false;
-	sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
+		this->sendToUsers(user.getReplyName() + " MODE " + _name + " -t \n");
+	}
 }
 
 void				Channel::setUsersLimit(User &user, std::string userLimit, int &addOrRemove)
@@ -268,13 +308,11 @@ void				Channel::setUsersLimit(User &user, std::string userLimit, int &addOrRemo
 		}
 		_usersLimit = static_cast< ssize_t >(std::atoi(userLimit.c_str()));
 		_isUsersLimit = true;
-		sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
 		this->sendToUsers(user.getReplyName() + " MODE " + _name + " +l " + userLimit + "\n");
 	}
 	else
 	{
 		_isUsersLimit = false;
-		sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
 		this->sendToUsers(user.getReplyName() + " MODE " + _name + " +l " + userLimit + "\n");
 	}
 }
