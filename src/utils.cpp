@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 14:27:34 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/28 14:14:40 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/29 09:12:19 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ std::string *cppsplit(std::string str, char sep)
             wordCT ++;
             i ++;
         } 
-        while (str[i] && str[i] == sep)// turn into a while and uncomment condition for real split
+        while (str[i] && str[i] == sep)
             i ++;
     }
     strArray = new std::string[wordCT + 1];
@@ -35,7 +35,7 @@ std::string *cppsplit(std::string str, char sep)
 
     while (i < wordCT)
     {
-        while (str[j] == sep) // if you raise it above the while and turn it into a while it will give you a real split without empty strings
+        while (str[j] == sep)
             j ++;
         while(str[j] && str[j] != sep)
         {
