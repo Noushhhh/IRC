@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 09:23:12 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/28 10:39:16 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/29 11:11:44 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,13 @@ void    Server::Notice(User &user, Message &message)
             if (isChannel(channels[i])) // check that channel name valid
             {
                 if (chan->userIsBanned(user.getNickname()))
-                    ;
+                    reply(user, ERR_CANNOTSENDTOCHAN(user.getReplyName(), user.getNickname(), channels[i]));
                 else if (chan->userIsMuted(user.getNickname()))
-                    ;
+                    reply(user, ERR_CANNOTSENDTOCHAN(user.getReplyName(), user.getNickname(), channels[i]));
                 else if (chan->getOutsideMsgStatus() == true && user.isOnChan(chan->getName()) == false)
-                    reply(user, ERR_CANNOTSENDTOCHAN(user.getReplyName(), channels[i]));
-                sendChanUsersExcept(user.getNickname(), channels[i], user.getReplyName() + " NOTICE " + channels[i] + " " + priv_msg + "\n");
+                    reply(user, ERR_CANNOTSENDTOCHAN(user.getReplyName(), user.getNickname(), channels[i]));
+                else
+                    sendChanUsersExcept(user.getNickname(), channels[i], user.getReplyName() + " NOTICE " + channels[i] + " " + priv_msg + "\n");
             }
             else
                 reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), user.getNickname(), target));

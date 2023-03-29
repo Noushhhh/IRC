@@ -63,22 +63,6 @@
 
 #define	RPL_UMODIS(rplname, userModeStr)            rplname + " 221:" + userModeStr + "\n"
 #define RPL_CHANNELMODEIS(replynick, channel, nick, modestring)   replynick + " 324 :" + nick + " " + channel + " " + modestring
-#define RPL_MUTED(rplname, nick, channel)           rplname + nick + " :Was succesfully muted in " + channel + "\n"
-#define RPL_ALLRDYMUTED(rplname, nick, channel)     rplname + nick + " :Was allready muted in " + channel + "\n"
-#define RPL_UNMUTED(rplname, nick, channel)         rplname + nick + " :Was succesfully unmuted in " + channel + "\n"
-#define RPL_NOTMUTED(rplname, nick, channel)        rplname + nick + " :Was not unmuted in " + channel + "\n"
-
-#define RPL_BANNED(rplname, nick, channel)          rplname + nick + " :Was succesfully banned from " + channel + "\n"
-#define RPL_ALLRDYBANNED(rplname, nick, channel)    rplname + nick + " :Was allready banned in " + channel + "\n"
-#define RPL_UNBANNED(rplname, nick, channel)        rplname + nick + " :Was succesfully unbanned from " + channel + "\n"
-#define RPL_NOTBANNED(rplname, nick, channel)       rplname + nick + " :Was not banned in " + channel + "\n"
-
-#define RPL_OPED(rplname, nick, channel)            rplname + nick + " :Was succesfully made operator in " + channel + "\n"
-#define RPL_ALLRDYOP(rplname, nick, channel)        rplname + nick + " :Was allready chanop in " + channel + "\n"
-#define RPL_UNOPED(rplname, nick, channel)          rplname + nick + " :Was succesfully de-oped in " + channel + "\n"
-#define RPL_NOTOP(rplname, nick, channel)           rplname + nick + " :Was not chanop in " + channel + "\n"
-
-#define RPL_USERLIMITSET(rplname, channel, nbr)     rplname + "  " + channel + " :Users limit was set to : " + nbr + "\n"
 
 //WHO 352
 
@@ -119,7 +103,7 @@
 //CHANNEL RELATED
 
 #define	ERR_NOSUCHCHANNEL(rplname, nick, channel)         rplname + " 402 " + nick + " " + channel + " :No such channel\n" // 403
-#define ERR_CANNOTSENDTOCHAN(rplname, channel)      rplname + " 404 " + channel + " :Cannot send to channel\n" // 404
+#define ERR_CANNOTSENDTOCHAN(rplname, nick,channel)      rplname + " 404 " + nick + " " + channel + " :Cannot send to channel\n" // 404
 #define ERR_UNAVAILRESOURCE(rplname, nickOrChan)    rplname + nickOrChan + " :is temporarily unavailable\n" //437 pas sur du bail
 #define ERR_NOTONCHANNEL(rplname, nick, chan)       rplname + " 442 " + nick + " " + chan + " :You are not on that channel\n" // 442
 #define ERR_USERONCHANNEL(rplname, chan, user)      rplname + " 443 " + user + " :Is already on channel " + chan + "\n" // 443
@@ -127,7 +111,7 @@
 #define ERR_BADCHANNELKEY(rplname, nick ,chan)      rplname + " 475 " + nick + " " + chan + " :cannot join channel (+k)\n" // 475
 #define ERR_CHANOPRIVSNEEDED(rplname, chan)         rplname + " 482 " + chan + " :You're not channel operator\n" // 482
 #define ERR_BANNEDFROMCHAN(rplname, nick, chan)     rplname + + " 474 " + nick + " " + chan + " :Cannot join channel (+b)\n"
-#define ERR_USERLIMITREACHED(rplname, chan)         rplname + chan + " :users limit reached\n"
+#define ERR_CHANNELISFULL(rplname, nick,chan)         rplname + " 471 " + nick + " " + chan + " :Cannot join channel (+l)\n"
 
 // PING & PONG
 

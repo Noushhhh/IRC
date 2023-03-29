@@ -269,12 +269,13 @@ void				Channel::setUsersLimit(User &user, std::string userLimit, int &addOrRemo
 		_usersLimit = static_cast< ssize_t >(std::atoi(userLimit.c_str()));
 		_isUsersLimit = true;
 		sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
-		sendToUsers(RPL_USERLIMITSET(user.getReplyName(), _name, userLimit));
+		this->sendToUsers(user.getReplyName() + " MODE " + _name + " +l " + userLimit + "\n");
 	}
 	else
 	{
 		_isUsersLimit = false;
 		sendToUsers(RPL_CHANNELMODEIS(user.getReplyName(), _name, user.getNickname(), modeIs()));
+		this->sendToUsers(user.getReplyName() + " MODE " + _name + " +l " + userLimit + "\n");
 	}
 }
 

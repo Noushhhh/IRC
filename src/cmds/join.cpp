@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/27 15:35:28 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/29 10:50:35 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,7 +195,7 @@ void	Server::Join(User &user, Message &message)
                     }
                     else if (_channelsListIt->getUsersLimitStatus() == true  && _channelsListIt->getUsersLimit() <= _channelsListIt->getUsersList().size())
                     {
-                        reply (user, ERR_USERLIMITREACHED(user.getReplyName(), _channelsListIt->getName()));
+                        reply (user, ERR_CHANNELISFULL(user.getReplyName(), user.getNickname(),_channelsListIt->getName()));
                         chanExist = true;
                         break ;
                     }
