@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:55 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/29 13:09:19 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/29 13:41:09 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ void	Server::Kick(User &user, Message &message)
         reply(user, ERR_NOPRIVILEGES(user.getReplyName()));
         return ;
     }
-    
     if (!isUserWNickname(nickname))
     {
         reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), user.getNickname(), nickname, channel_name));
