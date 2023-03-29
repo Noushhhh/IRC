@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:09 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/27 16:33:24 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/29 11:27:57 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void	Server::Nick(User &user, Message &message)
 
     if (user.getRegistered() == true)
     {
-        user.setNickname(nickname);
         for (_channelsListIt = _channelsList.begin(); _channelsListIt != _channelsList.end(); _channelsListIt++)
         {
             if (_channelsListIt->getQuietStatus())
@@ -64,12 +63,13 @@ void	Server::Nick(User &user, Message &message)
             sendChanUsers(_channelsListIt->getName(), user.getReplyName() + " NICK " + nickname + "\n");
         }
         reply(user, user.getReplyName() + " NICK " + nickname + "\n");
+        user.setNickname(nickname);
         return ;
     }
     else
     {
-        user.setNickname(nickname);
         reply(user, user.getReplyName() + " NICK " + nickname + "\n");
+        user.setNickname(nickname);
         return ;
     }
 
