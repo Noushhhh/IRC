@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 17:02:49 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/29 09:54:32 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/29 13:47:44 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -386,7 +386,6 @@ bool                    Server::handleMessage(User &user, std::string raw_messag
 	}
 	else
 	{
-		//message._argsNb = message._splitMessage.size();
 		(void)(this->*_ptrF[i])(user, message);
         return true;
 	}

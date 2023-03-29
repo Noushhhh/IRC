@@ -30,7 +30,7 @@ User::~User()
 
 User &User::operator=(const User &src)
 {
-    this->_addr = src._addr; // new
+    this->_addr = src._addr;
     this->_givenPassword = src._givenPassword;
     this->_isRegistered = src._isRegistered;
     this->_sockfd = src._sockfd;

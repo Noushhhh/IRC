@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:52 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/29 10:50:35 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/29 13:45:34 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ void        namelistRPL(Channel &chan, User user)
 
 void joinRPL(Channel &chan, User user)
 {
-    //TO DO : if channel mode is quiet only one username is sent (the activ user)
-
     std::string                  rpl_buff = RPL_TOPIC(user.getReplyName(), user.getNickname(), chan.getName(), chan.getTopic());
 
     if (chan.getQuietStatus() == true)
@@ -59,7 +57,6 @@ void joinRPL(Channel &chan, User user)
     if (chan.getTopic().empty())
         rpl_buff = RPL_NOTOPIC(user.getReplyName(), user.getNickname(), chan.getName());
     chan.sendToUsers(user.getReplyName() + " JOIN " + chan.getName() + "\n");
-    // chan.sendToUsers(rpl_buff);
     reply(user, rpl_buff);
     namelistRPL(chan, user);
 }

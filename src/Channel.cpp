@@ -337,7 +337,6 @@ void				Channel::setMutedList(User &user, User *target, int &addOrRemove)
 			this->sendToUsers(user.getReplyName() + " MODE " + _name + " +v " + target->getNickname() + "\n");
 		}
 	}
-	// namelistRPL(*this, user);
 }
 
 void				Channel::setBanList(Server &serv, User &user, User *target, int &addOrRemove)

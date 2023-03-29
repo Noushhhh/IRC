@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 14:27:34 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/29 09:12:19 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/29 13:48:04 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ std::string get_suffix(std::string *arguments)
         full_argument = full_argument + " ";
         i++;
     }
-    //full_argument = full_argument + "\n";
     return (full_argument);
 }
 

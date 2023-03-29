@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:01 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/28 11:20:48 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/29 13:46:17 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,12 @@ bool    isValidMode(User &user, std::string modes)
     {
         if (isCharset(modes[i], MODESCHARSET) != true)
         {
-            // err_msg.push_back(modes[i]);
             reply(user, err_msg.append(" : is an invalid mode argument\n"));
             return (false);
         }
+
         // if there are more than 1 consectuv '+' or '-'
+        
         if ((modes[i] == '+' || modes[i] == '-')
         && (i + 1 < modes_size)
         && (modes[i + 1] == '+' || modes[i + 1] == '-'))
@@ -123,7 +124,6 @@ std::list< Channel >::iterator &channel)
             case    'v': // add/remove from muted user list
                 if(channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]) == channel->getUsersList().end())
                     reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), user.getNickname(), modesparams[paramCt], channel->getName()));
-                    // reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), modesparams[paramCt], channel->getName())); //TO DO
                 else if (paramCt < modesparams_size)
                 {
                     channel->setMutedList(user, *channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]), addOrRemoveMode);
@@ -134,7 +134,6 @@ std::list< Channel >::iterator &channel)
             case    'b': // add/remove from banned userlist
                 if(addOrRemoveMode == ADD && channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]) == channel->getUsersList().end())
                     reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), user.getNickname(), modesparams[paramCt], channel->getName()));
-                    // reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), modesparams[paramCt], channel->getName()));
                 else if(addOrRemoveMode == REMOVE && channel->getUserItInList(channel->getBanList(), modesparams[paramCt]) == channel->getBanList().end())
                     reply (user, ERR_NOSUCHNICK(user.getReplyName(), user.getNickname(), modesparams[paramCt]));
                 else
@@ -155,7 +154,6 @@ std::list< Channel >::iterator &channel)
             case    'o': // add/remove from op list
                 if(channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]) == channel->getUsersList().end())
                     reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), user.getNickname(), modesparams[paramCt], channel->getName()));
-                    // reply(user, ERR_USERNOTINCHANNEL(user.getReplyName(), modesparams[paramCt], channel->getName())); //TO DO
                 else if (paramCt < modesparams_size)
                 {
                     channel->setOpList(user, *channel->getUserItInList(channel->getUsersList(), modesparams[paramCt]), addOrRemoveMode);
@@ -218,7 +216,6 @@ void	Server::Mode(User &user, Message &message)
     if (channel->isUserInChannel(user) == false)
     {
         err_buff = ERR_NOTONCHANNEL(user.getReplyName(), user.getNickname(), channel->getName());
-        // err_buff = ERR_USERNOTINCHANNEL(user.getReplyName(), user.getNickname(), channel->getName());
         send (user.getSockfd(), err_buff.c_str(), err_buff.length(), 0);
         return ;
     }

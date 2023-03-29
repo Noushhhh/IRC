@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 16:59:15 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/28 11:20:08 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/29 13:44:56 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,9 @@ class Server
 // functions
         bool                                    checkPass();
 		void                                    closeEmptyChans();
-        //void					            close();
-		//void					            receiveData();
 		
         bool                                    pollDispatch();
         bool                                    addUser();
-        // bool                                    closeUser(std::vector< struct pollfd >::iterator &it);
         bool                                    closeUser();
 
         bool                                    handleMessage(User &user, std::string raw_message);

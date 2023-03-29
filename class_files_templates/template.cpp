@@ -16,18 +16,17 @@
 
 Classname::Classname()
 {
-	// std::cerr << "Debug message: Classname Default Constructor called" << std::endl;
+	;
 }
 
 Classname::Classname(const Classname &src)
 {
 	*this = classInstance;
-	// std::cerr << "Debug message: Classname Default Copy Constructor called" << std::endl;
 }
 
 Classname::~Classname()
 {
-	// std::cerr << "Debug message: Classname Default Destructor called" << std::endl;
+	;
 }
 
 Classename &Classname::operator=(const Classname &src)

@@ -23,16 +23,7 @@
 #define RPL_YOURHOST(rplname, servername)           rplname + " 002:your host is " + servername ".\n"
 #define RPL_CREATED                                 rplname + " 003:This server was created, in the 6th year of the 6th decade of the 6th century.\n"
 
-// //AWAY 301 / 305 / 306
-
-// #define	RPL_AWAY(rplname, nickname)                 rplname + " 301 " + nickname + " :Is away\n" //send when you send a msg to an away user
-// #define RPL_UNAWAY(rplname)                         rplname + " 305 : You are no longer away\n"
-// #define	RPL_NOAWAY(rplname)                         rplname + " 306 : You have been marked as being away\n"
-
-//LIST 322 / 323
-
-// #define	RPL_LIST(rplname, nickname, channel, topic)       rplname + " 322 " + nickname + " " + channel + ": " + topic + "\n"
-// #define RPL_LISTEND(rplname, nickname)				      rplname + " 323 " + nickname + ": end of LIST\n"
+//LIST
 
 #define	RPL_LIST(rplname, nick, channel, client_count, topic)       rplname + " 322 " + nick + " " + channel + " " + client_count + " :" + topic + "\n"
 #define RPL_LISTEND(rplname, nickname)				        rplname + " 323 " + nickname + " : end of LIST\n"
@@ -45,10 +36,6 @@
 //INVITE / 341
 
 #define	RPL_INVITING(rplname, nick, invite_nick, chan) rplname + " 341 " + nick + " " + invite_nick + " " + chan + "\n"
-
-// //OPER / 381
-
-// #define RPL_YOUREOPER(rplname)			        rplname + " 381 : You are now an IRC operator\n"
 
 //USER 392 / 393 / 394 / 395
 
@@ -81,7 +68,6 @@
 #define ERR_NONICKNAMEGIVEN(rplname, nick)		rplname + " 431 " + nick + ":No nickname given\n" //431
 #define ERR_ERRONEUSNICKNAME(rplname, nick)     rplname + " 432 " + nick + ":Erroneous nickname\n" //432 when a nick contains invalid char
 #define ERR_NICKNAMEINUSE(rplname, nick, newnick)        rplname + " 433 " + nick + " " + newnick + ":Nickname is in use\n" // 433
-//#define CMD_NICK()
 
 //USER
 

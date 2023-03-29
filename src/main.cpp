@@ -6,7 +6,7 @@
 /*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 17:01:07 by aandric           #+#    #+#             */
-/*   Updated: 2023/03/28 11:20:20 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/29 13:46:57 by mgolinva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	Server::freeChans()
 		it ++;
 	};
 	_channelsList.clear();
-	// _servInstance->getChanList()->erase(_servInstance->getChanList()->begin(),_servInstance->getChanList()->end());
 }
 
 void	Server::freeUsers()

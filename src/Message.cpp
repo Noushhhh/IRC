@@ -14,26 +14,23 @@
 #include "../includes/Message.hpp"
 #include "../includes/User.hpp"
 
-Message::Message() :  _rawMessage(""), _it(_splitMessage.begin()), _argsNb(0) // init members
+Message::Message() :  _rawMessage(""), _it(_splitMessage.begin()), _argsNb(0)
 {
-	// std::cerr << "Debug message: Message Default Constructor called" << std::endl;
 }
 
 Message::Message(std::string message) : _rawMessage(message), _it(_splitMessage.begin()), _argsNb(0)
 {
 	;
-} // init members
+}
 
 Message::Message(const Message &src)
 {
 	*this = src;
-	// std::cerr << "Debug message: Message Default Copy Constructor called" << std::endl;
 }
 
 Message::~Message()
 {
 	delete[] _arguments;
-	// std::cerr << "Debug message: Message Default Destructor called" << std::endl;
 }
 
 Message &Message::operator=(const Message &src)
