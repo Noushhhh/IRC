@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgolinva <mgolinva@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:57:55 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/27 16:29:23 by mgolinva         ###   ########.fr       */
+/*   Updated: 2023/03/29 13:09:19 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@ void	Server::Kick(User &user, Message &message)
         nickname = message._arguments[2].substr(1);
     }
     
-    Channel *chan = getChannelWithName(channel_name);
     if (!isChannel(channel_name))
     {
         reply(user, ERR_NOSUCHCHANNEL(user.getReplyName(), user.getNickname(), channel_name));
         return ;
     }
+    Channel *chan = getChannelWithName(channel_name);
     if (!user.isOnChan(channel_name))
     {
         reply(user, ERR_NOTONCHANNEL(user.getReplyName(), user.getNickname(), channel_name));

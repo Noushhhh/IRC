@@ -6,7 +6,7 @@
 /*   By: aandric <aandric@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:58:09 by mgolinva          #+#    #+#             */
-/*   Updated: 2023/03/29 11:27:57 by aandric          ###   ########.fr       */
+/*   Updated: 2023/03/29 13:12:03 by aandric          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,11 @@ void	Server::Nick(User &user, Message &message)
             return ;
         }
         if (!std::isprint(static_cast <unsigned char> (nickname[i])))
+        {
+            reply(user, ERR_ERRONEUSNICKNAME(user.getReplyName(), nickname));
+            return ;
+        }
+        if (nickname.find("#") == 0)
         {
             reply(user, ERR_ERRONEUSNICKNAME(user.getReplyName(), nickname));
             return ;
